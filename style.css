@@ -8,7 +8,6 @@ body {
     font-family: 'Cinzel', serif; 
 }
 
-/* Padrão estilo Bandeira para o card do Listening */
 .us-flag-card {
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     position: relative;
@@ -31,7 +30,6 @@ body {
     background-size: 14px 14px;
 }
 
-/* Animação 3D do Flashcard Flip */
 .perspective-1000 {
     perspective: 1000px;
 }

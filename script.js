@@ -2,11 +2,9 @@ const TARGET_LISTENING_HOURS = 1000;
 let currentModule = 'hub';
 let currentTab = 'dashboard';
 
-// Idioma de Estudo (en, es, fr, ja, pt) e Idioma da Interface (pt, en, es, fr, ja)
 let targetLang = localStorage.getItem('luis_target_language') || 'en';
 let uiLang = localStorage.getItem('luis_ui_language') || 'pt';
 
-// Dicionário de Idiomas Estudados (Flags e Nomes)
 const LANG_META = {
     en: { name: 'English', flag: '🇺🇸', defaultVocab: [{ id: '201', word: 'Breathtaking', translation: 'Deslumbrante', example: 'The view was breathtaking.', correctCount: 0, wrongCount: 0 }] },
     es: { name: 'Español', flag: '🇪🇸', defaultVocab: [{ id: '201', word: 'Inolvidable', translation: 'Inesquecível', example: 'Fue una experiencia inolvidable.', correctCount: 0, wrongCount: 0 }] },
@@ -15,11 +13,10 @@ const LANG_META = {
     pt: { name: 'Português', flag: '🇧🇷', defaultVocab: [{ id: '201', word: 'Resiliência', translation: 'Resilience', example: 'A resiliência é fundamental.', correctCount: 0, wrongCount: 0 }] }
 };
 
-// Dicionário de Textos da Interface (UI)
 const UI_TEXTS = {
     pt: {
         subtitle: "Plataforma Global de Imersão",
-        learning: "Estudando:",
+        learningLabel: "Estudando", uiLabel: "Interface",
         navHub: "Início", navDash: "Dashboard", navCad: "Cadastrar",
         welcome: "Bem-vindo, Luis!",
         hubTitle: "O que você quer registrar ou treinar hoje?",
@@ -48,7 +45,7 @@ const UI_TEXTS = {
     },
     en: {
         subtitle: "Global Immersion Platform",
-        learning: "Studying:",
+        learningLabel: "Studying", uiLabel: "Interface",
         navHub: "Home", navDash: "Dashboard", navCad: "Add New",
         welcome: "Welcome, Luis!",
         hubTitle: "What do you want to track or practice today?",
@@ -74,17 +71,102 @@ const UI_TEXTS = {
         termInLang: "Word / Term in Target Language", termTranslation: "Translation / Meaning", termExample: "Example Sentence (Optional)",
         tapFlip: "Tap to Flip", clickToFlip: "Click card to reveal translation 🔄", translationTag: "Translation",
         correctHits: "Correct:", wrongHits: "Wrong:", btnWrong: "Forgot", btnCorrect: "Remembered!", btnNextRandom: "Draw Next Random Word"
+    },
+    es: {
+        subtitle: "Plataforma Global de Inmersión",
+        learningLabel: "Estudiando", uiLabel: "Interfaz",
+        navHub: "Inicio", navDash: "Panel", navCad: "Añadir",
+        welcome: "¡Bienvenido, Luis!",
+        hubTitle: "¿Qué quieres registrar o practicar hoy?",
+        hubDesc: "Selecciona un módulo a continuación para ver tu progreso.",
+        cardListeningGoal: "Meta: 1000 Horas", cardListeningTitle: "Listening Tracker", cardListeningDesc: "Películas y series vistas en el idioma seleccionado.",
+        cardReadingTag: "Lectura de Libros", cardReadingTitle: "Reading Tracker", cardReadingDesc: "Libros leídos, número de obras y páginas acumuladas.",
+        cardVocabTag: "Tarjetas", cardVocabTitle: "Vocabulary Trainer", cardVocabDesc: "Practica palabras con prueba de memoria.",
+        btnAccess: "Ver Panel", btnTrain: "Entrenar Vocabulario",
+        goalFixed: "Meta Fija", progress: "Progreso", of1000: "de 1000h",
+        summaryListening: "Resumen de Escucha", realTime: "Tiempo Real", registered: "Registrados",
+        hoursByType: "Horas por Tipo de Estudio", hoursByTypeDesc: "Separación por Diamante, Plata y Oro.",
+        titlesWatched: "Títulos Vistos", decimalTotal: "TOTAL DECIMAL:", target: "OBJETIVO:",
+        addMediaTitle: "Añadir Película o Serie", addMediaDesc: "Registra tus horas de inmersión.",
+        mediaType: "Tipo de Medio", optMovie: "Película", optSeries: "Serie",
+        titleName: "Nombre del Título", coverImg: "Portada (Imagen)", listeningMode: "Modo de Escucha",
+        descDiamond: "Sin subtítulos (Práctica 100% enfocada)", descGold: "Audio y subtítulos en el idioma", descSilver: "Audio original con subtítulos traducidos",
+        hours: "Horas", minutes: "Minutos", season: "Temporada (Opcional)", epCount: "Episodios Vistos", avgHours: "Media Ep (Horas)", avgMins: "Media Ep (Minutos)",
+        save: "Guardar", cancel: "Cancelar",
+        totalBooks: "Total Libros", totalPages: "Total Páginas", pagesPerBook: "Páginas por Libro", pagesPerBookDesc: "Volumen de lectura acumulado.",
+        registeredBooks: "Libros Guardados", sumPages: "TOTAL DE PÁGINAS:", addBookTitle: "Añadir Nuevo Libro", addBookDesc: "Registra libros para calcular páginas.",
+        bookTitle: "Título del Libro", bookAuthor: "Autor/a (Opcional)", bookPages: "Número de Páginas", bookCover: "Portada del Libro",
+        totalWords: "Palabras", accuracyRate: "Aciertos", registeredVocab: "Vocabulario Guardado", addWordTitle: "Añadir Palabra", addWordDesc: "Añade nuevos términos.",
+        termInLang: "Término en el Idioma", termTranslation: "Traducción / Significado", termExample: "Ejemplo (Opcional)",
+        tapFlip: "Toca para Girar", clickToFlip: "Haz clic en la tarjeta para ver traducción 🔄", translationTag: "Traducción",
+        correctHits: "Aciertos:", wrongHits: "Errores:", btnWrong: "Olvidé", btnCorrect: "¡Recordé!", btnNextRandom: "Siguiente Palabra Aleatoria"
+    },
+    fr: {
+        subtitle: "Plateforme d'Immersion Globale",
+        learningLabel: "Apprentissage", uiLabel: "Interface",
+        navHub: "Accueil", navDash: "Tableau de bord", navCad: "Ajouter",
+        welcome: "Bienvenue, Luis !",
+        hubTitle: "Que souhaitez-vous enregistrer ou pratiquer aujourd'hui ?",
+        hubDesc: "Sélectionnez un module ci-dessous pour suivre vos progrès.",
+        cardListeningGoal: "Objectif : 1000 Heures", cardListeningTitle: "Listening Tracker", cardListeningDesc: "Films et séries regardés dans la langue cible.",
+        cardReadingTag: "Lecture de Livres", cardReadingTitle: "Reading Tracker", cardReadingDesc: "Livres lus, nombre d'ouvrages et total de pages.",
+        cardVocabTag: "Flashcards", cardVocabTitle: "Vocabulary Trainer", cardVocabDesc: "Entraînez-vous avec des tests de mémoire.",
+        btnAccess: "Accéder au Tableau", btnTrain: "Entraîner le Vocabulaire",
+        goalFixed: "Objectif Fixe", progress: "Progrès", of1000: "sur 1000h",
+        summaryListening: "Résumé d'Écoute", realTime: "Temps Réel", registered: "Enregistrés",
+        hoursByType: "Heures par Type d'Étude", hoursByTypeDesc: "Répartition Diamant, Argent et Or.",
+        titlesWatched: "Titres Visionnés", decimalTotal: "TOTAL DÉCIMAL :", target: "CIBLE :",
+        addMediaTitle: "Ajouter Film ou Série", addMediaDesc: "Enregistrez vos heures d'immersion.",
+        mediaType: "Type de Média", optMovie: "Film", optSeries: "Série",
+        titleName: "Titre", coverImg: "Pochette (Image)", listeningMode: "Mode d'Écoute",
+        descDiamond: "Sans sous-titres (Entraînement 100% focalisé)", descGold: "Audio et sous-titres dans la langue", descSilver: "Audio original avec sous-titres traduits",
+        hours: "Heures", minutes: "Minutes", season: "Saison (Optionnel)", epCount: "Épisodes Regardés", avgHours: "Moy. Ép (Heures)", avgMins: "Moy. Ép (Minutes)",
+        save: "Enregistrer", cancel: "Annuler",
+        totalBooks: "Total Livres", totalPages: "Total Pages", pagesPerBook: "Pages par Livre", pagesPerBookDesc: "Volume de lecture par ouvrage.",
+        registeredBooks: "Livres Enregistrés", sumPages: "TOTAL DE PAGES :", addBookTitle: "Ajouter un Livre", addBookDesc: "Enregistrez vos livres lus.",
+        bookTitle: "Titre du Livre", bookAuthor: "Auteur (Optionnel)", bookPages: "Nombre de Pages", bookCover: "Couverture",
+        totalWords: "Mots", accuracyRate: "Taux de Réussite", registeredVocab: "Vocabulaire Enregistré", addWordTitle: "Ajouter un Mot", addWordDesc: "Ajoutez de nouveaux termes.",
+        termInLang: "Terme dans la Langue", termTranslation: "Traduction / Sens", termExample: "Exemple (Optionnel)",
+        tapFlip: "Appuyez pour Retourner", clickToFlip: "Cliquez pour voir la traduction 🔄", translationTag: "Traduction",
+        correctHits: "Correct :", wrongHits: "Erreurs :", btnWrong: "Oublié", btnCorrect: "Rappelé !", btnNextRandom: "Tirer un Mot au Hasard"
+    },
+    ja: {
+        subtitle: "グローバル・イマージョン・プラットフォーム",
+        learningLabel: "学習言語", uiLabel: "表示言語",
+        navHub: "ホーム", navDash: "ダッシュボード", navCad: "新規登録",
+        welcome: "ようこそ、Luisさん！",
+        hubTitle: "今日記録・練習する項目を選択してください",
+        hubDesc: "以下のモジュールを選択して進捗を記録しましょう。",
+        cardListeningGoal: "目標：1000時間", cardListeningTitle: "Listening Tracker", cardListeningDesc: "選択した言語で視聴した映画・ドラマ。",
+        cardReadingTag: "読書記録", cardReadingTitle: "Reading Tracker", cardReadingDesc: "読了した本と累積ページ数。",
+        cardVocabTag: "単語カード", cardVocabTitle: "Vocabulary Trainer", cardVocabDesc: "記憶テストで語彙力を鍛えましょう。",
+        btnAccess: "ダッシュボードを開く", btnTrain: "単語を練習する",
+        goalFixed: "固定目標", progress: "進捗率", of1000: " / 1000時間",
+        summaryListening: "リスニング概要", realTime: "実時間", registered: "登録数",
+        hoursByType: "学習タイプ別時間", hoursByTypeDesc: "ダイヤモンド、シルバー、ゴールド分類。",
+        titlesWatched: "視聴タイトル一覧", decimalTotal: "合計時間:", target: "目標:",
+        addMediaTitle: "作品の登録", addMediaDesc: "学習時間を追加します。",
+        mediaType: "メディア形式", optMovie: "映画", optSeries: "ドラマ・アニメ",
+        titleName: "作品名", coverImg: "カバー画像", listeningMode: "リスニングモード",
+        descDiamond: "字幕なし（集中トレーニング）", descGold: "学習言語の音声＋字幕", descSilver: "原語音声＋翻訳字幕",
+        hours: "時間", minutes: "分", season: "シーズン（任意）", epCount: "視聴話数", avgHours: "1話の平均（時間）", avgMins: "1話の平均（分）",
+        save: "保存する", cancel: "キャンセル",
+        totalBooks: "総本数", totalPages: "総ページ数", pagesPerBook: "本ごとのページ数", pagesPerBookDesc: "各作品の読書量。",
+        registeredBooks: "登録済みの本", sumPages: "合計ページ数:", addBookTitle: "新しい本を登録", addBookDesc: "読了した本を追加します。",
+        bookTitle: "本のタイトル", bookAuthor: "著者（任意）", bookPages: "ページ数", bookCover: "表紙画像",
+        totalWords: "単語数", accuracyRate: "正解率", registeredVocab: "登録済みの単語", addWordTitle: "新しい単語を追加", addWordDesc: "練習用の単語を追加します。",
+        termInLang: "学習言語の単語", termTranslation: "翻訳・意味", termExample: "例文（任意）",
+        tapFlip: "タップして裏返す", clickToFlip: "カードをクリックして意味を表示 🔄", translationTag: "翻訳・意味",
+        correctHits: "正解:", wrongHits: "不正解:", btnWrong: "覚えていない", btnCorrect: "覚えていた！", btnNextRandom: "次の単語をランダム抽出"
     }
 };
 
-// Variáveis de Banco de Dados Locais (carregados por idioma)
 let listeningList = [];
 let readingList = [];
 let vocabularyList = [];
 let currentVocabularyIndex = 0;
 let isCardFlipped = false;
 
-// Função principal de carregamento isolado do localStorage
 function loadLanguageData() {
     listeningList = JSON.parse(localStorage.getItem(`luis_listening_media_list_${targetLang}`)) || [];
     readingList = JSON.parse(localStorage.getItem(`luis_reading_book_list_${targetLang}`)) || [];
@@ -128,7 +210,13 @@ function applyUITranslations() {
     const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
 
     document.getElementById('header-subtitle').innerText = txt.subtitle;
-    document.getElementById('label-learning').innerText = txt.learning;
+    document.getElementById('label-learning').innerText = txt.learningLabel;
+    document.getElementById('label-ui-lang').innerText = txt.uiLabel;
+
+    document.getElementById('lbl-nav-hub').innerText = txt.navHub;
+    document.getElementById('lbl-nav-dash').innerText = txt.navDash;
+    document.getElementById('lbl-nav-cad').innerText = txt.navCad;
+
     document.getElementById('hub-welcome').innerText = `${txt.welcome} ${LANG_META[targetLang].flag}`;
     document.getElementById('hub-title').innerText = txt.hubTitle;
     document.getElementById('hub-desc').innerText = txt.hubDesc;
@@ -272,7 +360,9 @@ function toggleDarkMode() {
 }
 
 function updateThemeIcon(isDark) {
-    document.getElementById('theme-icon').className = isDark ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-slate-600';
+    const iconClass = isDark ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-slate-600';
+    document.getElementById('theme-icon-desktop').className = iconClass;
+    document.getElementById('theme-icon-mobile').className = iconClass;
 }
 
 function initTheme() {
