@@ -234,7 +234,15 @@ function checkMidnightAndTolerance() {
 
     if (diffDays > 1) {
         const missedDays = diffDays - 1;
-        for (let i = 0; i < missedDays; i++) {
+        for (let i = 1; i <= missedDays; i++) {
+            const pastDate = new Date(lastDate);
+            pastDate.setDate(lastDate.getDate() + i);
+            const pastDateStr = pastDate.toISOString().split('T')[0];
+            
+            if (!vocabStreakData.history[pastDateStr]) {
+                vocabStreakData.history[pastDateStr] = 'missed';
+            }
+
             if (vocabStreakData.missedThisMonth < 3) {
                 vocabStreakData.missedThisMonth += 1; 
             } else {
@@ -704,7 +712,7 @@ function recordVocabPracticeToday() {
 
         vocabStreakData.lastPracticeDate = todayStr;
         if (!vocabStreakData.history) vocabStreakData.history = {};
-        vocabStreakData.history[todayStr] = true;
+        vocabStreakData.history[todayStr] = 'done';
         
         saveVocabStreakData();
         updateHeaderStreakUI();
@@ -747,13 +755,27 @@ function openStreakModal() {
                 d.setDate(d.getDate() - i);
                 const dateStr = d.toISOString().split('T')[0];
                 const dayName = daysOfWeek[d.getDay()];
-                const isDone = vocabStreakData.history && vocabStreakData.history[dateStr];
+                
+                const status = vocabStreakData.history ? vocabStreakData.history[dateStr] : null;
+                const isDone = status === 'done';
+                const isMissed = status === 'missed';
+
+                let cardClass = 'sub-card opacity-60';
+                let iconColor = 'text-stone-400 opacity-40';
+
+                if (isDone) {
+                    cardClass = 'bg-amber-500/10 border-amber-500 text-amber-600 font-bold';
+                    iconColor = 'text-amber-500 opacity-100 animate-pulse';
+                } else if (isMissed) {
+                    cardClass = 'bg-red-500/10 border-red-500 text-red-600 font-bold';
+                    iconColor = 'text-red-500 opacity-100';
+                }
 
                 const div = document.createElement('div');
-                div.className = `p-2 rounded-xl border flex flex-col items-center justify-center gap-1 ${isDone ? 'bg-amber-500/10 border-amber-500 text-amber-600 font-bold' : 'sub-card opacity-60'}`;
+                div.className = `p-2 rounded-xl border flex flex-col items-center justify-center gap-1 ${cardClass}`;
                 div.innerHTML = `
                     <span class="text-[9px] uppercase">${dayName}</span>
-                    <i class="fa-solid fa-fire text-xs ${isDone ? 'text-amber-500' : 'text-stone-400 opacity-40'}"></i>
+                    <i class="fa-solid fa-fire text-xs ${iconColor}"></i>
                 `;
                 weekContainer.appendChild(div);
             }

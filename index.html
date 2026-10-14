@@ -33,19 +33,19 @@
     <!-- MARCA D'ÁGUA DA BANDEIRA -->
     <div id="bg-flag-watermark" class="fixed inset-0 pointer-events-none z-0 bg-cover bg-center transition-all duration-700 opacity-5"></div>
 
-    <!-- ANIMAÇÃO CENTRAL DO FOGUINHO (POP-UP DE SUCESSO) -->
-    <div id="streak-animation-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white dark:bg-slate-900 border-2 p-8 rounded-3xl shadow-2xl text-center space-y-4 transform scale-75 transition-transform duration-300 panel-card" id="streak-popup-box">
-            <div class="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center text-4xl bg-amber-100 dark:bg-amber-900/40 text-amber-500 animate-bounce shadow-inner">
+    <!-- ANIMAÇÃO CENTRAL DO FOGUINHO -->
+    <div id="streak-animation-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-white dark:bg-slate-900 border-2 p-8 rounded-3xl shadow-2xl text-center space-y-4 max-w-sm w-full mx-4 transform scale-75 transition-all duration-300 panel-card" id="streak-popup-box">
+            <div class="w-24 h-24 mx-auto rounded-3xl flex items-center justify-center text-5xl bg-amber-100 dark:bg-amber-900/40 text-amber-500 shadow-inner flame-ignite-animation">
                 <i class="fa-solid fa-fire"></i>
             </div>
-            <h3 class="text-xl font-black font-serif">Ofensiva Acesa! 🔥</h3>
+            <h3 class="text-xl font-black font-serif">Foguinho Aceso! 🔥</h3>
             <p class="text-xs opacity-80 font-medium">Parabéns, Luis! Tarefa de vocabulário concluída com sucesso hoje.</p>
-            <button onclick="closeStreakAnimation()" class="px-6 py-2.5 rounded-xl text-xs font-bold text-white uppercase tracking-wider btn-save shadow">Continuar</button>
+            <button onclick="closeStreakAnimation()" class="w-full py-3 rounded-xl text-xs font-bold text-white uppercase tracking-wider btn-save shadow">Continuar</button>
         </div>
     </div>
 
-    <!-- MODAL DE DETALHES DA OFENSIVA (AO CLICAR NO FOGUINHO) -->
+    <!-- MODAL DE DETALHES DA OFENSIVA -->
     <div id="streak-details-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
         <div class="max-w-md w-full mx-4 p-7 rounded-3xl border-2 shadow-2xl space-y-5 panel-card relative">
             <button onclick="closeStreakModal()" class="absolute top-4 right-4 opacity-70 hover:opacity-100 text-sm font-bold"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -55,7 +55,7 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-black font-serif">Estatísticas de Ofensiva</h3>
-                    <p class="text-[11px] opacity-75">Controlo diário e tolerância mensal</p>
+                    <p class="text-[11px] opacity-75">Controlo diário e histórico persistente</p>
                 </div>
             </div>
 
@@ -70,15 +70,15 @@
                 </div>
             </div>
 
-            <!-- SEQUÊNCIA DOS DIAS DA SEMANA -->
+            <!-- HISTÓRICO DA SEMANA -->
             <div class="space-y-2 pt-2">
-                <span class="text-[10px] font-black uppercase tracking-wider opacity-70 block">Dias da Semana (Últimos 7 dias)</span>
+                <span class="text-[10px] font-black uppercase tracking-wider opacity-70 block">Histórico dos Últimos 7 Dias</span>
                 <div id="week-days-container" class="grid grid-cols-7 gap-1.5 text-center">
-                    <!-- Preenchido via JS -->
+                    <!-- Gerado via JS -->
                 </div>
             </div>
 
-            <p class="text-[11px] opacity-70 text-center font-medium pt-1">Tens uma tolerância máxima de 3 faltas por mês antes de a ofensiva reiniciar.</p>
+            <p class="text-[11px] opacity-70 text-center font-medium pt-1">Tolerância máxima de 3 faltas por mês. Dias não realizados aparecem em vermelho.</p>
             <button onclick="closeStreakModal()" class="w-full py-3 rounded-xl text-xs font-bold text-white uppercase tracking-wider btn-save shadow">Entendido</button>
         </div>
     </div>
@@ -100,9 +100,9 @@
                     </div>
                 </div>
 
-                <!-- STREAK MOBILE (CLICÁVEL) -->
+                <!-- STREAK MOBILE -->
                 <div class="flex items-center gap-2 md:hidden">
-                    <div id="header-streak-badge" onclick="openStreakModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold shadow-sm sub-card cursor-pointer hover:opacity-80 transition-all" title="Ver estatísticas de ofensiva">
+                    <div id="header-streak-badge" onclick="openStreakModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold shadow-sm sub-card cursor-pointer hover:opacity-80 transition-all">
                         <i class="fa-solid fa-fire text-stone-400 opacity-60" id="header-streak-icon"></i>
                         <span id="header-streak-count">0</span>
                     </div>
@@ -159,8 +159,8 @@
                     </button>
                 </nav>
 
-                <!-- STREAK DESKTOP (CLICÁVEL) -->
-                <div id="header-streak-badge-desktop" onclick="openStreakModal()" class="hidden md:flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs font-bold shadow-sm sub-card cursor-pointer hover:opacity-80 transition-all" title="Ver estatísticas de ofensiva">
+                <!-- STREAK DESKTOP -->
+                <div id="header-streak-badge-desktop" onclick="openStreakModal()" class="hidden md:flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs font-bold shadow-sm sub-card cursor-pointer hover:opacity-80 transition-all">
                     <i class="fa-solid fa-fire text-stone-400 opacity-60" id="header-streak-icon-desktop"></i>
                     <span id="header-streak-count-desktop">0</span>
                 </div>
@@ -172,7 +172,7 @@
         </div>
     </header>
 
-    <!-- CONTEÚDO PRINCIPAL -->
+    <!-- MAIN -->
     <main class="flex-grow max-w-6xl w-full mx-auto p-4 sm:p-6 relative z-10">
 
         <div class="absolute top-2 left-2 text-lg pointer-events-none opacity-40 select-none decor-corner">❧</div>
@@ -624,7 +624,7 @@
 
     </main>
 
-    <!-- RODAPÉ -->
+    <!-- FOOTER -->
     <footer class="text-center py-6 text-xs border-t mt-auto font-semibold opacity-75 footer-box flex items-center justify-center gap-3 relative z-10">
         <span>❧</span> <span id="footer-text">Fluency Lab • American Edition • 2026</span> <span>❧</span>
     </footer>
