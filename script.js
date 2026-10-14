@@ -7,11 +7,11 @@ let uiLang = localStorage.getItem('luis_ui_language') || 'pt';
 let themeMode = localStorage.getItem('luis_theme_mode') || 'light';
 
 const LANG_META = {
-    en: { name: 'English', flag: '🇺🇸', themeClass: 'theme-en', platformName: 'American Immersion Platform', edition: 'American Edition' },
-    es: { name: 'Español', flag: '🇪🇸', themeClass: 'theme-es', platformName: 'Plataforma de Inmersión Española', edition: 'Edición Española' },
-    fr: { name: 'Français', flag: '🇫🇷', themeClass: 'theme-fr', platformName: "Plateforme d'Immersion Française", edition: 'Édition Française' },
-    ja: { name: '日本語', flag: '🇯🇵', themeClass: 'theme-ja', platformName: '日本没入プラットフォーム・和の学習ダッシュボード', edition: '和風 Edition' },
-    pt: { name: 'Português', flag: '🇧🇷', themeClass: 'theme-pt', platformName: 'Plataforma de Imersão Brasileira', edition: 'Edición Brasil' }
+    en: { name: 'English', flagImg: 'img/bandeira-eua.webp', themeClass: 'theme-en', platformName: 'American Immersion Platform', edition: 'American Edition' },
+    es: { name: 'Español', flagImg: 'img/bandeira-espanha.webp', themeClass: 'theme-es', platformName: 'Plataforma de Inmersión Española', edition: 'Edición Española' },
+    fr: { name: 'Français', flagImg: 'img/bandeira-franca.jpg', themeClass: 'theme-fr', platformName: "Plateforme d'Immersion Française", edition: 'Édition Française' },
+    ja: { name: '日本語', flagImg: 'img/bandeira-japao.jpg', themeClass: 'theme-ja', platformName: '日本没入プラットフォーム・和の学習ダッシュボード', edition: '和風 Edition' },
+    pt: { name: 'Português', flagImg: 'img/bandeira-brasil.webp', themeClass: 'theme-pt', platformName: 'Plataforma de Imersão Brasileira', edition: 'Edición Brasil' }
 };
 
 const VOCAB_TRANSLATIONS = {
@@ -48,7 +48,7 @@ const UI_TEXTS = {
         cardReadingTag: "LEITURA DE LIVROS", cardReadingTitle: "Rastreador de Leitura", cardReadingDesc: "Livros lidos, páginas e total de obras.",
         cardVocabTag: "FLASHCARDS", cardVocabTitle: "Treinador de Vocabulário", cardVocabDesc: "Pratique com exercícios de memória e vocabulário.",
         btnAccess: "Acessar o Painel", btnTrain: "Treinar Vocabulário",
-        goalFixed: "Meta (Horas)", progress: "Progresso", of1000: "de",
+        goalFixed: "Meta (Horas)", progress: "Progresso", ofTarget: "da meta",
         summaryListening: "Resumo de Escuta", realTime: "Tempo Real", registered: "Cadastrados",
         hoursByType: "Horas por Tipo de Estudo", hoursByTypeDesc: "Separação por Diamante, Prata e Ouro.",
         titlesWatched: "Títulos Assistidos", decimalTotal: "TOTAL DECIMAL:", target: "ALVO:",
@@ -77,7 +77,7 @@ const UI_TEXTS = {
         cardReadingTag: "BOOKS READ / PAGES", cardReadingTitle: "READING TRACKER", cardReadingDesc: "Books read, total pages completed. Build your reading habit.",
         cardVocabTag: "FLASHCARDS & WORDS", cardVocabTitle: "VOCABULARY TRAINER", cardVocabDesc: "Practice vocabulary with flashcards. Review and strengthen recall.",
         btnAccess: "Open Dashboard", btnTrain: "Practice Now",
-        goalFixed: "Goal (Hours)", progress: "Progress", of1000: "of",
+        goalFixed: "Goal (Hours)", progress: "Progress", ofTarget: "of goal",
         summaryListening: "Listening Summary", realTime: "Real Time", registered: "Tracked Items",
         hoursByType: "Hours by Study Type", hoursByTypeDesc: "Breakdown by Diamond, Silver, and Gold categories.",
         titlesWatched: "Titles Watched", decimalTotal: "DECIMAL TOTAL:", target: "TARGET:",
@@ -106,7 +106,7 @@ const UI_TEXTS = {
         cardReadingTag: "LECTURA DE LIBROS", cardReadingTitle: "Seguimiento de Lectura", cardReadingDesc: "Libros leídos, obras completadas y total de páginas.",
         cardVocabTag: "TARJETAS", cardVocabTitle: "Entrenador de Vocabulario", cardVocabDesc: "Practica con tarjetas y ejercicios de memoria.",
         btnAccess: "Acceder al Panel", btnTrain: "Practicar Vocabulario",
-        goalFixed: "Meta (Horas)", progress: "Progreso", of1000: "de",
+        goalFixed: "Meta (Horas)", progress: "Progreso", ofTarget: "de la meta",
         summaryListening: "Resumen de Escucha", realTime: "Tiempo Real", registered: "Registrados",
         hoursByType: "Horas por Tipo de Estudio", hoursByTypeDesc: "Separación por Diamante, Plata y Oro.",
         titlesWatched: "Títulos Vistos", decimalTotal: "TOTAL DECIMAL:", target: "OBJETIVO:",
@@ -135,7 +135,7 @@ const UI_TEXTS = {
         cardReadingTag: "LECTURE DE LIVRES", cardReadingTitle: "Reading Tracker", cardReadingDesc: "Livres lus, nombre d'ouvrages et total de pages.",
         cardVocabTag: "FLASHCARDS", cardVocabTitle: "Vocabulary Trainer", cardVocabDesc: "Entraînez-vous avec des tests de mémoire.",
         btnAccess: "Accéder au Tableau", btnTrain: "Entraîner le Vocabulaire",
-        goalFixed: "Objectif (Heures)", progress: "Progrès", of1000: "sur",
+        goalFixed: "Objectif (Heures)", progress: "Progrès", ofTarget: "de l'objectif",
         summaryListening: "Résumé d'Écoute", realTime: "Temps Réel", registered: "Enregistrés",
         hoursByType: "Heures par Type d'Étude", hoursByTypeDesc: "Répartition Diamant, Argent et Or.",
         titlesWatched: "Titres Visionnés", decimalTotal: "TOTAL DÉCIMAL :", target: "CIBLE :",
@@ -164,7 +164,7 @@ const UI_TEXTS = {
         cardReadingTag: "読書・テキスト学習", cardReadingTitle: "リーディングトラッカー", cardReadingDesc: "本・漫画・記事を読んで、ページ数と作品数を記録。",
         cardVocabTag: "語彙学習", cardVocabTitle: "語彙トレーナー", cardVocabDesc: "単語を復習し、記憶を定着させるフラッシュカード。",
         btnAccess: "ダッシュボードへ", btnTrain: "学習を開始",
-        goalFixed: "目標時間 (時間)", progress: "進捗率", of1000: " / ",
+        goalFixed: "目標時間 (時間)", progress: "進捗率", ofTarget: "の目標",
         summaryListening: "リスニング概要", realTime: "実時間", registered: "登録数",
         hoursByType: "学習タイプ別時間", hoursByTypeDesc: "ダイヤモンド、シルバー、ゴールド分類。",
         titlesWatched: "視聴タイトル一覧", decimalTotal: "合計時間:", target: "目標:",
@@ -246,31 +246,42 @@ function updateThemeAndFlags() {
     const meta = LANG_META[targetLang] || LANG_META['en'];
     const body = document.getElementById('app-body');
     
-    body.className = `${meta.themeClass} mode-${themeMode} min-h-screen transition-all duration-500 flex flex-col`;
+    if (body) {
+        body.className = `${meta.themeClass} mode-${themeMode} min-h-screen transition-all duration-500 flex flex-col relative overflow-x-hidden`;
+    }
     
-    document.getElementById('header-flag-badge').innerText = meta.flag;
-    document.getElementById('listening-flag-icon').innerText = meta.flag;
-    document.getElementById('reading-flag-icon').innerText = meta.flag;
-    document.getElementById('vocab-flag-icon').innerText = meta.flag;
+    const setImgSrc = (id, src) => { const el = document.getElementById(id); if (el) el.src = src; };
+    setImgSrc('header-flag-img', meta.flagImg);
+    setImgSrc('hub-flag-img', meta.flagImg);
+    setImgSrc('listening-flag-img', meta.flagImg);
+    setImgSrc('reading-flag-img', meta.flagImg);
+    setImgSrc('vocab-flag-img', meta.flagImg);
     
-    document.getElementById('header-subtitle').innerText = meta.platformName;
-    document.getElementById('listening-welcome-prefix').innerText = `Listening (${meta.name})`;
-    document.getElementById('reading-title-prefix').innerText = `Reading (${meta.name})`;
-    document.getElementById('vocab-title-prefix').innerText = `Vocabulary (${meta.name})`;
-    document.getElementById('card-front-lang-label').innerText = meta.name;
-    document.getElementById('hub-badge-flag').innerHTML = `<span>${meta.flag}</span> <span id="hub-welcome">WELCOME, LUIS • ${meta.name.toUpperCase()}</span>`;
-    document.getElementById('footer-text').innerText = `Fluency Lab • ${meta.edition} • 2026`;
+    const watermark = document.getElementById('bg-flag-watermark');
+    if (watermark) watermark.style.backgroundImage = `url('${meta.flagImg}')`;
+
+    const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
+    setText('header-subtitle', meta.platformName);
+    setText('listening-welcome-prefix', `Listening (${meta.name})`);
+    setText('reading-title-prefix', `Reading (${meta.name})`);
+    setText('vocab-title-prefix', `Vocabulary (${meta.name})`);
+    setText('card-front-lang-label', meta.name);
+    setText('hub-welcome', `WELCOME, LUIS • ${meta.name.toUpperCase()}`);
+    setText('footer-text', `Fluency Lab • ${meta.edition} • 2026`);
 
     const iconClass = themeMode === 'dark' ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-stone-700';
-    document.getElementById('theme-icon-desktop').className = iconClass;
-    document.getElementById('theme-icon-mobile').className = iconClass;
+    const iconDesk = document.getElementById('theme-icon-desktop');
+    const iconMob = document.getElementById('theme-icon-mobile');
+    if (iconDesk) iconDesk.className = iconClass;
+    if (iconMob) iconMob.className = iconClass;
     
     updateHeaderStreakUI();
 }
 
 function refreshAllDashboards() {
     applyUITranslations();
-    document.getElementById('input-listening-goal').value = targetListeningHours;
+    const goalInput = document.getElementById('input-listening-goal');
+    if (goalInput) goalInput.value = targetListeningHours;
     if (currentModule === 'listening') renderListeningDashboard();
     if (currentModule === 'reading') renderReadingDashboard();
     if (currentModule === 'vocabulary') renderVocabularyDashboard();
@@ -279,113 +290,119 @@ function refreshAllDashboards() {
 function applyUITranslations() {
     const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
 
-    document.getElementById('label-learning').innerText = txt.learningLabel;
-    document.getElementById('label-ui-lang').innerText = txt.uiLabel;
+    const setText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+    const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
 
-    document.getElementById('lbl-nav-hub').innerText = txt.navHub;
-    document.getElementById('lbl-nav-dash').innerText = txt.navDash;
-    document.getElementById('lbl-nav-cad').innerText = txt.navCad;
+    setText('label-learning', txt.learningLabel);
+    setText('label-ui-lang', txt.uiLabel);
+    setText('lbl-nav-hub', txt.navHub);
+    setText('lbl-nav-dash', txt.navDash);
+    setText('lbl-nav-cad', txt.navCad);
+    setText('hub-title', txt.hubTitle);
+    setText('hub-desc', txt.hubDesc);
 
-    document.getElementById('hub-title').innerText = txt.hubTitle;
-    document.getElementById('hub-desc').innerText = txt.hubDesc;
-
-    document.getElementById('card-listening-goal').innerText = txt.cardListeningGoal;
-    document.getElementById('card-listening-title').innerText = txt.cardListeningTitle;
-    document.getElementById('card-listening-desc').innerText = txt.cardListeningDesc;
-    
-    document.getElementById('card-reading-tag').innerText = txt.cardReadingTag;
-    document.getElementById('card-reading-title').innerText = txt.cardReadingTitle;
-    document.getElementById('card-reading-desc').innerText = txt.cardReadingDesc;
-
-    document.getElementById('card-vocab-tag').innerText = txt.cardVocabTag;
-    document.getElementById('card-vocab-title').innerText = txt.cardVocabTitle;
-    document.getElementById('card-vocab-desc').innerText = txt.cardVocabDesc;
+    setText('card-listening-goal', txt.cardListeningGoal);
+    setText('card-listening-title', txt.cardListeningTitle);
+    setText('card-listening-desc', txt.cardListeningDesc);
+    setText('card-reading-tag', txt.cardReadingTag);
+    setText('card-reading-title', txt.cardReadingTitle);
+    setText('card-reading-desc', txt.cardReadingDesc);
+    setText('card-vocab-tag', txt.cardVocabTag);
+    setText('card-vocab-title', txt.cardVocabTitle);
+    setText('card-vocab-desc', txt.cardVocabDesc);
 
     document.querySelectorAll('.hub-btn-access').forEach(el => el.innerText = txt.btnAccess);
-    document.getElementById('hub-btn-train').innerText = txt.btnTrain;
+    setText('hub-btn-train', txt.btnTrain);
 
-    document.getElementById('lbl-goal-fixed').innerText = txt.goalFixed;
-    document.getElementById('lbl-progress').innerText = txt.progress;
-    document.getElementById('lbl-of-1000').innerText = txt.of1000;
-    document.getElementById('lbl-summary-listening').innerHTML = `<i class="fa-solid fa-chart-line"></i> ${txt.summaryListening}`;
-    document.getElementById('lbl-real-time').innerText = txt.realTime;
-    document.getElementById('lbl-registered').innerText = txt.registered;
-    document.getElementById('lbl-hours-by-type').innerText = txt.hoursByType;
-    document.getElementById('lbl-hours-by-type-desc').innerText = txt.hoursByTypeDesc;
-    document.getElementById('lbl-titles-watched').innerHTML = `<i class="fa-solid fa-list"></i> ${txt.titlesWatched}`;
-    document.getElementById('lbl-decimal-total').innerText = txt.decimalTotal;
-    document.getElementById('lbl-target').innerText = txt.target;
+    setText('lbl-goal-fixed', txt.goalFixed);
+    setText('lbl-progress', txt.progress);
+    setText('lbl-of-target', txt.ofTarget);
+    setHtml('lbl-summary-listening', `<i class="fa-solid fa-chart-line"></i> ${txt.summaryListening}`);
+    setText('lbl-real-time', txt.realTime);
+    setText('lbl-registered', txt.registered);
+    setText('lbl-hours-by-type', txt.hoursByType);
+    setText('lbl-hours-by-type-desc', txt.hoursByTypeDesc);
+    setHtml('lbl-titles-watched', `<i class="fa-solid fa-list"></i> ${txt.titlesWatched}`);
+    setText('lbl-decimal-total', txt.decimalTotal);
+    setText('lbl-target', txt.target);
 
-    document.getElementById('lbl-add-media-title').innerText = txt.addMediaTitle;
-    document.getElementById('lbl-add-media-desc').innerText = txt.addMediaDesc;
-    document.getElementById('lbl-media-type').innerText = txt.mediaType;
-    document.getElementById('opt-movie').innerText = txt.optMovie;
-    document.getElementById('opt-series').innerText = txt.optSeries;
-    document.getElementById('lbl-title-name').innerText = txt.titleName;
-    document.getElementById('lbl-cover-img').innerText = txt.coverImg;
-    document.getElementById('lbl-listening-mode').innerText = txt.listeningMode;
-    document.getElementById('desc-diamond').innerText = txt.descDiamond;
-    document.getElementById('desc-gold').innerText = txt.descGold;
-    document.getElementById('desc-silver').innerText = txt.descSilver;
-    document.getElementById('lbl-hours').innerText = txt.hours;
-    document.getElementById('lbl-minutes').innerText = txt.minutes;
-    document.getElementById('lbl-season').innerText = txt.season;
-    document.getElementById('lbl-ep-count').innerText = txt.epCount;
-    document.getElementById('lbl-avg-hours').innerText = txt.avgHours;
-    document.getElementById('lbl-avg-mins').innerText = txt.avgMins;
+    setText('lbl-add-media-title', txt.addMediaTitle);
+    setText('lbl-add-media-desc', txt.addMediaDesc);
+    setText('lbl-media-type', txt.mediaType);
+    setText('opt-movie', txt.optMovie);
+    setText('opt-series', txt.optSeries);
+    setText('lbl-title-name', txt.titleName);
+    setText('lbl-cover-img', txt.coverImg);
+    setText('lbl-listening-mode', txt.listeningMode);
+    setText('desc-diamond', txt.descDiamond);
+    setText('desc-gold', txt.descGold);
+    setText('desc-silver', txt.descSilver);
+    setText('lbl-hours', txt.hours);
+    setText('lbl-minutes', txt.minutes);
+    setText('lbl-season', txt.season);
+    setText('lbl-ep-count', txt.epCount);
+    setText('lbl-avg-hours', txt.avgHours);
+    setText('lbl-avg-mins', txt.avgMins);
 
     document.querySelectorAll('.btn-save').forEach(el => el.innerText = txt.save);
     document.querySelectorAll('.btn-cancel').forEach(el => el.innerText = txt.cancel);
 
-    document.getElementById('lbl-total-books').innerText = txt.totalBooks;
-    document.getElementById('lbl-total-pages').innerText = txt.totalPages;
-    document.getElementById('lbl-pages-per-book').innerText = txt.pagesPerBook;
-    document.getElementById('lbl-pages-per-book-desc').innerText = txt.pagesPerBookDesc;
-    document.getElementById('lbl-registered-books').innerHTML = `<i class="fa-solid fa-bookmark"></i> ${txt.registeredBooks}`;
-    document.getElementById('lbl-sum-pages').innerText = txt.sumPages;
-    document.getElementById('lbl-add-book-title').innerText = txt.addBookTitle;
-    document.getElementById('lbl-add-book-desc').innerText = txt.addBookDesc;
-    document.getElementById('lbl-book-title').innerText = txt.bookTitle;
-    document.getElementById('lbl-book-author').innerText = txt.bookAuthor;
-    document.getElementById('lbl-book-pages').innerText = txt.bookPages;
-    document.getElementById('lbl-book-cover').innerText = txt.bookCover;
+    setText('lbl-total-books', txt.totalBooks);
+    setText('lbl-total-pages', txt.totalPages);
+    setText('lbl-pages-per-book', txt.pagesPerBook);
+    setText('lbl-pages-per-book-desc', txt.pagesPerBookDesc);
+    setHtml('lbl-registered-books', `<i class="fa-solid fa-bookmark"></i> ${txt.registeredBooks}`);
+    setText('lbl-sum-pages', txt.sumPages);
+    setText('lbl-add-book-title', txt.addBookTitle);
+    setText('lbl-add-book-desc', txt.addBookDesc);
+    setText('lbl-book-title', txt.bookTitle);
+    setText('lbl-book-author', txt.bookAuthor);
+    setText('lbl-book-pages', txt.bookPages);
+    setText('lbl-book-cover', txt.bookCover);
 
-    document.getElementById('lbl-total-words').innerText = txt.totalWords;
-    document.getElementById('lbl-accuracy-rate').innerText = txt.accuracyRate;
-    document.getElementById('lbl-registered-vocab').innerHTML = `<i class="fa-solid fa-list-check"></i> ${txt.registeredVocab}`;
-    document.getElementById('lbl-add-word-title').innerText = txt.addWordTitle;
-    document.getElementById('lbl-add-word-desc').innerText = txt.addWordDesc;
-    document.getElementById('lbl-term-in-lang').innerText = txt.termInLang;
-    document.getElementById('lbl-term-translation').innerText = txt.termTranslation;
-    document.getElementById('lbl-term-example').innerText = txt.termExample;
+    setText('lbl-total-words', txt.totalWords);
+    setText('lbl-accuracy-rate', txt.accuracyRate);
+    setHtml('lbl-registered-vocab', `<i class="fa-solid fa-list-check"></i> ${txt.registeredVocab}`);
+    setText('lbl-add-word-title', txt.addWordTitle);
+    setText('lbl-add-word-desc', txt.addWordDesc);
+    setText('lbl-term-in-lang', txt.termInLang);
+    setText('lbl-term-translation', txt.termTranslation);
+    setText('lbl-term-example', txt.termExample);
 
-    document.getElementById('lbl-tap-flip').innerText = txt.tapFlip;
-    document.getElementById('lbl-click-to-flip').innerText = txt.clickToFlip;
-    document.getElementById('lbl-translation-tag').innerText = txt.translationTag;
-    document.getElementById('lbl-correct-hits').innerText = txt.correctHits;
-    document.getElementById('lbl-wrong-hits').innerText = txt.wrongHits;
-    document.getElementById('btn-wrong-action').innerText = txt.btnWrong;
-    document.getElementById('btn-correct-action').innerText = txt.btnCorrect;
-    document.getElementById('btn-next-random').innerText = txt.btnNextRandom;
+    setText('lbl-tap-flip', txt.tapFlip);
+    setText('lbl-click-to-flip', txt.clickToFlip);
+    setText('lbl-translation-tag', txt.translationTag);
+    setText('lbl-correct-hits', txt.correctHits);
+    setText('lbl-wrong-hits', txt.wrongHits);
+    setText('btn-wrong-action', txt.btnWrong);
+    setText('btn-correct-action', txt.btnCorrect);
+    setText('btn-next-random', txt.btnNextRandom);
 }
 
 function openModule(moduleName) {
     currentModule = moduleName;
-    document.getElementById('module-hub').classList.add('hidden');
-    document.getElementById('module-listening').classList.add('hidden');
-    document.getElementById('module-reading').classList.add('hidden');
-    document.getElementById('module-vocabulary').classList.add('hidden');
+    const modHub = document.getElementById('module-hub');
+    const modListening = document.getElementById('module-listening');
+    const modReading = document.getElementById('module-reading');
+    const modVocab = document.getElementById('module-vocabulary');
+
+    if (modHub) modHub.classList.add('hidden');
+    if (modListening) modListening.classList.add('hidden');
+    if (modReading) modReading.classList.add('hidden');
+    if (modVocab) modVocab.classList.add('hidden');
 
     const nav = document.getElementById('main-nav');
     if (moduleName === 'hub') {
-        document.getElementById('module-hub').classList.remove('hidden');
-        nav.classList.add('hidden');
+        if (modHub) modHub.classList.remove('hidden');
+        if (nav) nav.classList.add('hidden');
     } else {
-        nav.classList.remove('hidden');
+        if (nav) nav.classList.remove('hidden');
         const activeEl = document.getElementById(`module-${moduleName}`);
-        activeEl.classList.remove('hidden');
+        if (activeEl) {
+            activeEl.classList.remove('hidden');
+            activeEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
         switchTab('dashboard');
-        activeEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 }
 
@@ -404,17 +421,19 @@ function switchTab(tabId) {
     refreshAllDashboards();
 
     if (tabId === 'dashboard') {
-        btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all shadow nav-btn-active";
-        btnCad.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all opacity-70 hover:opacity-100";
+        if (btnDash) btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all shadow nav-btn-active";
+        if (btnCad) btnCad.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all opacity-70 hover:opacity-100";
     } else {
-        btnCad.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all shadow nav-btn-active";
-        btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all opacity-70 hover:opacity-100";
+        if (btnCad) btnCad.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all shadow nav-btn-active";
+        if (btnDash) btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all opacity-70 hover:opacity-100";
     }
 }
 
 function toggleMediaType(type) {
-    document.getElementById('movie-time-fields').classList.toggle('hidden', type !== 'filme');
-    document.getElementById('series-time-fields').classList.toggle('hidden', type !== 'serie');
+    const movieFields = document.getElementById('movie-time-fields');
+    const seriesFields = document.getElementById('series-time-fields');
+    if (movieFields) movieFields.classList.toggle('hidden', type !== 'filme');
+    if (seriesFields) seriesFields.classList.toggle('hidden', type !== 'serie');
 }
 
 function getDecimalHours(h, m) { return h + (m / 60); }
@@ -434,127 +453,147 @@ function renderListeningDashboard() {
     const targetHours = targetListeningHours > 0 ? targetListeningHours : 1000;
     const pct = Math.min((totalDecimal / targetHours) * 100, 100);
 
-    document.getElementById('total-hours-display').innerText = totalDecimal.toFixed(2) + 'h';
-    document.getElementById('lbl-of-1000').innerText = `de ${targetHours}h`;
-    document.getElementById('summary-target-display').innerText = `${targetHours}h`;
-    document.getElementById('percentage-display').innerText = pct.toFixed(2) + '%';
-    document.getElementById('banner-progress').innerText = pct.toFixed(2) + '%';
-    document.getElementById('stat-total-time').innerText = `${Math.floor(totalMins / 60)}h ${totalMins % 60}m`;
-    document.getElementById('stat-total-items').innerText = listeningList.length;
-    document.getElementById('summary-total').innerText = totalDecimal.toFixed(2) + 'h';
-    document.getElementById('input-listening-goal').value = targetListeningHours;
+    const setText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+    setText('total-hours-display', totalDecimal.toFixed(2) + 'h');
+    setText('lbl-of-target', `de ${targetHours}h`);
+    setText('summary-target-display', `${targetHours}h`);
+    setText('percentage-display', pct.toFixed(2) + '%');
+    setText('banner-progress', pct.toFixed(2) + '%');
+    setText('stat-total-time', `${Math.floor(totalMins / 60)}h ${totalMins % 60}m`);
+    setText('stat-total-items', listeningList.length);
+    setText('summary-total', totalDecimal.toFixed(2) + 'h');
+    
+    const goalInput = document.getElementById('input-listening-goal');
+    if (goalInput) goalInput.value = targetListeningHours;
 
     const container = document.getElementById('listening-details-list');
-    const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
-    container.innerHTML = listeningList.length === 0 ? `<p class="text-xs opacity-60 text-center py-6 font-medium">${txt.emptyMediaList}</p>` : '';
-    listeningList.forEach(item => {
-        const itemDec = getDecimalHours(Number(item.hours), Number(item.minutes));
-        const labelMap = { 'DIAMANTE': '💎 DIAMANTE', 'OURO': '🥇 OURO', 'PRATA': '🥈 PRATA' };
+    if (container) {
+        const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
+        container.innerHTML = listeningList.length === 0 ? `<p class="text-xs opacity-60 text-center py-6 font-medium">${txt.emptyMediaList}</p>` : '';
+        listeningList.forEach(item => {
+            const itemDec = getDecimalHours(Number(item.hours), Number(item.minutes));
+            const labelMap = { 'DIAMANTE': '💎 DIAMANTE', 'OURO': '🥇 OURO', 'PRATA': '🥈 PRATA' };
 
-        const div = document.createElement('div');
-        div.className = "flex items-center justify-between p-3 rounded-xl border-2 transition-all sub-card";
-        div.innerHTML = `
-            <div class="flex items-center gap-3">
-                ${item.cover ? `<img src="${item.cover}" class="w-11 h-11 rounded-lg object-cover border-2 shadow-sm">` : `<div class="w-11 h-11 rounded-lg flex items-center justify-center text-sm font-bold card-icon-box"><i class="fa-solid fa-film"></i></div>`}
-                <div class="space-y-0.5">
-                    <span class="text-xs font-bold block">${item.name} ${item.season ? '('+item.season+')' : ''}</span>
-                    <span class="text-[11px] opacity-70 block">${item.hours}h ${item.minutes}m • ${itemDec.toFixed(2)}h</span>
-                    <span class="text-[10px] font-black block">${labelMap[item.studyType]}</span>
+            const div = document.createElement('div');
+            div.className = "flex items-center justify-between p-3 rounded-xl border-2 transition-all sub-card";
+            div.innerHTML = `
+                <div class="flex items-center gap-3">
+                    ${item.cover ? `<img src="${item.cover}" class="w-11 h-11 rounded-lg object-cover border-2 shadow-sm">` : `<div class="w-11 h-11 rounded-lg flex items-center justify-center text-sm font-bold card-icon-box"><i class="fa-solid fa-film"></i></div>`}
+                    <div class="space-y-0.5">
+                        <span class="text-xs font-bold block">${item.name} ${item.season ? '('+item.season+')' : ''}</span>
+                        <span class="text-[11px] opacity-70 block">${item.hours}h ${item.minutes}m • ${itemDec.toFixed(2)}h</span>
+                        <span class="text-[10px] font-black block">${labelMap[item.studyType]}</span>
+                    </div>
                 </div>
-            </div>
-            <button onclick="deleteListeningItem('${item.id}', '${item.name}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2.5 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>
-        `;
-        container.appendChild(div);
-    });
+                <button onclick="deleteListeningItem('${item.id}', '${item.name}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2.5 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>
+            `;
+            container.appendChild(div);
+        });
+    }
 
     const chartDonutColor = themeMode === 'dark' ? '#ffffff' : '#1c1917';
     const chartRestColor = themeMode === 'dark' ? '#21252b' : '#e2d9cd';
     const gridColor = themeMode === 'dark' ? 'rgba(255,255,255,0.06)' : '#e7dfd3';
 
-    const ctxDonut = document.getElementById('progressDonutChart').getContext('2d');
-    if (listeningDonutChart) listeningDonutChart.destroy();
-    listeningDonutChart = new Chart(ctxDonut, {
-        type: 'doughnut',
-        data: { labels: ['Concluído', 'Restante'], datasets: [{ data: [totalDecimal, Math.max(targetHours - totalDecimal, 0)], backgroundColor: [chartDonutColor, chartRestColor], borderWidth: 0 }] },
-        options: { responsive: true, maintainAspectRatio: false, cutout: '82%', plugins: { legend: { display: false }, tooltip: { enabled: false } } }
-    });
+    const canvasDonut = document.getElementById('progressDonutChart');
+    if (canvasDonut) {
+        const ctxDonut = canvasDonut.getContext('2d');
+        if (listeningDonutChart) listeningDonutChart.destroy();
+        listeningDonutChart = new Chart(ctxDonut, {
+            type: 'doughnut',
+            data: { labels: ['Concluído', 'Restante'], datasets: [{ data: [totalDecimal, Math.max(targetHours - totalDecimal, 0)], backgroundColor: [chartDonutColor, chartRestColor], borderWidth: 0 }] },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '82%', plugins: { legend: { display: false }, tooltip: { enabled: false } } }
+        });
+    }
 
-    const ctxBar = document.getElementById('barTypeChart').getContext('2d');
-    if (listeningBarChart) listeningBarChart.destroy();
-    listeningBarChart = new Chart(ctxBar, {
-        type: 'bar',
-        data: { labels: ['💎 DIAMANTE', '🥇 OURO', '🥈 PRATA'], datasets: [{ data: [hoursByStudy['DIAMANTE']/60, hoursByStudy['OURO']/60, hoursByStudy['PRATA']/60], backgroundColor: ['#06b6d4', '#eab308', '#94a3b8'], borderRadius: 6, barThickness: 24 }] },
-        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, grid: { color: gridColor }, ticks: { font: { size: 10 } } }, y: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ' ' + c.parsed.x.toFixed(2) + 'h' } } } }
-    });
+    const canvasBar = document.getElementById('barTypeChart');
+    if (canvasBar) {
+        const ctxBar = canvasBar.getContext('2d');
+        if (listeningBarChart) listeningBarChart.destroy();
+        listeningBarChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: { labels: ['💎 DIAMANTE', '🥇 OURO', '🥈 PRATA'], datasets: [{ data: [hoursByStudy['DIAMANTE']/60, hoursByStudy['OURO']/60, hoursByStudy['PRATA']/60], backgroundColor: ['#06b6d4', '#eab308', '#94a3b8'], borderRadius: 6, barThickness: 24 }] },
+            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, grid: { color: gridColor }, ticks: { font: { size: 10 } } }, y: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ' ' + c.parsed.x.toFixed(2) + 'h' } } } }
+        });
+    }
 }
 
 function renderReadingDashboard() {
     const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
     let totalPages = 0;
     readingList.forEach(b => totalPages += Number(b.pages));
-    document.getElementById('reading-stat-books').innerText = readingList.length;
-    document.getElementById('reading-stat-pages').innerText = totalPages;
-    document.getElementById('summary-reading-pages').innerText = totalPages;
+    
+    const setText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+    setText('reading-stat-books', readingList.length);
+    setText('reading-stat-pages', totalPages);
+    setText('summary-reading-pages', totalPages);
 
     const container = document.getElementById('reading-details-list');
-    container.innerHTML = readingList.length === 0 ? `<p class="text-xs opacity-60 text-center py-6 font-medium">${txt.emptyBookList}</p>` : '';
-    readingList.forEach(book => {
-        const div = document.createElement('div');
-        div.className = "flex items-center justify-between p-3 rounded-xl border-2 transition-all sub-card";
-        div.innerHTML = `
-            <div class="flex items-center gap-3">
-                ${book.cover ? `<img src="${book.cover}" class="w-10 h-12 rounded-lg object-cover border-2 shadow-sm">` : `<div class="w-10 h-12 rounded-lg flex items-center justify-center text-xs font-bold card-icon-box"><i class="fa-solid fa-book"></i></div>`}
-                <div class="space-y-0.5">
-                    <span class="text-xs font-bold block">${book.title}</span>
-                    ${book.author ? `<span class="text-[11px] opacity-70 block">${book.author}</span>` : ''}
-                    <span class="text-[10px] font-black text-emerald-600 block">${book.pages} páginas</span>
+    if (container) {
+        container.innerHTML = readingList.length === 0 ? `<p class="text-xs opacity-60 text-center py-6 font-medium">${txt.emptyBookList}</p>` : '';
+        readingList.forEach(book => {
+            const div = document.createElement('div');
+            div.className = "flex items-center justify-between p-3 rounded-xl border-2 transition-all sub-card";
+            div.innerHTML = `
+                <div class="flex items-center gap-3">
+                    ${book.cover ? `<img src="${book.cover}" class="w-10 h-12 rounded-lg object-cover border-2 shadow-sm">` : `<div class="w-10 h-12 rounded-lg flex items-center justify-center text-xs font-bold card-icon-box"><i class="fa-solid fa-book"></i></div>`}
+                    <div class="space-y-0.5">
+                        <span class="text-xs font-bold block">${book.title}</span>
+                        ${book.author ? `<span class="text-[11px] opacity-70 block">${book.author}</span>` : ''}
+                        <span class="text-[10px] font-black text-emerald-600 block">${book.pages} páginas</span>
+                    </div>
                 </div>
-            </div>
-            <button onclick="deleteReadingItem('${book.id}', '${book.title}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2.5 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>
-        `;
-        container.appendChild(div);
-    });
+                <button onclick="deleteReadingItem('${book.id}', '${book.title}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2.5 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>
+            `;
+            container.appendChild(div);
+        });
+    }
 
     const gridColor = themeMode === 'dark' ? 'rgba(255,255,255,0.06)' : '#e7dfd3';
-    const ctxBar = document.getElementById('readingBarChart').getContext('2d');
-    if (readingBarChart) readingBarChart.destroy();
-    readingBarChart = new Chart(ctxBar, {
-        type: 'bar',
-        data: { labels: readingList.map(b => b.title.length > 15 ? b.title.substring(0, 15) + '...' : b.title), datasets: [{ data: readingList.map(b => Number(b.pages)), backgroundColor: '#10b981', borderRadius: 6, barThickness: 20 }] },
-        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: gridColor }, ticks: { font: { size: 10 } } }, x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ' ' + c.parsed.y + ' páginas' } } } }
-    });
+    const canvasBar = document.getElementById('readingBarChart');
+    if (canvasBar) {
+        const ctxBar = canvasBar.getContext('2d');
+        if (readingBarChart) readingBarChart.destroy();
+        readingBarChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: { labels: readingList.map(b => b.title.length > 15 ? b.title.substring(0, 15) + '...' : b.title), datasets: [{ data: readingList.map(b => Number(b.pages)), backgroundColor: '#10b981', borderRadius: 6, barThickness: 20 }] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: gridColor }, ticks: { font: { size: 10 } } }, x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ' ' + c.parsed.y + ' páginas' } } } }
+        });
+    }
 }
 
 function renderVocabularyDashboard() {
     const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
-    document.getElementById('vocab-stat-count').innerText = vocabularyList.length;
+    const setText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+    setText('vocab-stat-count', vocabularyList.length);
     
     let totalCorrect = 0, totalWrong = 0;
     vocabularyList.forEach(v => { totalCorrect += (v.correctCount || 0); totalWrong += (v.wrongCount || 0); });
     const totalAttempts = totalCorrect + totalWrong;
     const accuracy = totalAttempts > 0 ? Math.round((totalCorrect / totalAttempts) * 100) : 0;
-    document.getElementById('vocab-stat-accuracy').innerText = accuracy + '%';
+    setText('vocab-stat-accuracy', accuracy + '%');
 
     const container = document.getElementById('vocabulary-details-list');
-    container.innerHTML = vocabularyList.length === 0 ? `<p class="text-xs opacity-60 text-center py-6 font-medium">${txt.emptyVocabList}</p>` : '';
-    
-    vocabularyList.forEach((v, idx) => {
-        const seqNumber = idx + 1;
-        const div = document.createElement('div');
-        div.className = "flex items-center justify-between p-3 rounded-xl border-2 transition-all sub-card";
-        div.innerHTML = `
-            <div class="flex items-center gap-3">
-                <span class="w-7 h-7 rounded-lg font-black text-xs flex items-center justify-center border-2 card-icon-box">#${seqNumber}</span>
-                <div class="space-y-0.5">
-                    <span class="text-xs font-bold block">${v.word}</span>
-                    <span class="text-[11px] opacity-70 block">${v.translation}</span>
-                    <span class="text-[10px] opacity-80 block">${txt.correctHits} <strong class="text-emerald-600 font-black">${v.correctCount || 0}</strong> | ${txt.wrongHits} <strong class="text-red-600 font-black">${v.wrongCount || 0}</strong></span>
+    if (container) {
+        container.innerHTML = vocabularyList.length === 0 ? `<p class="text-xs opacity-60 text-center py-6 font-medium">${txt.emptyVocabList}</p>` : '';
+        vocabularyList.forEach((v, idx) => {
+            const seqNumber = idx + 1;
+            const div = document.createElement('div');
+            div.className = "flex items-center justify-between p-3 rounded-xl border-2 transition-all sub-card";
+            div.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <span class="w-7 h-7 rounded-lg font-black text-xs flex items-center justify-center border-2 card-icon-box">#${seqNumber}</span>
+                    <div class="space-y-0.5">
+                        <span class="text-xs font-bold block">${v.word}</span>
+                        <span class="text-[11px] opacity-70 block">${v.translation}</span>
+                        <span class="text-[10px] opacity-80 block">${txt.correctHits} <strong class="text-emerald-600 font-black">${v.correctCount || 0}</strong> | ${txt.wrongHits} <strong class="text-red-600 font-black">${v.wrongCount || 0}</strong></span>
+                    </div>
                 </div>
-            </div>
-            <button onclick="deleteVocabularyItem('${v.id}', '${v.word}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2.5 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>
-        `;
-        container.appendChild(div);
-    });
+                <button onclick="deleteVocabularyItem('${v.id}', '${v.word}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2.5 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>
+            `;
+            container.appendChild(div);
+        });
+    }
 
     if (vocabularyList.length > 0 && currentVocabularyIndex >= vocabularyList.length) {
         currentVocabularyIndex = 0;
@@ -565,26 +604,27 @@ function renderVocabularyDashboard() {
 function updateFlashcardUI() {
     const cardInner = document.getElementById('flip-card-inner');
     const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
+    const setText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
     
     if (vocabularyList.length === 0) {
-        document.getElementById('fc-word').innerText = txt.emptyVocabTitle;
-        document.getElementById('fc-translation').innerText = '-';
-        document.getElementById('fc-example').innerText = txt.emptyVocabExample;
-        document.getElementById('vocab-card-number').innerText = '#0';
-        document.getElementById('vocab-card-counter').innerText = `0 ${txt.registered}`;
+        setText('fc-word', txt.emptyVocabTitle);
+        setText('fc-translation', '-');
+        setText('fc-example', txt.emptyVocabExample);
+        setText('vocab-card-number', '#0');
+        setText('vocab-card-counter', `0 ${txt.registered}`);
         return;
     }
 
     const item = vocabularyList[currentVocabularyIndex];
     const seqNumber = currentVocabularyIndex + 1;
 
-    document.getElementById('vocab-card-number').innerText = `#${seqNumber}`;
-    document.getElementById('vocab-card-counter').innerText = `${vocabularyList.length} ${txt.registered}`;
-    document.getElementById('fc-word').innerText = item.word;
-    document.getElementById('fc-translation').innerText = item.translation;
-    document.getElementById('fc-example').innerText = item.example ? `"${item.example}"` : '-';
-    document.getElementById('fc-correct').innerText = item.correctCount || 0;
-    document.getElementById('fc-wrong').innerText = item.wrongCount || 0;
+    setText('vocab-card-number', `#${seqNumber}`);
+    setText('vocab-card-counter', `${vocabularyList.length} ${txt.registered}`);
+    setText('fc-word', item.word);
+    setText('fc-translation', item.translation);
+    setText('fc-example', item.example ? `"${item.example}"` : '-');
+    setText('fc-correct', item.correctCount || 0);
+    setText('fc-wrong', item.wrongCount || 0);
 
     isCardFlipped = false;
     if (cardInner) cardInner.classList.remove('flipped');
@@ -594,10 +634,8 @@ function flipFlashcard() {
     if (vocabularyList.length === 0) return;
     const cardInner = document.getElementById('flip-card-inner');
     isCardFlipped = !isCardFlipped;
-    if (isCardFlipped) {
-        cardInner.classList.add('flipped');
-    } else {
-        cardInner.classList.remove('flipped');
+    if (cardInner) {
+        cardInner.classList.toggle('flipped', isCardFlipped);
     }
 }
 
@@ -647,20 +685,20 @@ function updateHeaderStreakUI() {
     const isAcessedToday = vocabStreakData.lastPracticeDate === todayStr;
     const count = vocabStreakData.streakCount || 0;
 
-    const countElMobile = document.getElementById('header-streak-count');
-    const countElDesktop = document.getElementById('header-streak-count-desktop');
+    const countMobile = document.getElementById('header-streak-count');
     const iconMobile = document.getElementById('header-streak-icon');
-    const iconDesktop = document.getElementById('header-streak-icon-desktop');
+    const countDesk = document.getElementById('header-streak-count-desktop');
+    const iconDesk = document.getElementById('header-streak-icon-desktop');
 
-    if (countElMobile) countElMobile.innerText = count;
-    if (countElDesktop) countElDesktop.innerText = count;
+    if (countMobile) countMobile.innerText = count;
+    if (countDesk) countDesk.innerText = count;
 
     if (isAcessedToday) {
-        if (iconMobile) iconMobile.className = "fa-solid fa-fire text-amber-500";
-        if (iconDesktop) iconDesktop.className = "fa-solid fa-fire text-amber-500";
+        if (iconMobile) iconMobile.className = "fa-solid fa-fire text-amber-500 opacity-100";
+        if (iconDesk) iconDesk.className = "fa-solid fa-fire text-amber-500 opacity-100";
     } else {
         if (iconMobile) iconMobile.className = "fa-solid fa-fire text-stone-400 opacity-60";
-        if (iconDesktop) iconDesktop.className = "fa-solid fa-fire text-stone-400 opacity-60";
+        if (iconDesk) iconDesk.className = "fa-solid fa-fire text-stone-400 opacity-60";
     }
 }
 
@@ -678,62 +716,68 @@ function gradeFlashcard(isCorrect) {
 
 async function handleListeningFormSubmit(e) {
     e.preventDefault();
-    const mediaType = document.querySelector('input[name="mediaType"]:checked').value;
-    const name = document.getElementById('mediaName').value.trim();
-    const studyType = document.querySelector('input[name="studyType"]:checked').value;
+    const mediaTypeRadio = document.querySelector('input[name="mediaType"]:checked');
+    const mediaType = mediaTypeRadio ? mediaTypeRadio.value : 'filme';
+    const nameEl = document.getElementById('mediaName');
+    const name = nameEl ? nameEl.value.trim() : '';
+    const studyTypeRadio = document.querySelector('input[name="studyType"]:checked');
+    const studyType = studyTypeRadio ? studyTypeRadio.value : 'DIAMANTE';
     const coverInput = document.getElementById('mediaCoverFile');
     let hours = 0, minutes = 0, season = '';
 
     if (mediaType === 'filme') {
-        hours = parseInt(document.getElementById('filmHours').value) || 0;
-        minutes = parseInt(document.getElementById('filmMinutes').value) || 0;
+        hours = parseInt(document.getElementById('filmHours')?.value) || 0;
+        minutes = parseInt(document.getElementById('filmMinutes')?.value) || 0;
     } else {
-        season = document.getElementById('seriesSeason').value.trim();
-        const epCount = parseInt(document.getElementById('seriesEpCount').value) || 1;
-        const totalMins = (((parseInt(document.getElementById('seriesEpHours').value) || 0) * 60) + (parseInt(document.getElementById('seriesEpMinutes').value) || 22)) * epCount;
+        season = document.getElementById('seriesSeason')?.value.trim() || '';
+        const epCount = parseInt(document.getElementById('seriesEpCount')?.value) || 1;
+        const totalMins = (((parseInt(document.getElementById('seriesEpHours')?.value) || 0) * 60) + (parseInt(document.getElementById('seriesEpMinutes')?.value) || 22)) * epCount;
         hours = Math.floor(totalMins / 60);
         minutes = totalMins % 60;
         if (epCount > 0) season += season ? ` (${epCount} eps)` : `${epCount} eps`;
     }
 
     let coverBase64 = '';
-    if (coverInput.files && coverInput.files[0]) {
+    if (coverInput && coverInput.files && coverInput.files[0]) {
         coverBase64 = await new Promise(r => { const reader = new FileReader(); reader.onload = (e) => r(e.target.result); reader.readAsDataURL(coverInput.files[0]); });
     }
 
     listeningList.push({ id: Date.now().toString(), type: mediaType, name, season, cover: coverBase64, studyType, hours, minutes });
     saveListeningData();
-    document.getElementById('media-form').reset();
+    const form = document.getElementById('media-form');
+    if (form) form.reset();
     switchTab('dashboard');
 }
 
 async function handleReadingFormSubmit(e) {
     e.preventDefault();
-    const title = document.getElementById('bookTitle').value.trim();
-    const author = document.getElementById('bookAuthor').value.trim();
-    const pages = parseInt(document.getElementById('bookPages').value) || 0;
+    const title = document.getElementById('bookTitle')?.value.trim() || '';
+    const author = document.getElementById('bookAuthor')?.value.trim() || '';
+    const pages = parseInt(document.getElementById('bookPages')?.value) || 0;
     const coverInput = document.getElementById('bookCoverFile');
 
     let coverBase64 = '';
-    if (coverInput.files && coverInput.files[0]) {
+    if (coverInput && coverInput.files && coverInput.files[0]) {
         coverBase64 = await new Promise(r => { const reader = new FileReader(); reader.onload = (e) => r(e.target.result); reader.readAsDataURL(coverInput.files[0]); });
     }
 
     readingList.push({ id: Date.now().toString(), title, author, pages, cover: coverBase64 });
     saveReadingData();
-    document.getElementById('book-form').reset();
+    const form = document.getElementById('book-form');
+    if (form) form.reset();
     switchTab('dashboard');
 }
 
 function handleVocabularyFormSubmit(e) {
     e.preventDefault();
-    const word = document.getElementById('vocabWord').value.trim();
-    const translation = document.getElementById('vocabTranslation').value.trim();
-    const example = document.getElementById('vocabExample').value.trim();
+    const word = document.getElementById('vocabWord')?.value.trim() || '';
+    const translation = document.getElementById('vocabTranslation')?.value.trim() || '';
+    const example = document.getElementById('vocabExample')?.value.trim() || '';
 
     vocabularyList.push({ id: Date.now().toString(), word, translation, example, correctCount: 0, wrongCount: 0 });
     saveVocabularyData();
-    document.getElementById('vocab-form').reset();
+    const form = document.getElementById('vocab-form');
+    if (form) form.reset();
     switchTab('dashboard');
 }
 
@@ -762,8 +806,10 @@ function deleteVocabularyItem(id, word) {
 }
 
 window.onload = function() {
-    document.getElementById('select-target-lang').value = targetLang;
-    document.getElementById('select-ui-lang').value = uiLang;
+    const targetLangSelect = document.getElementById('select-target-lang');
+    const uiLangSelect = document.getElementById('select-ui-lang');
+    if (targetLangSelect) targetLangSelect.value = targetLang;
+    if (uiLangSelect) uiLangSelect.value = uiLang;
     loadLanguageData();
     updateThemeAndFlags();
     applyUITranslations();
