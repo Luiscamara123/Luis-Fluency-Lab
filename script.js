@@ -75,7 +75,7 @@ const UI_TEXTS = {
         hubDesc: "Select a module below to monitor your progress.",
         cardListeningGoal: "GOAL: 1000 HOURS", cardListeningTitle: "LISTENING TRACKER", cardListeningDesc: "Podcasts & series watched in target language. Track listening time.",
         cardReadingTag: "BOOKS READ / PAGES", cardReadingTitle: "READING TRACKER", cardReadingDesc: "Books read, total pages completed. Build your reading habit.",
-        cardvocabTag: "FLASHCARDS & WORDS", cardVocabTitle: "VOCABULARY TRAINER", cardVocabDesc: "Practice vocabulary with flashcards. Review and strengthen recall.",
+        cardVocabTag: "FLASHCARDS & WORDS", cardVocabTitle: "VOCABULARY TRAINER", cardVocabDesc: "Practice vocabulary with flashcards. Review and strengthen recall.",
         btnAccess: "Open Dashboard", btnTrain: "Practice Now",
         goalFixed: "Fixed Goal", progress: "Progress", of1000: "of 1000h",
         summaryListening: "Listening Summary", realTime: "Real Time", registered: "Tracked Items",
@@ -97,7 +97,7 @@ const UI_TEXTS = {
         emptyVocabTitle: "No words added", emptyVocabExample: "Add words using the top menu.", emptyVocabList: "No words registered.", emptyMediaList: "No titles registered.", emptyBookList: "No books registered."
     },
     es: {
-        learningLabel: "Estudiando", uiLabel: "Interfaz",
+        learningLabel: "Estudando", uiLabel: "Interfaz",
         navHub: "Inicio", navDash: "Panel", navCad: "Añadir",
         welcome: "BIENVENIDO, LUIS •",
         hubTitle: "¿Qué quieres registrar o practicar hoy?",
@@ -247,7 +247,7 @@ function updateThemeAndFlags() {
     document.getElementById('vocab-title-prefix').innerText = `Vocabulary (${meta.name})`;
     document.getElementById('card-front-lang-label').innerText = meta.name;
     document.getElementById('hub-badge-flag').innerHTML = `<span>${meta.flag}</span> <span id="hub-welcome">WELCOME, LUIS • ${meta.name.toUpperCase()}</span>`;
-    document.getElementById('footer-text').innerText = `Vintage Immersion Tracker • ${meta.edition} • 2026`;
+    document.getElementById('footer-text').innerText = `Fluency Lab • ${meta.edition} • 2026`;
 
     const iconClass = themeMode === 'dark' ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-stone-700';
     document.getElementById('theme-icon-desktop').className = iconClass;
