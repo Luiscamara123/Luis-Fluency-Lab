@@ -6,11 +6,35 @@ let targetLang = localStorage.getItem('luis_target_language') || 'en';
 let uiLang = localStorage.getItem('luis_ui_language') || 'pt';
 
 const LANG_META = {
-    en: { name: 'English', flag: '🇺🇸', defaultVocab: [{ id: '201', word: 'Breathtaking', translation: 'Deslumbrante', example: 'The view was breathtaking.', correctCount: 0, wrongCount: 0 }] },
-    es: { name: 'Español', flag: '🇪🇸', defaultVocab: [{ id: '201', word: 'Inolvidable', translation: 'Inesquecível', example: 'Fue una experiencia inolvidable.', correctCount: 0, wrongCount: 0 }] },
-    fr: { name: 'Français', flag: '🇫🇷', defaultVocab: [{ id: '201', word: 'Inoubliable', translation: 'Inesquecível', example: 'C\'était un voyage inoubliable.', correctCount: 0, wrongCount: 0 }] },
-    ja: { name: '日本語', flag: '🇯🇵', defaultVocab: [{ id: '201', word: '素晴らしい (Subarashii)', translation: 'Maravilhoso', example: '素晴らしい天気ですね。', correctCount: 0, wrongCount: 0 }] },
-    pt: { name: 'Português', flag: '🇧🇷', defaultVocab: [{ id: '201', word: 'Resiliência', translation: 'Resilience', example: 'A resiliência é fundamental.', correctCount: 0, wrongCount: 0 }] }
+    en: { name: 'English', flag: '🇺🇸' },
+    es: { name: 'Español', flag: '🇪🇸' },
+    fr: { name: 'Français', flag: '🇫🇷' },
+    ja: { name: '日本語', flag: '🇯🇵' },
+    pt: { name: 'Português', flag: '🇧🇷' }
+};
+
+// Dicionário de Vocabulário padrão traduzido para cada idioma da interface
+const VOCAB_TRANSLATIONS = {
+    pt: [
+        { id: '1', word: 'Breathtaking', translation: 'De tirar o fôlego / Deslumbrante', example: 'The view from the mountain was breathtaking.', correctCount: 0, wrongCount: 0 },
+        { id: '2', word: 'Achievement', translation: 'Conquista / Realização', example: 'Learning a new language is a great achievement.', correctCount: 0, wrongCount: 0 }
+    ],
+    en: [
+        { id: '1', word: 'Breathtaking', translation: 'Stunning / Extremely exciting', example: 'The view from the mountain was breathtaking.', correctCount: 0, wrongCount: 0 },
+        { id: '2', word: 'Achievement', translation: 'A thing done successfully with effort', example: 'Learning a new language is a great achievement.', correctCount: 0, wrongCount: 0 }
+    ],
+    es: [
+        { id: '1', word: 'Breathtaking', translation: 'Impresionante / Deslumbrante', example: 'The view from the mountain was breathtaking.', correctCount: 0, wrongCount: 0 },
+        { id: '2', word: 'Achievement', translation: 'Logro / Conquista', example: 'Learning a new language is a great achievement.', correctCount: 0, wrongCount: 0 }
+    ],
+    fr: [
+        { id: '1', word: 'Breathtaking', translation: 'Époustouflant / Saisissant', example: 'The view from the mountain was breathtaking.', correctCount: 0, wrongCount: 0 },
+        { id: '2', word: 'Achievement', translation: 'Réussite / Réalisation', example: 'Learning a new language is a great achievement.', correctCount: 0, wrongCount: 0 }
+    ],
+    ja: [
+        { id: '1', word: 'Breathtaking', translation: '息をのむような (Subarashii)', example: 'The view from the mountain was breathtaking.', correctCount: 0, wrongCount: 0 },
+        { id: '2', word: 'Achievement', translation: '達成 / 成果 (Tassei)', example: 'Learning a new language is a great achievement.', correctCount: 0, wrongCount: 0 }
+    ]
 };
 
 const UI_TEXTS = {
@@ -41,7 +65,8 @@ const UI_TEXTS = {
         totalWords: "Palavras", accuracyRate: "Taxa Acerto", registeredVocab: "Suas Palavras Cadastradas", addWordTitle: "Cadastrar Nova Palavra", addWordDesc: "Adicione termos para treinos.",
         termInLang: "Palavra / Termo no Idioma", termTranslation: "Tradução / Significado", termExample: "Exemplo de Frase (Opcional)",
         tapFlip: "Toque para Virar", clickToFlip: "Clique no cartão para revelar a tradução 🔄", translationTag: "Tradução",
-        correctHits: "Acertos:", wrongHits: "Erros:", btnWrong: "Não Lembrei", btnCorrect: "Lembrei (Certo!)", btnNextRandom: "Sortear Próxima Palavra Aleatória"
+        correctHits: "Acertos:", wrongHits: "Erros:", btnWrong: "Não Lembrei", btnCorrect: "Lembrei (Certo!)", btnNextRandom: "Sortear Próxima Palavra Aleatória",
+        emptyVocabTitle: "Nenhuma palavra", emptyVocabExample: "Cadastre palavras no menu superior.", emptyVocabList: "Nenhuma palavra cadastrada.", emptyMediaList: "Nenhum título cadastrado.", emptyBookList: "Nenhum livro cadastrado."
     },
     en: {
         subtitle: "Global Immersion Platform",
@@ -70,7 +95,8 @@ const UI_TEXTS = {
         totalWords: "Words", accuracyRate: "Accuracy Rate", registeredVocab: "Saved Vocabulary", addWordTitle: "Add New Word", addWordDesc: "Add new terms for training.",
         termInLang: "Word / Term in Target Language", termTranslation: "Translation / Meaning", termExample: "Example Sentence (Optional)",
         tapFlip: "Tap to Flip", clickToFlip: "Click card to reveal translation 🔄", translationTag: "Translation",
-        correctHits: "Correct:", wrongHits: "Wrong:", btnWrong: "Forgot", btnCorrect: "Remembered!", btnNextRandom: "Draw Next Random Word"
+        correctHits: "Correct:", wrongHits: "Wrong:", btnWrong: "Forgot", btnCorrect: "Remembered!", btnNextRandom: "Draw Next Random Word",
+        emptyVocabTitle: "No words added", emptyVocabExample: "Add words using the top menu.", emptyVocabList: "No words registered.", emptyMediaList: "No titles registered.", emptyBookList: "No books registered."
     },
     es: {
         subtitle: "Plataforma Global de Inmersión",
@@ -99,7 +125,8 @@ const UI_TEXTS = {
         totalWords: "Palabras", accuracyRate: "Aciertos", registeredVocab: "Vocabulario Guardado", addWordTitle: "Añadir Palabra", addWordDesc: "Añade nuevos términos.",
         termInLang: "Término en el Idioma", termTranslation: "Traducción / Significado", termExample: "Ejemplo (Opcional)",
         tapFlip: "Toca para Girar", clickToFlip: "Haz clic en la tarjeta para ver traducción 🔄", translationTag: "Traducción",
-        correctHits: "Aciertos:", wrongHits: "Errores:", btnWrong: "Olvidé", btnCorrect: "¡Recordé!", btnNextRandom: "Siguiente Palabra Aleatoria"
+        correctHits: "Aciertos:", wrongHits: "Errores:", btnWrong: "Olvidé", btnCorrect: "¡Recordé!", btnNextRandom: "Siguiente Palabra Aleatoria",
+        emptyVocabTitle: "Sin palabras", emptyVocabExample: "Añade palabras desde el menú superior.", emptyVocabList: "No hay palabras registradas.", emptyMediaList: "No hay títulos registrados.", emptyBookList: "No hay libros registrados."
     },
     fr: {
         subtitle: "Plateforme d'Immersion Globale",
@@ -128,7 +155,8 @@ const UI_TEXTS = {
         totalWords: "Mots", accuracyRate: "Taux de Réussite", registeredVocab: "Vocabulaire Enregistré", addWordTitle: "Ajouter un Mot", addWordDesc: "Ajoutez de nouveaux termes.",
         termInLang: "Terme dans la Langue", termTranslation: "Traduction / Sens", termExample: "Exemple (Optionnel)",
         tapFlip: "Appuyez pour Retourner", clickToFlip: "Cliquez pour voir la traduction 🔄", translationTag: "Traduction",
-        correctHits: "Correct :", wrongHits: "Erreurs :", btnWrong: "Oublié", btnCorrect: "Rappelé !", btnNextRandom: "Tirer un Mot au Hasard"
+        correctHits: "Correct :", wrongHits: "Erreurs :", btnWrong: "Oublié", btnCorrect: "Rappelé !", btnNextRandom: "Tirer un Mot au Hasard",
+        emptyVocabTitle: "Aucun mot", emptyVocabExample: "Ajoutez des mots depuis le menu haut.", emptyVocabList: "Aucun mot enregistré.", emptyMediaList: "Aucun titre enregistré.", emptyBookList: "Aucun livre enregistré."
     },
     ja: {
         subtitle: "グローバル・イマージョン・プラットフォーム",
@@ -157,7 +185,8 @@ const UI_TEXTS = {
         totalWords: "単語数", accuracyRate: "正解率", registeredVocab: "登録済みの単語", addWordTitle: "新しい単語を追加", addWordDesc: "練習用の単語を追加します。",
         termInLang: "学習言語の単語", termTranslation: "翻訳・意味", termExample: "例文（任意）",
         tapFlip: "タップして裏返す", clickToFlip: "カードをクリックして意味を表示 🔄", translationTag: "翻訳・意味",
-        correctHits: "正解:", wrongHits: "不正解:", btnWrong: "覚えていない", btnCorrect: "覚えていた！", btnNextRandom: "次の単語をランダム抽出"
+        correctHits: "正解:", wrongHits: "不正解:", btnWrong: "覚えていない", btnCorrect: "覚えていた！", btnNextRandom: "次の単語をランダム抽出",
+        emptyVocabTitle: "単語がありません", emptyVocabExample: "上のメニューから単語を追加してください。", emptyVocabList: "登録済みの単語はありません。", emptyMediaList: "登録済みの作品はありません。", emptyBookList: "登録済みの本はありません。"
     }
 };
 
@@ -168,34 +197,48 @@ let currentVocabularyIndex = 0;
 let isCardFlipped = false;
 
 function loadLanguageData() {
-    listeningList = JSON.parse(localStorage.getItem(`luis_listening_media_list_${targetLang}`)) || [];
-    readingList = JSON.parse(localStorage.getItem(`luis_reading_book_list_${targetLang}`)) || [];
-    vocabularyList = JSON.parse(localStorage.getItem(`luis_vocabulary_list_${targetLang}`)) || (LANG_META[targetLang] ? LANG_META[targetLang].defaultVocab : []);
+    listeningList = JSON.parse(localStorage.getItem(`luis_listening_${targetLang}`)) || [];
+    readingList = JSON.parse(localStorage.getItem(`luis_reading_${targetLang}`)) || [];
+    
+    // Carrega o vocabulário base correspondente ao idioma da interface atual se não houver dados salvos
+    let savedVocab = JSON.parse(localStorage.getItem(`luis_vocab_${uiLang}`));
+    if (!savedVocab || savedVocab.length === 0) {
+        vocabularyList = VOCAB_TRANSLATIONS[uiLang] || VOCAB_TRANSLATIONS['pt'];
+        saveVocabularyData();
+    } else {
+        vocabularyList = savedVocab;
+    }
 }
 
-function saveListeningData() { localStorage.setItem(`luis_listening_media_list_${targetLang}`, JSON.stringify(listeningList)); }
-function saveReadingData() { localStorage.setItem(`luis_reading_book_list_${targetLang}`, JSON.stringify(readingList)); }
-function saveVocabularyData() { localStorage.setItem(`luis_vocabulary_list_${targetLang}`, JSON.stringify(vocabularyList)); }
+function saveListeningData() { localStorage.setItem(`luis_listening_${targetLang}`, JSON.stringify(listeningList)); }
+function saveReadingData() { localStorage.setItem(`luis_reading_${targetLang}`, JSON.stringify(readingList)); }
+function saveVocabularyData() { localStorage.setItem(`luis_vocab_${uiLang}`, JSON.stringify(vocabularyList)); }
 
 function changeTargetLanguage(newLang) {
     targetLang = newLang;
     localStorage.setItem('luis_target_language', targetLang);
     loadLanguageData();
     updateUIWithTargetLang();
-    if (currentModule === 'listening') renderListeningDashboard();
-    if (currentModule === 'reading') renderReadingDashboard();
-    if (currentModule === 'vocabulary') renderVocabularyDashboard();
+    refreshAllDashboards();
 }
 
 function changeUILanguage(newUILang) {
     uiLang = newUILang;
     localStorage.setItem('luis_ui_language', uiLang);
+    loadLanguageData(); // Recarrega o vocabulário traduzido para a nova UI
     applyUITranslations();
+    refreshAllDashboards();
+}
+
+function refreshAllDashboards() {
+    applyUITranslations();
+    if (currentModule === 'listening') renderListeningDashboard();
+    if (currentModule === 'reading') renderReadingDashboard();
+    if (currentModule === 'vocabulary') renderVocabularyDashboard();
 }
 
 function updateUIWithTargetLang() {
     const meta = LANG_META[targetLang] || LANG_META['en'];
-    
     document.getElementById('listening-flag-icon').innerText = meta.flag;
     document.getElementById('reading-flag-icon').innerText = meta.flag;
     document.getElementById('vocab-flag-icon').innerText = meta.flag;
@@ -314,8 +357,10 @@ function openModule(moduleName) {
         nav.classList.add('hidden');
     } else {
         nav.classList.remove('hidden');
-        document.getElementById(`module-${moduleName}`).classList.remove('hidden');
+        const activeEl = document.getElementById(`module-${moduleName}`);
+        activeEl.classList.remove('hidden');
         switchTab('dashboard');
+        activeEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 }
 
@@ -331,9 +376,7 @@ function switchTab(tabId) {
         if (cadEl) cadEl.classList.toggle('hidden', currentModule !== mod || tabId !== 'cadastro');
     });
 
-    if (currentModule === 'listening' && tabId === 'dashboard') renderListeningDashboard();
-    if (currentModule === 'reading' && tabId === 'dashboard') renderReadingDashboard();
-    if (currentModule === 'vocabulary' && tabId === 'dashboard') renderVocabularyDashboard();
+    refreshAllDashboards();
 
     if (tabId === 'dashboard') {
         btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider uppercase transition-all bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow";
@@ -355,8 +398,7 @@ function toggleDarkMode() {
     const isDark = document.documentElement.classList.toggle('dark');
     localStorage.setItem('luis_theme_mode', isDark ? 'dark' : 'light');
     updateThemeIcon(isDark);
-    if (currentModule === 'listening') renderListeningDashboard();
-    if (currentModule === 'reading') renderReadingDashboard();
+    refreshAllDashboards();
 }
 
 function updateThemeIcon(isDark) {
@@ -376,7 +418,9 @@ function initTheme() {
 let listeningDonutChart = null, listeningBarChart = null, readingBarChart = null;
 
 function renderListeningDashboard() {
+    const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
     let totalMins = 0, hoursByStudy = { 'DIAMANTE': 0, 'PRATA': 0, 'OURO': 0 };
+    
     listeningList.forEach(item => {
         const mins = (Number(item.hours) * 60) + Number(item.minutes);
         totalMins += mins;
@@ -387,14 +431,14 @@ function renderListeningDashboard() {
     const pct = Math.min((totalDecimal / TARGET_LISTENING_HOURS) * 100, 100);
 
     document.getElementById('total-hours-display').innerText = totalDecimal.toFixed(2) + 'h';
-    document.getElementById('percentage-display').innerText = pct.toFixed(2) + '% completo';
+    document.getElementById('percentage-display').innerText = pct.toFixed(2) + '%';
     document.getElementById('banner-progress').innerText = pct.toFixed(2) + '%';
     document.getElementById('stat-total-time').innerText = `${Math.floor(totalMins / 60)}h ${totalMins % 60}m`;
     document.getElementById('stat-total-items').innerText = listeningList.length;
     document.getElementById('summary-total').innerText = totalDecimal.toFixed(2) + 'h';
 
     const container = document.getElementById('listening-details-list');
-    container.innerHTML = listeningList.length === 0 ? '<p class="text-xs text-slate-400 text-center py-4">Nenhum título cadastrado.</p>' : '';
+    container.innerHTML = listeningList.length === 0 ? `<p class="text-xs text-slate-400 text-center py-4">${txt.emptyMediaList}</p>` : '';
     listeningList.forEach(item => {
         const itemDec = getDecimalHours(Number(item.hours), Number(item.minutes));
         const labelMap = { 'DIAMANTE': '💎 DIAMANTE', 'OURO': '🥇 OURO', 'PRATA': '🥈 PRATA' };
@@ -435,6 +479,7 @@ function renderListeningDashboard() {
 }
 
 function renderReadingDashboard() {
+    const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
     let totalPages = 0;
     readingList.forEach(b => totalPages += Number(b.pages));
     document.getElementById('reading-stat-books').innerText = readingList.length;
@@ -442,7 +487,7 @@ function renderReadingDashboard() {
     document.getElementById('summary-reading-pages').innerText = totalPages;
 
     const container = document.getElementById('reading-details-list');
-    container.innerHTML = readingList.length === 0 ? '<p class="text-xs text-slate-400 text-center py-4">Nenhum livro cadastrado.</p>' : '';
+    container.innerHTML = readingList.length === 0 ? `<p class="text-xs text-slate-400 text-center py-4">${txt.emptyBookList}</p>` : '';
     readingList.forEach(book => {
         const div = document.createElement('div');
         div.className = "flex items-center justify-between p-2.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30";
@@ -471,6 +516,7 @@ function renderReadingDashboard() {
 }
 
 function renderVocabularyDashboard() {
+    const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
     document.getElementById('vocab-stat-count').innerText = vocabularyList.length;
     
     let totalCorrect = 0, totalWrong = 0;
@@ -480,7 +526,7 @@ function renderVocabularyDashboard() {
     document.getElementById('vocab-stat-accuracy').innerText = accuracy + '%';
 
     const container = document.getElementById('vocabulary-details-list');
-    container.innerHTML = vocabularyList.length === 0 ? '<p class="text-xs text-slate-400 text-center py-4">Nenhuma palavra cadastrada.</p>' : '';
+    container.innerHTML = vocabularyList.length === 0 ? `<p class="text-xs text-slate-400 text-center py-4">${txt.emptyVocabList}</p>` : '';
     
     vocabularyList.forEach((v, idx) => {
         const seqNumber = idx + 1;
@@ -492,7 +538,7 @@ function renderVocabularyDashboard() {
                 <div class="space-y-0.5">
                     <span class="text-xs font-bold text-slate-900 dark:text-white block">${v.word}</span>
                     <span class="text-[11px] text-slate-400 block">${v.translation}</span>
-                    <span class="text-[10px] text-slate-500 block">Acertos: <strong class="text-emerald-500">${v.correctCount || 0}</strong> | Erros: <strong class="text-red-500">${v.wrongCount || 0}</strong></span>
+                    <span class="text-[10px] text-slate-500 block">${txt.correctHits} <strong class="text-emerald-500">${v.correctCount || 0}</strong> | ${txt.wrongHits} <strong class="text-red-500">${v.wrongCount || 0}</strong></span>
                 </div>
             </div>
             <button onclick="deleteVocabularyItem('${v.id}', '${v.word}')" class="text-slate-400 hover:text-red-500 p-2"><i class="fa-solid fa-trash-can text-xs"></i></button>
@@ -508,13 +554,14 @@ function renderVocabularyDashboard() {
 
 function updateFlashcardUI() {
     const cardInner = document.getElementById('flip-card-inner');
+    const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
     
     if (vocabularyList.length === 0) {
-        document.getElementById('fc-word').innerText = 'Nenhuma palavra';
+        document.getElementById('fc-word').innerText = txt.emptyVocabTitle;
         document.getElementById('fc-translation').innerText = '-';
-        document.getElementById('fc-example').innerText = 'Cadastre palavras no menu superior.';
+        document.getElementById('fc-example').innerText = txt.emptyVocabExample;
         document.getElementById('vocab-card-number').innerText = '#0';
-        document.getElementById('vocab-card-counter').innerText = '0 total';
+        document.getElementById('vocab-card-counter').innerText = `0 ${txt.registered}`;
         return;
     }
 
@@ -522,10 +569,10 @@ function updateFlashcardUI() {
     const seqNumber = currentVocabularyIndex + 1;
 
     document.getElementById('vocab-card-number').innerText = `#${seqNumber}`;
-    document.getElementById('vocab-card-counter').innerText = `${vocabularyList.length} cadastradas`;
+    document.getElementById('vocab-card-counter').innerText = `${vocabularyList.length} ${txt.registered}`;
     document.getElementById('fc-word').innerText = item.word;
     document.getElementById('fc-translation').innerText = item.translation;
-    document.getElementById('fc-example').innerText = item.example ? `"${item.example}"` : 'Sem frase de exemplo.';
+    document.getElementById('fc-example').innerText = item.example ? `"${item.example}"` : '-';
     document.getElementById('fc-correct').innerText = item.correctCount || 0;
     document.getElementById('fc-wrong').innerText = item.wrongCount || 0;
 

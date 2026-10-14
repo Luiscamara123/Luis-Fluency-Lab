@@ -26,7 +26,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- FontAwesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- CSS Externo -->
+    <!-- Estilos Personalizados -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="min-h-screen transition-colors duration-300 bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 flex flex-col">
@@ -48,9 +48,9 @@
             </div>
             
             <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 w-full md:w-auto">
-                <!-- SELETOR DE IDIOMA QUE ESTÁ APRENDENDO (DROPDOWN ESTILIZADO) -->
+                <!-- DROPDOWN: IDIOMA ESTUDADO -->
                 <div class="relative flex-1 sm:flex-initial min-w-[150px]">
-                    <div class="flex items-center gap-2 bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800/80 px-3 py-1.5 rounded-xl shadow-sm hover:border-indigo-400 transition-all">
+                    <div class="flex items-center gap-2 bg-indigo-50/80 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 px-3 py-1.5 rounded-2xl shadow-sm hover:border-indigo-400 transition-all">
                         <i class="fa-solid fa-earth-americas text-indigo-600 dark:text-indigo-400 text-xs shrink-0"></i>
                         <div class="flex flex-col flex-grow">
                             <span class="text-[9px] font-extrabold uppercase text-indigo-500 dark:text-indigo-400 tracking-wider leading-none" id="label-learning">Estudando</span>
@@ -66,9 +66,9 @@
                     </div>
                 </div>
 
-                <!-- SELETOR DE IDIOMA DA INTERFACE (DROPDOWN ESTILIZADO) -->
+                <!-- DROPDOWN: INTERFACE -->
                 <div class="relative flex-1 sm:flex-initial min-w-[150px]">
-                    <div class="flex items-center gap-2 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/80 px-3 py-1.5 rounded-xl shadow-sm hover:border-emerald-400 transition-all">
+                    <div class="flex items-center gap-2 bg-emerald-50/80 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-3 py-1.5 rounded-2xl shadow-sm hover:border-emerald-400 transition-all">
                         <i class="fa-solid fa-language text-emerald-600 dark:text-emerald-400 text-xs shrink-0"></i>
                         <div class="flex flex-col flex-grow">
                             <span class="text-[9px] font-extrabold uppercase text-emerald-600 dark:text-emerald-400 tracking-wider leading-none" id="label-ui-lang">Interface</span>
@@ -107,7 +107,7 @@
     <!-- CONTEÚDO PRINCIPAL -->
     <main class="flex-grow max-w-6xl w-full mx-auto p-4 sm:p-6">
 
-        <!-- ================= TELA INICIAL / HUB SELETOR ================= -->
+        <!-- TELA INICIAL / HUB SELETOR -->
         <section id="module-hub" class="py-8 sm:py-12 space-y-8">
             <div class="text-center space-y-2 max-w-xl mx-auto">
                 <span id="hub-welcome" class="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Welcome, Luis! 🇺🇸</span>
@@ -137,7 +137,7 @@
                     </div>
                 </div>
 
-                <!-- CARD 2: READING (LIVROS) -->
+                <!-- CARD 2: READING -->
                 <div onclick="openModule('reading')" class="group relative rounded-3xl p-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer border border-slate-700 overflow-hidden hover:-translate-y-1 flex flex-col justify-between">
                     <div class="absolute top-0 right-0 w-28 h-28 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
                     <div class="relative z-10 space-y-3">
@@ -157,7 +157,7 @@
                     </div>
                 </div>
 
-                <!-- CARD 3: VOCABULARY (FLASHCARDS) -->
+                <!-- CARD 3: VOCABULARY -->
                 <div onclick="openModule('vocabulary')" class="group relative rounded-3xl p-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer border border-slate-700 overflow-hidden hover:-translate-y-1 flex flex-col justify-between">
                     <div class="absolute top-0 right-0 w-28 h-28 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all"></div>
                     <div class="relative z-10 space-y-3">
@@ -180,9 +180,8 @@
             </div>
         </section>
 
-
-        <!-- ================= MÓDULO LISTENING ================= -->
-        <div id="module-listening" class="hidden space-y-6">
+        <!-- MÓDULO LISTENING -->
+        <div id="module-listening" class="hidden space-y-6 pt-2">
             <section class="us-flag-card rounded-2xl shadow-xl border border-slate-700/50 p-6 text-white relative flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden">
                 <div class="absolute inset-y-0 left-0 w-2.5 us-flag-banner"></div>
                 <div class="absolute -right-12 -bottom-12 w-48 h-48 rounded-full us-stars-canton opacity-20 pointer-events-none"></div>
@@ -213,7 +212,6 @@
                 </div>
             </section>
 
-            <!-- Dashboard Listening -->
             <section id="listening-tab-dashboard" class="space-y-6">
                 <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-around gap-6">
                     <div class="relative w-52 h-52 sm:w-60 sm:h-60 flex items-center justify-center">
@@ -272,7 +270,6 @@
                 </div>
             </section>
 
-            <!-- Cadastro Listening -->
             <section id="listening-tab-cadastro" class="hidden max-w-xl mx-auto bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
                 <div class="mb-6">
                     <h2 class="text-xl font-bold text-slate-900 dark:text-white" id="lbl-add-media-title">Cadastrar Filme ou Série</h2>
@@ -372,8 +369,8 @@
         </div>
 
 
-        <!-- ================= MÓDULO READING (LIVROS) ================= -->
-        <div id="module-reading" class="hidden space-y-6">
+        <!-- MÓDULO READING -->
+        <div id="module-reading" class="hidden space-y-6 pt-2">
             <section class="bg-gradient-to-r from-emerald-900 to-slate-900 rounded-2xl shadow-xl border border-slate-700/50 p-6 text-white flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="space-y-2 max-w-xl">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-800/80 border border-emerald-400/30 text-xs font-semibold tracking-widest uppercase text-emerald-100">
@@ -398,7 +395,6 @@
                 </div>
             </section>
 
-            <!-- Dashboard Reading -->
             <section id="reading-tab-dashboard" class="space-y-6">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
@@ -424,7 +420,6 @@
                 </div>
             </section>
 
-            <!-- Cadastro Reading -->
             <section id="reading-tab-cadastro" class="hidden max-w-xl mx-auto bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
                 <div class="mb-6">
                     <h2 class="text-xl font-bold text-slate-900 dark:text-white" id="lbl-add-book-title">Cadastrar Novo Livro</h2>
@@ -457,8 +452,8 @@
         </div>
 
 
-        <!-- ================= MÓDULO VOCABULARY ================= -->
-        <div id="module-vocabulary" class="hidden space-y-6">
+        <!-- MÓDULO VOCABULARY -->
+        <div id="module-vocabulary" class="hidden space-y-6 pt-2">
             <section class="bg-gradient-to-r from-amber-900 to-slate-900 rounded-2xl shadow-xl border border-slate-700/50 p-6 text-white flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="space-y-2 max-w-xl">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-800/80 border border-amber-400/30 text-xs font-semibold tracking-widest uppercase text-amber-100">
@@ -483,7 +478,6 @@
                 </div>
             </section>
 
-            <!-- Dashboard / Trainer Vocabulary -->
             <section id="vocabulary-tab-dashboard" class="space-y-6">
                 
                 <!-- FLASHCARD INTERATIVO -->
@@ -551,7 +545,6 @@
                 </div>
             </section>
 
-            <!-- Cadastro Vocabulary -->
             <section id="vocabulary-tab-cadastro" class="hidden max-w-xl mx-auto bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
                 <div class="mb-6">
                     <h2 class="text-xl font-bold text-slate-900 dark:text-white" id="lbl-add-word-title">Cadastrar Nova Palavra</h2>
