@@ -4,16 +4,16 @@ let currentTab = 'dashboard';
 
 let targetLang = localStorage.getItem('luis_target_language') || 'en';
 let uiLang = localStorage.getItem('luis_ui_language') || 'pt';
+let themeMode = localStorage.getItem('luis_theme_mode') || 'light';
 
 const LANG_META = {
-    en: { name: 'English', flag: '🇺🇸' },
-    es: { name: 'Español', flag: '🇪🇸' },
-    fr: { name: 'Français', flag: '🇫🇷' },
-    ja: { name: '日本語', flag: '🇯🇵' },
-    pt: { name: 'Português', flag: '🇧🇷' }
+    en: { name: 'English', flag: '🇺🇸', themeClass: 'theme-en', platformName: 'American Immersion Platform', edition: 'American Edition' },
+    es: { name: 'Español', flag: '🇪🇸', themeClass: 'theme-es', platformName: 'Plataforma de Inmersión Española', edition: 'Edición Española' },
+    fr: { name: 'Français', flag: '🇫🇷', themeClass: 'theme-fr', platformName: "Plateforme d'Immersion Française", edition: 'Édition Française' },
+    ja: { name: '日本語', flag: '🇯🇵', themeClass: 'theme-ja', platformName: '日本没入プラットフォーム・和の学習ダッシュボード', edition: '和風 Edition' },
+    pt: { name: 'Português', flag: '🇧🇷', themeClass: 'theme-pt', platformName: 'Plataforma de Imersão Brasileira', edition: 'Edición Brasil' }
 };
 
-// Dicionário de Vocabulário padrão traduzido para cada idioma da interface
 const VOCAB_TRANSLATIONS = {
     pt: [
         { id: '1', word: 'Breathtaking', translation: 'De tirar o fôlego / Deslumbrante', example: 'The view from the mountain was breathtaking.', correctCount: 0, wrongCount: 0 },
@@ -39,18 +39,17 @@ const VOCAB_TRANSLATIONS = {
 
 const UI_TEXTS = {
     pt: {
-        subtitle: "Plataforma Global de Imersão",
         learningLabel: "Estudando", uiLabel: "Interface",
         navHub: "Início", navDash: "Dashboard", navCad: "Cadastrar",
-        welcome: "Bem-vindo, Luis!",
-        hubTitle: "O que você quer registrar ou treinar hoje?",
-        hubDesc: "Escolha uma das modalidades abaixo para acompanhar sua evolução.",
-        cardListeningGoal: "Meta: 1000 Horas", cardListeningTitle: "Listening Tracker", cardListeningDesc: "Filmes e séries assistidos no idioma selecionado.",
-        cardReadingTag: "Leitura de Livros", cardReadingTitle: "Reading Tracker", cardReadingDesc: "Livros lidos, contagem de obras e páginas acumuladas.",
-        cardVocabTag: "Flashcards", cardVocabTitle: "Vocabulary Trainer", cardVocabDesc: "Treine palavras aprendidas com teste de verificação.",
-        btnAccess: "Acessar Dashboard", btnTrain: "Treinar Vocabulário",
+        welcome: "BEM-VINDO, LUIS •",
+        hubTitle: "O que você deseja registrar ou praticar hoje?",
+        hubDesc: "Selecione um módulo abaixo para acompanhar seu progresso.",
+        cardListeningGoal: "META: 1000 HORAS", cardListeningTitle: "Rastreador de Escuta", cardListeningDesc: "Filmes, séries e podcasts assistidos no idioma.",
+        cardReadingTag: "LEITURA DE LIVROS", cardReadingTitle: "Rastreador de Leitura", cardReadingDesc: "Livros lidos, páginas e total de obras.",
+        cardVocabTag: "FLASHCARDS", cardVocabTitle: "Treinador de Vocabulário", cardVocabDesc: "Pratique com exercícios de memória e vocabulário.",
+        btnAccess: "Acessar o Painel", btnTrain: "Treinar Vocabulário",
         goalFixed: "Meta Fixa", progress: "Progresso", of1000: "de 1000h",
-        summaryListening: "Resumo do Listening", realTime: "Tempo Real", registered: "Cadastrados",
+        summaryListening: "Resumo de Escuta", realTime: "Tempo Real", registered: "Cadastrados",
         hoursByType: "Horas por Tipo de Estudo", hoursByTypeDesc: "Separação por Diamante, Prata e Ouro.",
         titlesWatched: "Títulos Assistidos", decimalTotal: "TOTAL DECIMAL:", target: "ALVO:",
         addMediaTitle: "Cadastrar Filme ou Série", addMediaDesc: "Adicione suas horas de imersão.",
@@ -69,19 +68,18 @@ const UI_TEXTS = {
         emptyVocabTitle: "Nenhuma palavra", emptyVocabExample: "Cadastre palavras no menu superior.", emptyVocabList: "Nenhuma palavra cadastrada.", emptyMediaList: "Nenhum título cadastrado.", emptyBookList: "Nenhum livro cadastrado."
     },
     en: {
-        subtitle: "Global Immersion Platform",
         learningLabel: "Studying", uiLabel: "Interface",
         navHub: "Home", navDash: "Dashboard", navCad: "Add New",
-        welcome: "Welcome, Luis!",
-        hubTitle: "What do you want to track or practice today?",
-        hubDesc: "Select one of the modules below to track your progress.",
-        cardListeningGoal: "Goal: 1000 Hours", cardListeningTitle: "Listening Tracker", cardListeningDesc: "Movies and series watched in your target language.",
-        cardReadingTag: "Book Reading", cardReadingTitle: "Reading Tracker", cardReadingDesc: "Books read, count of works and total pages accumulated.",
-        cardVocabTag: "Flashcards", cardVocabTitle: "Vocabulary Trainer", cardVocabDesc: "Practice vocabulary with active memory tests.",
-        btnAccess: "Open Dashboard", btnTrain: "Train Vocabulary",
+        welcome: "WELCOME, LUIS •",
+        hubTitle: "What would you like to track or practice today?",
+        hubDesc: "Select a module below to monitor your progress.",
+        cardListeningGoal: "GOAL: 1000 HOURS", cardListeningTitle: "LISTENING TRACKER", cardListeningDesc: "Podcasts & series watched in target language. Track listening time.",
+        cardReadingTag: "BOOKS READ / PAGES", cardReadingTitle: "READING TRACKER", cardReadingDesc: "Books read, total pages completed. Build your reading habit.",
+        cardvocabTag: "FLASHCARDS & WORDS", cardVocabTitle: "VOCABULARY TRAINER", cardVocabDesc: "Practice vocabulary with flashcards. Review and strengthen recall.",
+        btnAccess: "Open Dashboard", btnTrain: "Practice Now",
         goalFixed: "Fixed Goal", progress: "Progress", of1000: "of 1000h",
         summaryListening: "Listening Summary", realTime: "Real Time", registered: "Tracked Items",
-        hoursByType: "Hours by Study Type", hoursByTypeDesc: "Breakdown by Diamond, Silver, and Gold.",
+        hoursByType: "Hours by Study Type", hoursByTypeDesc: "Breakdown by Diamond, Silver, and Gold categories.",
         titlesWatched: "Titles Watched", decimalTotal: "DECIMAL TOTAL:", target: "TARGET:",
         addMediaTitle: "Add Movie or Series", addMediaDesc: "Log your immersion hours.",
         mediaType: "Media Type", optMovie: "Movie", optSeries: "Series",
@@ -89,7 +87,7 @@ const UI_TEXTS = {
         descDiamond: "No subtitles (100% focused practice)", descGold: "Audio and subtitles in target language", descSilver: "Original audio with translated subtitles",
         hours: "Hours", minutes: "Minutes", season: "Season (Optional)", epCount: "Episodes Watched", avgHours: "Avg Ep (Hours)", avgMins: "Avg Ep (Minutes)",
         save: "Save Entry", cancel: "Cancel",
-        totalBooks: "Total Books", totalPages: "Total Pages", pagesPerBook: "Pages Read per Book", pagesPerBookDesc: "Volume of reading per book.",
+        totalBooks: "Total Books", totalPages: "Total Pages", pagesPerBook: "Pages Read per Book", pagesPerBookDesc: "Volume of reading per registered work.",
         registeredBooks: "Saved Books", sumPages: "TOTAL PAGES:", addBookTitle: "Add New Book", addBookDesc: "Log books read to calculate total pages.",
         bookTitle: "Book Title", bookAuthor: "Author (Optional)", bookPages: "Number of Pages", bookCover: "Book Cover",
         totalWords: "Words", accuracyRate: "Accuracy Rate", registeredVocab: "Saved Vocabulary", addWordTitle: "Add New Word", addWordDesc: "Add new terms for training.",
@@ -99,16 +97,15 @@ const UI_TEXTS = {
         emptyVocabTitle: "No words added", emptyVocabExample: "Add words using the top menu.", emptyVocabList: "No words registered.", emptyMediaList: "No titles registered.", emptyBookList: "No books registered."
     },
     es: {
-        subtitle: "Plataforma Global de Inmersión",
         learningLabel: "Estudiando", uiLabel: "Interfaz",
         navHub: "Inicio", navDash: "Panel", navCad: "Añadir",
-        welcome: "¡Bienvenido, Luis!",
+        welcome: "BIENVENIDO, LUIS •",
         hubTitle: "¿Qué quieres registrar o practicar hoy?",
-        hubDesc: "Selecciona un módulo a continuación para ver tu progreso.",
-        cardListeningGoal: "Meta: 1000 Horas", cardListeningTitle: "Listening Tracker", cardListeningDesc: "Películas y series vistas en el idioma seleccionado.",
-        cardReadingTag: "Lectura de Libros", cardReadingTitle: "Reading Tracker", cardReadingDesc: "Libros leídos, número de obras y páginas acumuladas.",
-        cardVocabTag: "Tarjetas", cardVocabTitle: "Vocabulary Trainer", cardVocabDesc: "Practica palabras con prueba de memoria.",
-        btnAccess: "Ver Panel", btnTrain: "Entrenar Vocabulario",
+        hubDesc: "Selecciona un módulo a continuación para seguir tu progreso.",
+        cardListeningGoal: "OBJETIVO: 1000 HORAS", cardListeningTitle: "Seguimiento de Escucha", cardListeningDesc: "Podcasts, series y vídeos en el idioma.",
+        cardReadingTag: "LECTURA DE LIBROS", cardReadingTitle: "Seguimiento de Lectura", cardReadingDesc: "Libros leídos, obras completadas y total de páginas.",
+        cardVocabTag: "TARJETAS", cardVocabTitle: "Entrenador de Vocabulario", cardVocabDesc: "Practica con tarjetas y ejercicios de memoria.",
+        btnAccess: "Acceder al Panel", btnTrain: "Practicar Vocabulario",
         goalFixed: "Meta Fija", progress: "Progreso", of1000: "de 1000h",
         summaryListening: "Resumen de Escucha", realTime: "Tiempo Real", registered: "Registrados",
         hoursByType: "Horas por Tipo de Estudio", hoursByTypeDesc: "Separación por Diamante, Plata y Oro.",
@@ -129,15 +126,14 @@ const UI_TEXTS = {
         emptyVocabTitle: "Sin palabras", emptyVocabExample: "Añade palabras desde el menú superior.", emptyVocabList: "No hay palabras registradas.", emptyMediaList: "No hay títulos registrados.", emptyBookList: "No hay libros registrados."
     },
     fr: {
-        subtitle: "Plateforme d'Immersion Globale",
         learningLabel: "Apprentissage", uiLabel: "Interface",
-        navHub: "Accueil", navDash: "Tableau de bord", navCad: "Ajouter",
-        welcome: "Bienvenue, Luis !",
+        navHub: "Accueil", navDash: "Tableau", navCad: "Ajouter",
+        welcome: "BIENVENUE, LUIS •",
         hubTitle: "Que souhaitez-vous enregistrer ou pratiquer aujourd'hui ?",
         hubDesc: "Sélectionnez un module ci-dessous pour suivre vos progrès.",
-        cardListeningGoal: "Objectif : 1000 Heures", cardListeningTitle: "Listening Tracker", cardListeningDesc: "Films et séries regardés dans la langue cible.",
-        cardReadingTag: "Lecture de Livres", cardReadingTitle: "Reading Tracker", cardReadingDesc: "Livres lus, nombre d'ouvrages et total de pages.",
-        cardVocabTag: "Flashcards", cardVocabTitle: "Vocabulary Trainer", cardVocabDesc: "Entraînez-vous avec des tests de mémoire.",
+        cardListeningGoal: "OBJECTIF : 1000 HEURES", cardListeningTitle: "Listening Tracker", cardListeningDesc: "Films et séries regardés dans la langue cible.",
+        cardReadingTag: "LECTURE DE LIVRES", cardReadingTitle: "Reading Tracker", cardReadingDesc: "Livres lus, nombre d'ouvrages et total de pages.",
+        cardVocabTag: "FLASHCARDS", cardVocabTitle: "Vocabulary Trainer", cardVocabDesc: "Entraînez-vous avec des tests de mémoire.",
         btnAccess: "Accéder au Tableau", btnTrain: "Entraîner le Vocabulaire",
         goalFixed: "Objectif Fixe", progress: "Progrès", of1000: "sur 1000h",
         summaryListening: "Résumé d'Écoute", realTime: "Temps Réel", registered: "Enregistrés",
@@ -159,17 +155,16 @@ const UI_TEXTS = {
         emptyVocabTitle: "Aucun mot", emptyVocabExample: "Ajoutez des mots depuis le menu haut.", emptyVocabList: "Aucun mot enregistré.", emptyMediaList: "Aucun titre enregistré.", emptyBookList: "Aucun livre enregistré."
     },
     ja: {
-        subtitle: "グローバル・イマージョン・プラットフォーム",
-        learningLabel: "学習言語", uiLabel: "表示言語",
+        learningLabel: "学習モード", uiLabel: "インターフェース",
         navHub: "ホーム", navDash: "ダッシュボード", navCad: "新規登録",
-        welcome: "ようこそ、Luisさん！",
-        hubTitle: "今日記録・練習する項目を選択してください",
-        hubDesc: "以下のモジュールを選択して進捗を記録しましょう。",
-        cardListeningGoal: "目標：1000時間", cardListeningTitle: "Listening Tracker", cardListeningDesc: "選択した言語で視聴した映画・ドラマ。",
-        cardReadingTag: "読書記録", cardReadingTitle: "Reading Tracker", cardReadingDesc: "読了した本と累積ページ数。",
-        cardVocabTag: "単語カード", cardVocabTitle: "Vocabulary Trainer", cardVocabDesc: "記憶テストで語彙力を鍛えましょう。",
-        btnAccess: "ダッシュボードを開く", btnTrain: "単語を練習する",
-        goalFixed: "固定目標", progress: "進捗率", of1000: " / 1000時間",
+        welcome: "ようこそ、ルイイスさん •",
+        hubTitle: "今日は何を記録・練習しますか？",
+        hubDesc: "下のモジュールを選択して、進捗を記録しましょう。",
+        cardListeningGoal: "目標：1000時間", cardListeningTitle: "リスニングトラッカー", cardListeningDesc: "アニメ・ドラマ・ポッドキャストで聞き取り練習。",
+        cardReadingTag: "読書・テキスト学習", cardReadingTitle: "リーディングトラッカー", cardReadingDesc: "本・漫画・記事を読んで、ページ数と作品数を記録。",
+        cardVocabTag: "語彙学習", cardVocabTitle: "語彙トレーナー", cardVocabDesc: "単語を復習し、記憶を定着させるフラッシュカード。",
+        btnAccess: "ダッシュボードへ", btnTrain: "学習を開始",
+        goalFixed: "目標時間", progress: "進捗率", of1000: " / 1000時間",
         summaryListening: "リスニング概要", realTime: "実時間", registered: "登録数",
         hoursByType: "学習タイプ別時間", hoursByTypeDesc: "ダイヤモンド、シルバー、ゴールド分類。",
         titlesWatched: "視聴タイトル一覧", decimalTotal: "合計時間:", target: "目標:",
@@ -200,7 +195,6 @@ function loadLanguageData() {
     listeningList = JSON.parse(localStorage.getItem(`luis_listening_${targetLang}`)) || [];
     readingList = JSON.parse(localStorage.getItem(`luis_reading_${targetLang}`)) || [];
     
-    // Carrega o vocabulário base correspondente ao idioma da interface atual se não houver dados salvos
     let savedVocab = JSON.parse(localStorage.getItem(`luis_vocab_${uiLang}`));
     if (!savedVocab || savedVocab.length === 0) {
         vocabularyList = VOCAB_TRANSLATIONS[uiLang] || VOCAB_TRANSLATIONS['pt'];
@@ -218,16 +212,46 @@ function changeTargetLanguage(newLang) {
     targetLang = newLang;
     localStorage.setItem('luis_target_language', targetLang);
     loadLanguageData();
-    updateUIWithTargetLang();
+    updateThemeAndFlags();
     refreshAllDashboards();
 }
 
 function changeUILanguage(newUILang) {
     uiLang = newUILang;
     localStorage.setItem('luis_ui_language', uiLang);
-    loadLanguageData(); // Recarrega o vocabulário traduzido para a nova UI
+    loadLanguageData();
     applyUITranslations();
     refreshAllDashboards();
+}
+
+function toggleDarkMode() {
+    themeMode = themeMode === 'light' ? 'dark' : 'light';
+    localStorage.setItem('luis_theme_mode', themeMode);
+    updateThemeAndFlags();
+}
+
+function updateThemeAndFlags() {
+    const meta = LANG_META[targetLang] || LANG_META['en'];
+    const body = document.getElementById('app-body');
+    
+    body.className = `${meta.themeClass} mode-${themeMode} min-h-screen transition-all duration-500 flex flex-col`;
+    
+    document.getElementById('header-flag-badge').innerText = meta.flag;
+    document.getElementById('listening-flag-icon').innerText = meta.flag;
+    document.getElementById('reading-flag-icon').innerText = meta.flag;
+    document.getElementById('vocab-flag-icon').innerText = meta.flag;
+    
+    document.getElementById('header-subtitle').innerText = meta.platformName;
+    document.getElementById('listening-welcome-prefix').innerText = `Listening (${meta.name})`;
+    document.getElementById('reading-title-prefix').innerText = `Reading (${meta.name})`;
+    document.getElementById('vocab-title-prefix').innerText = `Vocabulary (${meta.name})`;
+    document.getElementById('card-front-lang-label').innerText = meta.name;
+    document.getElementById('hub-badge-flag').innerHTML = `<span>${meta.flag}</span> <span id="hub-welcome">WELCOME, LUIS • ${meta.name.toUpperCase()}</span>`;
+    document.getElementById('footer-text').innerText = `Vintage Immersion Tracker • ${meta.edition} • 2026`;
+
+    const iconClass = themeMode === 'dark' ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-stone-700';
+    document.getElementById('theme-icon-desktop').className = iconClass;
+    document.getElementById('theme-icon-mobile').className = iconClass;
 }
 
 function refreshAllDashboards() {
@@ -237,22 +261,9 @@ function refreshAllDashboards() {
     if (currentModule === 'vocabulary') renderVocabularyDashboard();
 }
 
-function updateUIWithTargetLang() {
-    const meta = LANG_META[targetLang] || LANG_META['en'];
-    document.getElementById('listening-flag-icon').innerText = meta.flag;
-    document.getElementById('reading-flag-icon').innerText = meta.flag;
-    document.getElementById('vocab-flag-icon').innerText = meta.flag;
-    
-    document.getElementById('listening-welcome-prefix').innerText = `Listening (${meta.name})`;
-    document.getElementById('reading-title-prefix').innerText = `Reading (${meta.name})`;
-    document.getElementById('vocab-title-prefix').innerText = `Vocabulary (${meta.name})`;
-    document.getElementById('card-front-lang-label').innerText = meta.name;
-}
-
 function applyUITranslations() {
     const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
 
-    document.getElementById('header-subtitle').innerText = txt.subtitle;
     document.getElementById('label-learning').innerText = txt.learningLabel;
     document.getElementById('label-ui-lang').innerText = txt.uiLabel;
 
@@ -260,7 +271,6 @@ function applyUITranslations() {
     document.getElementById('lbl-nav-dash').innerText = txt.navDash;
     document.getElementById('lbl-nav-cad').innerText = txt.navCad;
 
-    document.getElementById('hub-welcome').innerText = `${txt.welcome} ${LANG_META[targetLang].flag}`;
     document.getElementById('hub-title').innerText = txt.hubTitle;
     document.getElementById('hub-desc').innerText = txt.hubDesc;
 
@@ -282,12 +292,12 @@ function applyUITranslations() {
     document.getElementById('lbl-goal-fixed').innerText = txt.goalFixed;
     document.getElementById('lbl-progress').innerText = txt.progress;
     document.getElementById('lbl-of-1000').innerText = txt.of1000;
-    document.getElementById('lbl-summary-listening').innerText = txt.summaryListening;
+    document.getElementById('lbl-summary-listening').innerHTML = `<i class="fa-solid fa-chart-line"></i> ${txt.summaryListening}`;
     document.getElementById('lbl-real-time').innerText = txt.realTime;
     document.getElementById('lbl-registered').innerText = txt.registered;
     document.getElementById('lbl-hours-by-type').innerText = txt.hoursByType;
     document.getElementById('lbl-hours-by-type-desc').innerText = txt.hoursByTypeDesc;
-    document.getElementById('lbl-titles-watched').innerText = txt.titlesWatched;
+    document.getElementById('lbl-titles-watched').innerHTML = `<i class="fa-solid fa-list"></i> ${txt.titlesWatched}`;
     document.getElementById('lbl-decimal-total').innerText = txt.decimalTotal;
     document.getElementById('lbl-target').innerText = txt.target;
 
@@ -316,7 +326,7 @@ function applyUITranslations() {
     document.getElementById('lbl-total-pages').innerText = txt.totalPages;
     document.getElementById('lbl-pages-per-book').innerText = txt.pagesPerBook;
     document.getElementById('lbl-pages-per-book-desc').innerText = txt.pagesPerBookDesc;
-    document.getElementById('lbl-registered-books').innerText = txt.registeredBooks;
+    document.getElementById('lbl-registered-books').innerHTML = `<i class="fa-solid fa-bookmark"></i> ${txt.registeredBooks}`;
     document.getElementById('lbl-sum-pages').innerText = txt.sumPages;
     document.getElementById('lbl-add-book-title').innerText = txt.addBookTitle;
     document.getElementById('lbl-add-book-desc').innerText = txt.addBookDesc;
@@ -327,7 +337,7 @@ function applyUITranslations() {
 
     document.getElementById('lbl-total-words').innerText = txt.totalWords;
     document.getElementById('lbl-accuracy-rate').innerText = txt.accuracyRate;
-    document.getElementById('lbl-registered-vocab').innerText = txt.registeredVocab;
+    document.getElementById('lbl-registered-vocab').innerHTML = `<i class="fa-solid fa-list-check"></i> ${txt.registeredVocab}`;
     document.getElementById('lbl-add-word-title').innerText = txt.addWordTitle;
     document.getElementById('lbl-add-word-desc').innerText = txt.addWordDesc;
     document.getElementById('lbl-term-in-lang').innerText = txt.termInLang;
@@ -379,11 +389,11 @@ function switchTab(tabId) {
     refreshAllDashboards();
 
     if (tabId === 'dashboard') {
-        btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider uppercase transition-all bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow";
-        btnCad.className = "px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider uppercase transition-all text-slate-600 dark:text-slate-300";
+        btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all shadow nav-btn-active";
+        btnCad.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all opacity-70 hover:opacity-100";
     } else {
-        btnCad.className = "px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider uppercase transition-all bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow";
-        btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider uppercase transition-all text-slate-600 dark:text-slate-300";
+        btnCad.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all shadow nav-btn-active";
+        btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all opacity-70 hover:opacity-100";
     }
 }
 
@@ -393,27 +403,6 @@ function toggleMediaType(type) {
 }
 
 function getDecimalHours(h, m) { return h + (m / 60); }
-
-function toggleDarkMode() {
-    const isDark = document.documentElement.classList.toggle('dark');
-    localStorage.setItem('luis_theme_mode', isDark ? 'dark' : 'light');
-    updateThemeIcon(isDark);
-    refreshAllDashboards();
-}
-
-function updateThemeIcon(isDark) {
-    const iconClass = isDark ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-slate-600';
-    document.getElementById('theme-icon-desktop').className = iconClass;
-    document.getElementById('theme-icon-mobile').className = iconClass;
-}
-
-function initTheme() {
-    const savedTheme = localStorage.getItem('luis_theme_mode');
-    const isDark = savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    if (isDark) document.documentElement.classList.add('dark');
-    else document.documentElement.classList.remove('dark');
-    updateThemeIcon(isDark);
-}
 
 let listeningDonutChart = null, listeningBarChart = null, readingBarChart = null;
 
@@ -438,34 +427,36 @@ function renderListeningDashboard() {
     document.getElementById('summary-total').innerText = totalDecimal.toFixed(2) + 'h';
 
     const container = document.getElementById('listening-details-list');
-    container.innerHTML = listeningList.length === 0 ? `<p class="text-xs text-slate-400 text-center py-4">${txt.emptyMediaList}</p>` : '';
+    container.innerHTML = listeningList.length === 0 ? `<p class="text-xs opacity-60 text-center py-6 font-medium">${txt.emptyMediaList}</p>` : '';
     listeningList.forEach(item => {
         const itemDec = getDecimalHours(Number(item.hours), Number(item.minutes));
         const labelMap = { 'DIAMANTE': '💎 DIAMANTE', 'OURO': '🥇 OURO', 'PRATA': '🥈 PRATA' };
-        const colorMap = { 'DIAMANTE': 'text-cyan-400', 'OURO': 'text-amber-400', 'PRATA': 'text-slate-400' };
 
         const div = document.createElement('div');
-        div.className = "flex items-center justify-between p-2.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30";
+        div.className = "flex items-center justify-between p-3 rounded-xl border-2 transition-all sub-card";
         div.innerHTML = `
             <div class="flex items-center gap-3">
-                ${item.cover ? `<img src="${item.cover}" class="w-10 h-10 rounded-lg object-cover border border-slate-700">` : `<div class="w-10 h-10 rounded-lg bg-slate-700 flex items-center justify-center text-slate-400 text-xs font-bold"><i class="fa-solid fa-film"></i></div>`}
+                ${item.cover ? `<img src="${item.cover}" class="w-11 h-11 rounded-lg object-cover border-2 shadow-sm">` : `<div class="w-11 h-11 rounded-lg flex items-center justify-center text-sm font-bold card-icon-box"><i class="fa-solid fa-film"></i></div>`}
                 <div class="space-y-0.5">
-                    <span class="text-xs font-bold text-slate-900 dark:text-white block">${item.name} ${item.season ? '('+item.season+')' : ''}</span>
-                    <span class="text-[11px] text-slate-400 block">${item.hours}h ${item.minutes}m • ${itemDec.toFixed(2)}h</span>
-                    <span class="text-[10px] font-semibold ${colorMap[item.studyType]} block">${labelMap[item.studyType]}</span>
+                    <span class="text-xs font-bold block">${item.name} ${item.season ? '('+item.season+')' : ''}</span>
+                    <span class="text-[11px] opacity-70 block">${item.hours}h ${item.minutes}m • ${itemDec.toFixed(2)}h</span>
+                    <span class="text-[10px] font-black block">${labelMap[item.studyType]}</span>
                 </div>
             </div>
-            <button onclick="deleteListeningItem('${item.id}', '${item.name}')" class="text-slate-400 hover:text-red-500 p-2"><i class="fa-solid fa-trash-can text-xs"></i></button>
+            <button onclick="deleteListeningItem('${item.id}', '${item.name}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2.5 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>
         `;
         container.appendChild(div);
     });
 
-    const isDark = document.documentElement.classList.contains('dark');
+    const chartDonutColor = themeMode === 'dark' ? '#ffffff' : '#1c1917';
+    const chartRestColor = themeMode === 'dark' ? '#21252b' : '#e2d9cd';
+    const gridColor = themeMode === 'dark' ? 'rgba(255,255,255,0.06)' : '#e7dfd3';
+
     const ctxDonut = document.getElementById('progressDonutChart').getContext('2d');
     if (listeningDonutChart) listeningDonutChart.destroy();
     listeningDonutChart = new Chart(ctxDonut, {
         type: 'doughnut',
-        data: { labels: ['Concluído', 'Restante'], datasets: [{ data: [totalDecimal, Math.max(TARGET_LISTENING_HOURS - totalDecimal, 0)], backgroundColor: [isDark ? '#818cf8' : '#312e81', isDark ? '#334155' : '#e2e8f0'], borderWidth: 0 }] },
+        data: { labels: ['Concluído', 'Restante'], datasets: [{ data: [totalDecimal, Math.max(TARGET_LISTENING_HOURS - totalDecimal, 0)], backgroundColor: [chartDonutColor, chartRestColor], borderWidth: 0 }] },
         options: { responsive: true, maintainAspectRatio: false, cutout: '82%', plugins: { legend: { display: false }, tooltip: { enabled: false } } }
     });
 
@@ -474,7 +465,7 @@ function renderListeningDashboard() {
     listeningBarChart = new Chart(ctxBar, {
         type: 'bar',
         data: { labels: ['💎 DIAMANTE', '🥇 OURO', '🥈 PRATA'], datasets: [{ data: [hoursByStudy['DIAMANTE']/60, hoursByStudy['OURO']/60, hoursByStudy['PRATA']/60], backgroundColor: ['#06b6d4', '#eab308', '#94a3b8'], borderRadius: 6, barThickness: 24 }] },
-        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, grid: { color: isDark ? '#1e293b' : '#f1f5f9' }, ticks: { color: isDark ? '#94a3b8' : '#64748b', font: { size: 10 } } }, y: { grid: { display: false }, ticks: { color: isDark ? '#cbd5e1' : '#334155', font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ' ' + c.parsed.x.toFixed(2) + 'h' } } } }
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, grid: { color: gridColor }, ticks: { font: { size: 10 } } }, y: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ' ' + c.parsed.x.toFixed(2) + 'h' } } } }
     });
 }
 
@@ -487,31 +478,31 @@ function renderReadingDashboard() {
     document.getElementById('summary-reading-pages').innerText = totalPages;
 
     const container = document.getElementById('reading-details-list');
-    container.innerHTML = readingList.length === 0 ? `<p class="text-xs text-slate-400 text-center py-4">${txt.emptyBookList}</p>` : '';
+    container.innerHTML = readingList.length === 0 ? `<p class="text-xs opacity-60 text-center py-6 font-medium">${txt.emptyBookList}</p>` : '';
     readingList.forEach(book => {
         const div = document.createElement('div');
-        div.className = "flex items-center justify-between p-2.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30";
+        div.className = "flex items-center justify-between p-3 rounded-xl border-2 transition-all sub-card";
         div.innerHTML = `
             <div class="flex items-center gap-3">
-                ${book.cover ? `<img src="${book.cover}" class="w-10 h-12 rounded-md object-cover border border-slate-700">` : `<div class="w-10 h-12 rounded-md bg-slate-700 flex items-center justify-center text-slate-400 text-xs font-bold"><i class="fa-solid fa-book"></i></div>`}
+                ${book.cover ? `<img src="${book.cover}" class="w-10 h-12 rounded-lg object-cover border-2 shadow-sm">` : `<div class="w-10 h-12 rounded-lg flex items-center justify-center text-xs font-bold card-icon-box"><i class="fa-solid fa-book"></i></div>`}
                 <div class="space-y-0.5">
-                    <span class="text-xs font-bold text-slate-900 dark:text-white block">${book.title}</span>
-                    ${book.author ? `<span class="text-[11px] text-slate-400 block">${book.author}</span>` : ''}
-                    <span class="text-[10px] font-semibold text-emerald-400 block">${book.pages} páginas</span>
+                    <span class="text-xs font-bold block">${book.title}</span>
+                    ${book.author ? `<span class="text-[11px] opacity-70 block">${book.author}</span>` : ''}
+                    <span class="text-[10px] font-black text-emerald-600 block">${book.pages} páginas</span>
                 </div>
             </div>
-            <button onclick="deleteReadingItem('${book.id}', '${book.title}')" class="text-slate-400 hover:text-red-500 p-2"><i class="fa-solid fa-trash-can text-xs"></i></button>
+            <button onclick="deleteReadingItem('${book.id}', '${book.title}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2.5 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>
         `;
         container.appendChild(div);
     });
 
-    const isDark = document.documentElement.classList.contains('dark');
+    const gridColor = themeMode === 'dark' ? 'rgba(255,255,255,0.06)' : '#e7dfd3';
     const ctxBar = document.getElementById('readingBarChart').getContext('2d');
     if (readingBarChart) readingBarChart.destroy();
     readingBarChart = new Chart(ctxBar, {
         type: 'bar',
         data: { labels: readingList.map(b => b.title.length > 15 ? b.title.substring(0, 15) + '...' : b.title), datasets: [{ data: readingList.map(b => Number(b.pages)), backgroundColor: '#10b981', borderRadius: 6, barThickness: 20 }] },
-        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: isDark ? '#1e293b' : '#f1f5f9' }, ticks: { color: isDark ? '#94a3b8' : '#64748b', font: { size: 10 } } }, x: { grid: { display: false }, ticks: { color: isDark ? '#cbd5e1' : '#334155', font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ' ' + c.parsed.y + ' páginas' } } } }
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: gridColor }, ticks: { font: { size: 10 } } }, x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ' ' + c.parsed.y + ' páginas' } } } }
     });
 }
 
@@ -526,22 +517,22 @@ function renderVocabularyDashboard() {
     document.getElementById('vocab-stat-accuracy').innerText = accuracy + '%';
 
     const container = document.getElementById('vocabulary-details-list');
-    container.innerHTML = vocabularyList.length === 0 ? `<p class="text-xs text-slate-400 text-center py-4">${txt.emptyVocabList}</p>` : '';
+    container.innerHTML = vocabularyList.length === 0 ? `<p class="text-xs opacity-60 text-center py-6 font-medium">${txt.emptyVocabList}</p>` : '';
     
     vocabularyList.forEach((v, idx) => {
         const seqNumber = idx + 1;
         const div = document.createElement('div');
-        div.className = "flex items-center justify-between p-2.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30";
+        div.className = "flex items-center justify-between p-3 rounded-xl border-2 transition-all sub-card";
         div.innerHTML = `
             <div class="flex items-center gap-3">
-                <span class="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-500 font-bold text-xs flex items-center justify-center border border-amber-500/20">#${seqNumber}</span>
+                <span class="w-7 h-7 rounded-lg font-black text-xs flex items-center justify-center border-2 card-icon-box">#${seqNumber}</span>
                 <div class="space-y-0.5">
-                    <span class="text-xs font-bold text-slate-900 dark:text-white block">${v.word}</span>
-                    <span class="text-[11px] text-slate-400 block">${v.translation}</span>
-                    <span class="text-[10px] text-slate-500 block">${txt.correctHits} <strong class="text-emerald-500">${v.correctCount || 0}</strong> | ${txt.wrongHits} <strong class="text-red-500">${v.wrongCount || 0}</strong></span>
+                    <span class="text-xs font-bold block">${v.word}</span>
+                    <span class="text-[11px] opacity-70 block">${v.translation}</span>
+                    <span class="text-[10px] opacity-80 block">${txt.correctHits} <strong class="text-emerald-600 font-black">${v.correctCount || 0}</strong> | ${txt.wrongHits} <strong class="text-red-600 font-black">${v.wrongCount || 0}</strong></span>
                 </div>
             </div>
-            <button onclick="deleteVocabularyItem('${v.id}', '${v.word}')" class="text-slate-400 hover:text-red-500 p-2"><i class="fa-solid fa-trash-can text-xs"></i></button>
+            <button onclick="deleteVocabularyItem('${v.id}', '${v.word}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2.5 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>
         `;
         container.appendChild(div);
     });
@@ -701,11 +692,10 @@ function deleteVocabularyItem(id, word) {
 }
 
 window.onload = function() {
-    initTheme();
     document.getElementById('select-target-lang').value = targetLang;
     document.getElementById('select-ui-lang').value = uiLang;
     loadLanguageData();
-    updateUIWithTargetLang();
+    updateThemeAndFlags();
     applyUITranslations();
     openModule('hub');
 };

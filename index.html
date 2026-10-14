@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luis Immersion Tracker</title>
+    <title>Vintage Immersion Platform</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -12,11 +12,8 @@
             theme: {
                 extend: {
                     colors: {
-                        usred: '#B22234',
-                        usblue: '#3C3B6E',
-                        gold: '#EAB308',
-                        silver: '#94A3B8',
-                        diamond: '#06B6D4'
+                        countryPrimary: 'var(--country-primary)',
+                        countrySecondary: 'var(--country-secondary)'
                     }
                 }
             }
@@ -24,37 +21,44 @@
     </script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- FontAwesome para ícones -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Estilos Personalizados -->
+    <!-- Google Fonts Vintage -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Estilos Personalizados Vintage Exatos -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="min-h-screen transition-colors duration-300 bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 flex flex-col">
+<body id="app-body" class="theme-en mode-light min-h-screen transition-all duration-500 flex flex-col">
 
-    <!-- HEADER PRINCIPAL -->
-    <header class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-50 transition-colors shadow-sm">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+    <!-- HEADER PRINCIPAL VINTAGE COM BORDAS ORNAMENTADAS -->
+    <header class="app-header border-b sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-6xl mx-auto px-4 py-3.5 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3 cursor-pointer w-full md:w-auto justify-between md:justify-start" onclick="openModule('hub')">
-                <div>
-                    <h1 class="text-lg sm:text-xl font-bold font-serif-header tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
-                        <span>LUIS IMMERSION TRACKER</span>
-                    </h1>
-                    <p class="text-xs text-slate-500 dark:text-slate-400" id="header-subtitle">Plataforma Global de Imersão</p>
+                <div class="flex items-center gap-3">
+                    <div id="header-flag-badge" class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border flag-badge-box">
+                        🇺🇸
+                    </div>
+                    <div>
+                        <h1 class="text-base sm:text-lg font-black font-serif tracking-wide flex items-center gap-2">
+                            <span>VINTAGE IMMERSION</span>
+                        </h1>
+                        <p class="text-[11px] font-medium opacity-75" id="header-subtitle">American Immersion Platform</p>
+                    </div>
                 </div>
 
-                <button onclick="toggleDarkMode()" class="md:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                <button onclick="toggleDarkMode()" class="md:hidden p-2.5 rounded-xl border transition-all theme-toggle-btn">
                     <i id="theme-icon-mobile" class="fa-solid fa-moon"></i>
                 </button>
             </div>
             
-            <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 w-full md:w-auto">
+            <div class="flex flex-wrap items-center justify-center gap-2.5 w-full md:w-auto">
                 <!-- DROPDOWN: IDIOMA ESTUDADO -->
-                <div class="relative flex-1 sm:flex-initial min-w-[150px]">
-                    <div class="flex items-center gap-2 bg-indigo-50/80 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 px-3 py-1.5 rounded-2xl shadow-sm hover:border-indigo-400 transition-all">
-                        <i class="fa-solid fa-earth-americas text-indigo-600 dark:text-indigo-400 text-xs shrink-0"></i>
+                <div class="relative flex-1 sm:flex-initial min-w-[170px]">
+                    <div class="flex items-center gap-2 border px-3.5 py-2 rounded-xl shadow-sm transition-all dropdown-box">
+                        <i class="fa-solid fa-earth-americas text-xs shrink-0 opacity-70"></i>
                         <div class="flex flex-col flex-grow">
-                            <span class="text-[9px] font-extrabold uppercase text-indigo-500 dark:text-indigo-400 tracking-wider leading-none" id="label-learning">Estudando</span>
-                            <select id="select-target-lang" onchange="changeTargetLanguage(this.value)" class="bg-transparent font-bold text-xs text-slate-900 dark:text-white border-none focus:outline-none cursor-pointer pr-4 appearance-none py-0.5">
+                            <span class="text-[9px] font-black uppercase tracking-wider leading-none opacity-60" id="label-learning">Learning Mode</span>
+                            <select id="select-target-lang" onchange="changeTargetLanguage(this.value)" class="bg-transparent font-bold text-xs border-none focus:outline-none cursor-pointer pr-4 appearance-none py-0.5 select-custom">
                                 <option value="en">🇺🇸 English</option>
                                 <option value="es">🇪🇸 Español</option>
                                 <option value="fr">🇫🇷 Français</option>
@@ -62,17 +66,17 @@
                                 <option value="pt">🇧🇷 Português</option>
                             </select>
                         </div>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-indigo-400 pointer-events-none ml-auto"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] opacity-50 pointer-events-none ml-auto"></i>
                     </div>
                 </div>
 
                 <!-- DROPDOWN: INTERFACE -->
-                <div class="relative flex-1 sm:flex-initial min-w-[150px]">
-                    <div class="flex items-center gap-2 bg-emerald-50/80 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-3 py-1.5 rounded-2xl shadow-sm hover:border-emerald-400 transition-all">
-                        <i class="fa-solid fa-language text-emerald-600 dark:text-emerald-400 text-xs shrink-0"></i>
+                <div class="relative flex-1 sm:flex-initial min-w-[160px]">
+                    <div class="flex items-center gap-2 border px-3.5 py-2 rounded-xl shadow-sm transition-all dropdown-box">
+                        <i class="fa-solid fa-language text-xs shrink-0 opacity-70"></i>
                         <div class="flex flex-col flex-grow">
-                            <span class="text-[9px] font-extrabold uppercase text-emerald-600 dark:text-emerald-400 tracking-wider leading-none" id="label-ui-lang">Interface</span>
-                            <select id="select-ui-lang" onchange="changeUILanguage(this.value)" class="bg-transparent font-bold text-xs text-slate-900 dark:text-white border-none focus:outline-none cursor-pointer pr-4 appearance-none py-0.5">
+                            <span class="text-[9px] font-black uppercase tracking-wider leading-none opacity-60" id="label-ui-lang">Interface</span>
+                            <select id="select-ui-lang" onchange="changeUILanguage(this.value)" class="bg-transparent font-bold text-xs border-none focus:outline-none cursor-pointer pr-4 appearance-none py-0.5 select-custom">
                                 <option value="pt">🇧🇷 Português</option>
                                 <option value="en">🇺🇸 English</option>
                                 <option value="es">🇪🇸 Español</option>
@@ -80,100 +84,108 @@
                                 <option value="ja">🇯🇵 日本語</option>
                             </select>
                         </div>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-emerald-400 pointer-events-none ml-auto"></i>
+                        <i class="fa-solid fa-chevron-down text-[10px] opacity-50 pointer-events-none ml-auto"></i>
                     </div>
                 </div>
 
                 <!-- NAVEGAÇÃO -->
-                <nav id="main-nav" class="hidden flex gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
-                    <button onclick="openModule('hub')" id="nav-btn-hub" class="px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider uppercase transition-all text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
-                        <i class="fa-solid fa-house mr-1"></i> <span id="lbl-nav-hub">Início</span>
+                <nav id="main-nav" class="hidden flex gap-1.5 border p-1.5 rounded-xl shadow-sm nav-container">
+                    <button onclick="openModule('hub')" id="nav-btn-hub" class="px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all opacity-70 hover:opacity-100">
+                        <i class="fa-solid fa-house mr-1"></i> <span id="lbl-nav-hub">Home</span>
                     </button>
-                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider uppercase transition-all bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow">
+                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all shadow nav-btn-active">
                         <i class="fa-solid fa-chart-pie mr-1"></i> <span id="lbl-nav-dash">Dashboard</span>
                     </button>
-                    <button onclick="switchTab('cadastro')" id="btn-cadastro" class="px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider uppercase transition-all text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
-                        <i class="fa-solid fa-plus-circle mr-1"></i> <span id="lbl-nav-cad">Cadastrar</span>
+                    <button onclick="switchTab('cadastro')" id="btn-cadastro" class="px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all opacity-70 hover:opacity-100">
+                        <i class="fa-solid fa-plus-circle mr-1"></i> <span id="lbl-nav-cad">Add New</span>
                     </button>
                 </nav>
 
-                <button onclick="toggleDarkMode()" class="hidden md:block p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                <button onclick="toggleDarkMode()" class="hidden md:block p-3 rounded-xl border transition-all theme-toggle-btn shadow-sm">
                     <i id="theme-icon-desktop" class="fa-solid fa-moon"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- CONTEÚDO PRINCIPAL -->
-    <main class="flex-grow max-w-6xl w-full mx-auto p-4 sm:p-6">
+    <!-- CONTEÚDO PRINCIPAL COM MOLDURA VITORIANA NAS BORDAS -->
+    <main class="flex-grow max-w-6xl w-full mx-auto p-4 sm:p-6 relative">
 
-        <!-- TELA INICIAL / HUB SELETOR -->
+        <!-- ELEMENTOS DECORATIVOS VITORIANOS NAS 4 PONTAS DA TELA -->
+        <div class="absolute top-2 left-2 text-lg pointer-events-none opacity-40 select-none decor-corner">❧</div>
+        <div class="absolute top-2 right-2 text-lg pointer-events-none opacity-40 select-none decor-corner transform scale-x-[-1]">❧</div>
+        <div class="absolute bottom-2 left-2 text-lg pointer-events-none opacity-40 select-none decor-corner transform scale-y-[-1]">❧</div>
+        <div class="absolute bottom-2 right-2 text-lg pointer-events-none opacity-40 select-none decor-corner transform scale-[-1]">❧</div>
+
+        <!-- TELA INICIAL / HUB SELETOR VINTAGE EXATO -->
         <section id="module-hub" class="py-8 sm:py-12 space-y-8">
-            <div class="text-center space-y-2 max-w-xl mx-auto">
-                <span id="hub-welcome" class="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Welcome, Luis! 🇺🇸</span>
-                <h2 id="hub-title" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">O que você quer registrar ou treinar hoje?</h2>
-                <p id="hub-desc" class="text-sm text-slate-500 dark:text-slate-400">Escolha uma das modalidades abaixo para acompanhar sua evolução.</p>
+            <div class="text-center space-y-3 max-w-xl mx-auto">
+                <div id="hub-badge-flag" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-bold uppercase tracking-widest shadow-sm hub-badge">
+                    <span>🇺🇸</span> <span id="hub-welcome">WELCOME, LUIS • USA</span>
+                </div>
+                <h2 id="hub-title" class="text-2xl sm:text-4xl font-black font-serif tracking-tight">What would you like to track or practice today?</h2>
+                <p id="hub-desc" class="text-sm font-medium opacity-80">Select a module below to monitor your progress.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto pt-4">
                 
                 <!-- CARD 1: LISTENING -->
-                <div onclick="openModule('listening')" class="group relative rounded-3xl p-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer border border-slate-700 overflow-hidden hover:-translate-y-1 flex flex-col justify-between">
-                    <div class="absolute top-0 right-0 w-28 h-28 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-all"></div>
-                    <div class="relative z-10 space-y-3">
-                        <div class="w-12 h-12 rounded-2xl bg-indigo-600/30 border border-indigo-400/30 flex items-center justify-center text-indigo-300 text-xl">
+                <div onclick="openModule('listening')" class="vintage-card group relative rounded-2xl p-7 border-2 shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col justify-between">
+                    <div class="absolute top-0 left-0 right-0 h-1.5 flag-accent-bar"></div>
+                    <div class="space-y-4 pt-1">
+                        <div class="w-12 h-12 rounded-xl border flex items-center justify-center text-xl shadow-inner card-icon-box">
                             <i class="fa-solid fa-headphones"></i>
                         </div>
                         <div>
-                            <span id="card-listening-goal" class="text-[11px] font-bold text-indigo-400 uppercase tracking-wider">Meta: 1000 Horas</span>
-                            <h3 id="card-listening-title" class="text-xl font-bold text-white group-hover:text-indigo-200 transition-colors">Listening Tracker</h3>
+                            <span id="card-listening-goal" class="text-[11px] font-black uppercase tracking-widest opacity-70">GOAL: 1000 HOURS</span>
+                            <h3 id="card-listening-title" class="text-xl font-bold font-serif group-hover:opacity-80 transition-colors mt-0.5">LISTENING TRACKER</h3>
                         </div>
-                        <p id="card-listening-desc" class="text-xs text-slate-300 leading-relaxed">
-                            Filmes e séries assistidos no idioma selecionado.
+                        <p id="card-listening-desc" class="text-xs leading-relaxed font-medium opacity-80">
+                            Podcasts & series watched in English. Track listening time and comprehension.
                         </p>
                     </div>
-                    <div class="pt-4 relative z-10 flex items-center text-xs font-bold text-indigo-400 group-hover:translate-x-1 transition-transform">
-                        <span class="hub-btn-access">Acessar Dashboard</span> <i class="fa-solid fa-arrow-right ml-2"></i>
+                    <div class="pt-6 flex items-center text-xs font-bold group-hover:translate-x-1 transition-transform">
+                        <span class="hub-btn-access">Open Dashboard</span> <i class="fa-solid fa-arrow-right ml-2"></i>
                     </div>
                 </div>
 
                 <!-- CARD 2: READING -->
-                <div onclick="openModule('reading')" class="group relative rounded-3xl p-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer border border-slate-700 overflow-hidden hover:-translate-y-1 flex flex-col justify-between">
-                    <div class="absolute top-0 right-0 w-28 h-28 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
-                    <div class="relative z-10 space-y-3">
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-600/30 border border-emerald-400/30 flex items-center justify-center text-emerald-300 text-xl">
+                <div onclick="openModule('reading')" class="vintage-card group relative rounded-2xl p-7 border-2 shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col justify-between">
+                    <div class="absolute top-0 left-0 right-0 h-1.5 flag-accent-bar"></div>
+                    <div class="space-y-4 pt-1">
+                        <div class="w-12 h-12 rounded-xl border flex items-center justify-center text-xl shadow-inner card-icon-box">
                             <i class="fa-solid fa-book-open"></i>
                         </div>
                         <div>
-                            <span id="card-reading-tag" class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">Leitura de Livros</span>
-                            <h3 id="card-reading-title" class="text-xl font-bold text-white group-hover:text-emerald-200 transition-colors">Reading Tracker</h3>
+                            <span id="card-reading-tag" class="text-[11px] font-black uppercase tracking-widest opacity-70">BOOKS READ / PAGES</span>
+                            <h3 id="card-reading-title" class="text-xl font-bold font-serif group-hover:opacity-80 transition-colors mt-0.5">READING TRACKER</h3>
                         </div>
-                        <p id="card-reading-desc" class="text-xs text-slate-300 leading-relaxed">
-                            Livros lidos, contagem de obras e total de páginas acumuladas.
+                        <p id="card-reading-desc" class="text-xs leading-relaxed font-medium opacity-80">
+                            Books read, total pages completed. Build your reading habit.
                         </p>
                     </div>
-                    <div class="pt-4 relative z-10 flex items-center text-xs font-bold text-emerald-400 group-hover:translate-x-1 transition-transform">
-                        <span class="hub-btn-access">Acessar Dashboard</span> <i class="fa-solid fa-arrow-right ml-2"></i>
+                    <div class="pt-6 flex items-center text-xs font-bold group-hover:translate-x-1 transition-transform">
+                        <span class="hub-btn-access">Open Dashboard</span> <i class="fa-solid fa-arrow-right ml-2"></i>
                     </div>
                 </div>
 
                 <!-- CARD 3: VOCABULARY -->
-                <div onclick="openModule('vocabulary')" class="group relative rounded-3xl p-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer border border-slate-700 overflow-hidden hover:-translate-y-1 flex flex-col justify-between">
-                    <div class="absolute top-0 right-0 w-28 h-28 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all"></div>
-                    <div class="relative z-10 space-y-3">
-                        <div class="w-12 h-12 rounded-2xl bg-amber-600/30 border border-amber-400/30 flex items-center justify-center text-amber-300 text-xl">
+                <div onclick="openModule('vocabulary')" class="vintage-card group relative rounded-2xl p-7 border-2 shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col justify-between">
+                    <div class="absolute top-0 left-0 right-0 h-1.5 flag-accent-bar"></div>
+                    <div class="space-y-4 pt-1">
+                        <div class="w-12 h-12 rounded-xl border flex items-center justify-center text-xl shadow-inner card-icon-box">
                             <i class="fa-solid fa-brain"></i>
                         </div>
                         <div>
-                            <span id="card-vocab-tag" class="text-[11px] font-bold text-amber-400 uppercase tracking-wider">Flashcards</span>
-                            <h3 id="card-vocab-title" class="text-xl font-bold text-white group-hover:text-amber-200 transition-colors">Vocabulary Trainer</h3>
+                            <span id="card-vocab-tag" class="text-[11px] font-black uppercase tracking-widest opacity-70">FLASHCARDS & WORDS</span>
+                            <h3 id="card-vocab-title" class="text-xl font-bold font-serif group-hover:opacity-80 transition-colors mt-0.5">VOCABULARY TRAINER</h3>
                         </div>
-                        <p id="card-vocab-desc" class="text-xs text-slate-300 leading-relaxed">
-                            Treine palavras aprendidas, teste sua memória com verificação de certo ou errado.
+                        <p id="card-vocab-desc" class="text-xs leading-relaxed font-medium opacity-80">
+                            Practice vocabulary with flashcards. Review and strengthen recall.
                         </p>
                     </div>
-                    <div class="pt-4 relative z-10 flex items-center text-xs font-bold text-amber-400 group-hover:translate-x-1 transition-transform">
-                        <span id="hub-btn-train">Treinar Vocabulário</span> <i class="fa-solid fa-arrow-right ml-2"></i>
+                    <div class="pt-6 flex items-center text-xs font-bold group-hover:translate-x-1 transition-transform">
+                        <span id="hub-btn-train">Practice Now</span> <i class="fa-solid fa-arrow-right ml-2"></i>
                     </div>
                 </div>
 
@@ -182,147 +194,146 @@
 
         <!-- MÓDULO LISTENING -->
         <div id="module-listening" class="hidden space-y-6 pt-2">
-            <section class="us-flag-card rounded-2xl shadow-xl border border-slate-700/50 p-6 text-white relative flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden">
-                <div class="absolute inset-y-0 left-0 w-2.5 us-flag-banner"></div>
-                <div class="absolute -right-12 -bottom-12 w-48 h-48 rounded-full us-stars-canton opacity-20 pointer-events-none"></div>
-
-                <div class="z-10 space-y-2 max-w-xl pl-3">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-usblue/80 border border-indigo-400/30 text-xs font-semibold tracking-widest uppercase text-indigo-100">
-                        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+            <section class="banner-vintage rounded-2xl shadow-md border-2 p-7 relative flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-2 flag-accent-bar"></div>
+                <div class="z-10 space-y-2 max-w-xl pt-2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md border text-xs font-bold tracking-widest uppercase banner-tag">
                         <span id="listening-banner-tag">Immersion Tracker</span>
                     </div>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-                        <span id="listening-welcome-prefix">Welcome back, Luis!</span> <span id="listening-flag-icon">🇺🇸</span>
+                    <h2 class="text-2xl sm:text-3xl font-black font-serif tracking-tight flex items-center gap-3">
+                        <span id="listening-welcome-prefix">Welcome back, Luis!</span> <span id="listening-flag-icon" class="text-3xl">🇺🇸</span>
                     </h2>
-                    <p id="listening-banner-desc" class="text-sm text-slate-300 leading-relaxed">
-                        Meta de <strong class="text-white font-bold">1000 horas de listening</strong> para dominar o idioma. Cada filme e série assistido conta!
+                    <p id="listening-banner-desc" class="text-sm font-medium leading-relaxed opacity-80">
+                        Goal of <strong class="font-bold">1000 listening hours</strong>. Every movie and series watched counts!
                     </p>
                 </div>
 
-                <div class="z-10 flex gap-4 bg-slate-900/80 backdrop-blur-sm border border-slate-700 p-4 rounded-xl text-center w-full md:w-auto justify-around">
+                <div class="z-10 flex gap-5 border-2 p-5 rounded-xl text-center w-full md:w-auto justify-around shadow-sm banner-stats-box">
                     <div>
-                        <span class="block text-xs uppercase tracking-wider text-slate-400" id="lbl-goal-fixed">Meta Fixa</span>
-                        <span class="text-xl font-extrabold text-amber-400">1000h</span>
+                        <span class="block text-[10px] font-black uppercase tracking-wider opacity-70" id="lbl-goal-fixed">Fixed Goal</span>
+                        <span class="text-xl font-black text-amber-600">1000h</span>
                     </div>
-                    <div class="w-px bg-slate-700"></div>
+                    <div class="w-px opacity-25 bg-current"></div>
                     <div>
-                        <span class="block text-xs uppercase tracking-wider text-slate-400" id="lbl-progress">Progresso</span>
-                        <span id="banner-progress" class="text-xl font-extrabold text-emerald-400">0.00%</span>
+                        <span class="block text-[10px] font-black uppercase tracking-wider opacity-70" id="lbl-progress">Progress</span>
+                        <span id="banner-progress" class="text-xl font-black text-emerald-600">0.00%</span>
                     </div>
                 </div>
             </section>
 
             <section id="listening-tab-dashboard" class="space-y-6">
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-around gap-6">
+                <div class="p-7 rounded-2xl border-2 shadow-md flex flex-col md:flex-row items-center justify-around gap-6 panel-card">
                     <div class="relative w-52 h-52 sm:w-60 sm:h-60 flex items-center justify-center">
                         <canvas id="progressDonutChart"></canvas>
                         <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-                            <span id="total-hours-display" class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">0.00h</span>
-                            <span class="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider" id="lbl-of-1000">de 1000h</span>
-                            <span id="percentage-display" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-1 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
-                                0.00% completo
+                            <span id="total-hours-display" class="text-3xl font-black font-serif tracking-tight">0.00h</span>
+                            <span class="text-xs font-bold uppercase tracking-wider opacity-70" id="lbl-of-1000">of 1000h</span>
+                            <span id="percentage-display" class="text-xs font-black text-emerald-600 mt-1 px-3 py-1 rounded-full border shadow-sm percentage-badge">
+                                0.00%
                             </span>
                         </div>
                     </div>
 
                     <div class="flex flex-col space-y-4 max-w-md w-full">
-                        <h3 class="text-lg font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-2" id="lbl-summary-listening">
-                            Resumo do Listening
+                        <h3 class="text-base font-bold font-serif border-b pb-3 flex items-center gap-2 panel-title" id="lbl-summary-listening">
+                            <i class="fa-solid fa-chart-line"></i> Listening Summary
                         </h3>
                         <div class="grid grid-cols-2 gap-4">
-                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-                                <span class="text-xs text-slate-500 dark:text-slate-400 block uppercase font-medium" id="lbl-real-time">Tempo Real</span>
-                                <span id="stat-total-time" class="text-lg font-bold text-slate-900 dark:text-white">0h 0m</span>
+                            <div class="p-4 rounded-xl border-2 shadow-sm sub-card">
+                                <span class="text-[10px] block uppercase font-black tracking-wider opacity-70" id="lbl-real-time">Real Time</span>
+                                <span id="stat-total-time" class="text-lg font-black mt-0.5 block">0h 0m</span>
                             </div>
-                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-                                <span class="text-xs text-slate-500 dark:text-slate-400 block uppercase font-medium" id="lbl-registered">Cadastrados</span>
-                                <span id="stat-total-items" class="text-lg font-bold text-slate-900 dark:text-white">0</span>
+                            <div class="p-4 rounded-xl border-2 shadow-sm sub-card">
+                                <span class="text-[10px] block uppercase font-black tracking-wider opacity-70" id="lbl-registered">Tracked Items</span>
+                                <span id="stat-total-items" class="text-lg font-black mt-0.5 block">0</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                    <div class="lg:col-span-2 p-7 rounded-2xl border-2 shadow-md flex flex-col justify-between panel-card">
                         <div>
-                            <h3 class="text-base font-bold text-slate-900 dark:text-white mb-1" id="lbl-hours-by-type">Horas por Tipo de Estudo</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" id="lbl-hours-by-type-desc">Separação visual pelas categorias Diamante, Prata e Ouro.</p>
+                            <h3 class="text-base font-bold font-serif mb-1" id="lbl-hours-by-type">Hours by Study Type</h3>
+                            <p class="text-xs mb-4 font-medium opacity-75" id="lbl-hours-by-type-desc">Visual breakdown by Diamond, Silver, and Gold categories.</p>
                         </div>
                         <div class="relative h-64 w-full">
                             <canvas id="barTypeChart"></canvas>
                         </div>
                     </div>
 
-                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
-                        <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 uppercase tracking-wider text-xs" id="lbl-titles-watched">Títulos Assistidos</h3>
+                    <div class="p-7 rounded-2xl border-2 shadow-md flex flex-col panel-card">
+                        <h3 class="text-xs font-black mb-4 uppercase tracking-wider flex items-center gap-2 opacity-80" id="lbl-titles-watched">
+                            <i class="fa-solid fa-list"></i> Titles Watched
+                        </h3>
                         <div id="listening-details-list" class="space-y-3 overflow-y-auto max-h-80 pr-1 flex-grow"></div>
-                        <div class="border-t border-dashed border-slate-200 dark:border-slate-800 pt-3 mt-4 text-xs font-semibold text-slate-600 dark:text-slate-400 space-y-1">
+                        <div class="border-t pt-4 mt-4 text-xs font-bold space-y-1.5 summary-footer">
                             <div class="flex justify-between">
-                                <span id="lbl-decimal-total">TOTAL DECIMAL:</span>
-                                <span id="summary-total" class="text-slate-900 dark:text-white">0.00h</span>
+                                <span id="lbl-decimal-total" class="opacity-70">DECIMAL TOTAL:</span>
+                                <span id="summary-total" class="font-black">0.00h</span>
                             </div>
                             <div class="flex justify-between">
-                                <span id="lbl-target">ALVO:</span>
-                                <span class="text-slate-900 dark:text-white">1000h</span>
+                                <span id="lbl-target" class="opacity-70">TARGET:</span>
+                                <span class="font-black">1000h</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section id="listening-tab-cadastro" class="hidden max-w-xl mx-auto bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <section id="listening-tab-cadastro" class="hidden max-w-xl mx-auto p-7 sm:p-9 rounded-2xl border-2 shadow-md panel-card">
                 <div class="mb-6">
-                    <h2 class="text-xl font-bold text-slate-900 dark:text-white" id="lbl-add-media-title">Cadastrar Filme ou Série</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400" id="lbl-add-media-desc">Adicione suas horas de treino de imersão.</p>
+                    <h2 class="text-xl font-black font-serif" id="lbl-add-media-title">Add Movie or Series</h2>
+                    <p class="text-xs font-medium mt-0.5 opacity-75" id="lbl-add-media-desc">Log your immersion hours.</p>
                 </div>
 
                 <form id="media-form" class="space-y-4" onsubmit="handleListeningFormSubmit(event)">
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2" id="lbl-media-type">Tipo de Mídia</label>
+                        <label class="block text-[10px] font-black uppercase tracking-wider mb-2 opacity-80" id="lbl-media-type">Media Type</label>
                         <div class="grid grid-cols-2 gap-3">
-                            <label class="border border-slate-200 dark:border-slate-700 rounded-xl p-3 flex items-center gap-2 cursor-pointer hover:border-slate-400 transition-all">
-                                <input type="radio" name="mediaType" value="filme" checked onclick="toggleMediaType('filme')" class="text-slate-900">
-                                <span class="text-xs font-semibold" id="opt-movie">Filme</span>
+                            <label class="border-2 rounded-xl p-3 flex items-center gap-2.5 cursor-pointer transition-all sub-card">
+                                <input type="radio" name="mediaType" value="filme" checked onclick="toggleMediaType('filme')" class="accent-amber-700">
+                                <span class="text-xs font-bold" id="opt-movie">Movie</span>
                             </label>
-                            <label class="border border-slate-200 dark:border-slate-700 rounded-xl p-3 flex items-center gap-2 cursor-pointer hover:border-slate-400 transition-all">
-                                <input type="radio" name="mediaType" value="serie" onclick="toggleMediaType('serie')" class="text-slate-900">
-                                <span class="text-xs font-semibold" id="opt-series">Série</span>
+                            <label class="border-2 rounded-xl p-3 flex items-center gap-2.5 cursor-pointer transition-all sub-card">
+                                <input type="radio" name="mediaType" value="serie" onclick="toggleMediaType('serie')" class="accent-amber-700">
+                                <span class="text-xs font-bold" id="opt-series">Series</span>
                             </label>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-title-name">Nome do Título</label>
-                        <input type="text" id="mediaName" required placeholder="Ex: Friends, Anime..." class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm">
+                        <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-title-name">Title Name</label>
+                        <input type="text" id="mediaName" required placeholder="Ex: Friends, Anime..." class="w-full px-4 py-2.5 rounded-xl border-2 text-sm form-input">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-cover-img">Capa (Arquivo de Imagem)</label>
-                        <input type="file" id="mediaCoverFile" accept="image/*" class="w-full px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-200 dark:file:bg-slate-700 file:text-slate-800 dark:file:text-white">
+                        <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-cover-img">Cover (Image File)</label>
+                        <input type="file" id="mediaCoverFile" accept="image/*" class="w-full px-3 py-2 rounded-xl border-2 text-xs file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold cursor-pointer form-input">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2" id="lbl-listening-mode">Modo de Listening</label>
-                        <div class="space-y-2">
-                            <label class="border border-cyan-200 dark:border-cyan-900 bg-cyan-50/30 dark:bg-cyan-950/20 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-cyan-400 transition-all">
-                                <input type="radio" name="studyType" value="DIAMANTE" required class="text-cyan-500">
+                        <label class="block text-[10px] font-black uppercase tracking-wider mb-2 opacity-80" id="lbl-listening-mode">Listening Mode</label>
+                        <div class="space-y-2.5">
+                            <label class="border-2 border-cyan-300 bg-cyan-50/20 rounded-xl p-3 flex items-center gap-3 cursor-pointer">
+                                <input type="radio" name="studyType" value="DIAMANTE" required class="accent-cyan-600">
                                 <div>
-                                    <span class="text-xs font-bold block text-cyan-600 dark:text-cyan-400">💎 DIAMANTE</span>
-                                    <span class="text-[11px] text-slate-500 dark:text-slate-400" id="desc-diamond">Sem legendas (Treino 100% focado)</span>
+                                    <span class="text-xs font-black block text-cyan-600">💎 DIAMANTE</span>
+                                    <span class="text-[11px] font-medium opacity-80" id="desc-diamond">No subtitles (100% focused practice)</span>
                                 </div>
                             </label>
-                            <label class="border border-amber-200 dark:border-amber-900 bg-amber-50/30 dark:bg-amber-950/20 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-amber-400 transition-all">
-                                <input type="radio" name="studyType" value="OURO" class="text-amber-500">
+                            <label class="border-2 border-amber-300 bg-amber-50/20 rounded-xl p-3 flex items-center gap-3 cursor-pointer">
+                                <input type="radio" name="studyType" value="OURO" class="accent-amber-600">
                                 <div>
-                                    <span class="text-xs font-bold block text-amber-600 dark:text-amber-400">🥇 OURO</span>
-                                    <span class="text-[11px] text-slate-500 dark:text-slate-400" id="desc-gold">Áudio e legendas no idioma estudado</span>
+                                    <span class="text-xs font-black block text-amber-600">🥇 OURO</span>
+                                    <span class="text-[11px] font-medium opacity-80" id="desc-gold">Audio and subtitles in target language</span>
                                 </div>
                             </label>
-                            <label class="border border-slate-300 dark:border-slate-700 bg-slate-100/50 dark:bg-slate-800/40 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-slate-400 transition-all">
-                                <input type="radio" name="studyType" value="PRATA" class="text-slate-500">
+                            <label class="border-2 rounded-xl p-3 flex items-center gap-3 cursor-pointer sub-card">
+                                <input type="radio" name="studyType" value="PRATA">
                                 <div>
-                                    <span class="text-xs font-bold block text-slate-600 dark:text-slate-300">🥈 PRATA</span>
-                                    <span class="text-[11px] text-slate-500 dark:text-slate-400" id="desc-silver">Áudio original com legendas traduzidas</span>
+                                    <span class="text-xs font-black block opacity-90">🥈 PRATA</span>
+                                    <span class="text-[11px] font-medium opacity-80" id="desc-silver">Original audio with translated subtitles</span>
                                 </div>
                             </label>
                         </div>
@@ -330,39 +341,39 @@
 
                     <div id="movie-time-fields" class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-hours">Horas</label>
-                            <input type="number" id="filmHours" min="0" value="1" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm">
+                            <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-hours">Hours</label>
+                            <input type="number" id="filmHours" min="0" value="1" class="w-full px-4 py-2.5 rounded-xl border-2 text-sm form-input">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-minutes">Minutos</label>
-                            <input type="number" id="filmMinutes" min="0" max="59" value="30" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm">
+                            <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-minutes">Minutes</label>
+                            <input type="number" id="filmMinutes" min="0" max="59" value="30" class="w-full px-4 py-2.5 rounded-xl border-2 text-sm form-input">
                         </div>
                     </div>
 
-                    <div id="series-time-fields" class="hidden space-y-3 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40">
+                    <div id="series-time-fields" class="hidden space-y-3 p-4 rounded-xl border-2 sub-card">
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-season">Temporada (Opcional)</label>
-                            <input type="text" id="seriesSeason" placeholder="Ex: Temporada 1" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm">
+                            <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-season">Season (Optional)</label>
+                            <input type="text" id="seriesSeason" placeholder="Ex: Season 1" class="w-full px-4 py-2.5 rounded-xl border-2 text-sm form-input">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-ep-count">Qtd Episódios Assistidos</label>
-                            <input type="number" id="seriesEpCount" min="1" value="10" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm">
+                            <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-ep-count">Episodes Watched</label>
+                            <input type="number" id="seriesEpCount" min="1" value="10" class="w-full px-4 py-2.5 rounded-xl border-2 text-sm form-input">
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-avg-hours">Média Ep (Horas)</label>
-                                <input type="number" id="seriesEpHours" min="0" value="0" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm">
+                                <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-avg-hours">Avg Ep (Hours)</label>
+                                <input type="number" id="seriesEpHours" min="0" value="0" class="w-full px-4 py-2.5 rounded-xl border-2 text-sm form-input">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-avg-mins">Média Ep (Minutos)</label>
-                                <input type="number" id="seriesEpMinutes" min="0" max="59" value="22" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm">
+                                <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-avg-mins">Avg Ep (Minutes)</label>
+                                <input type="number" id="seriesEpMinutes" min="0" max="59" value="22" class="w-full px-4 py-2.5 rounded-xl border-2 text-sm form-input">
                             </div>
                         </div>
                     </div>
 
                     <div class="flex gap-3 pt-3">
-                        <button type="submit" class="flex-grow bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 font-bold py-2.5 rounded-xl hover:opacity-90 transition-all text-xs uppercase tracking-wider btn-save">Salvar Registro</button>
-                        <button type="button" onclick="switchTab('dashboard')" class="px-5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold py-2.5 rounded-xl transition-all text-xs uppercase tracking-wider btn-cancel">Cancelar</button>
+                        <button type="submit" class="flex-grow text-white font-black py-3 rounded-xl transition-all text-xs uppercase tracking-wider shadow btn-save">Save Entry</button>
+                        <button type="button" onclick="switchTab('dashboard')" class="px-5 font-bold py-3 rounded-xl transition-all text-xs uppercase tracking-wider border-2 btn-cancel">Cancel</button>
                     </div>
                 </form>
             </section>
@@ -371,81 +382,84 @@
 
         <!-- MÓDULO READING -->
         <div id="module-reading" class="hidden space-y-6 pt-2">
-            <section class="bg-gradient-to-r from-emerald-900 to-slate-900 rounded-2xl shadow-xl border border-slate-700/50 p-6 text-white flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="space-y-2 max-w-xl">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-800/80 border border-emerald-400/30 text-xs font-semibold tracking-widest uppercase text-emerald-100">
-                        <i class="fa-solid fa-book-open text-emerald-400"></i> Reading Tracker
+            <section class="rounded-2xl shadow-md border-2 p-7 relative flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden panel-card">
+                <div class="absolute top-0 left-0 right-0 h-2 flag-accent-bar"></div>
+                <div class="space-y-2 max-w-xl pt-2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md border text-xs font-bold tracking-widest uppercase banner-tag">
+                        <i class="fa-solid fa-book-open"></i> Reading Tracker
                     </div>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-                        <span id="reading-title-prefix">Seus Livros Lidos</span> <span id="reading-flag-icon">🇺🇸</span>
+                    <h2 class="text-2xl sm:text-3xl font-black font-serif tracking-tight flex items-center gap-3">
+                        <span id="reading-title-prefix">Books Read</span> <span id="reading-flag-icon" class="text-3xl">🇺🇸</span>
                     </h2>
-                    <p class="text-sm text-slate-300 leading-relaxed" id="reading-banner-desc">Acompanhe a evolução do seu vocabulário e compreensão de leitura através de páginas acumuladas.</p>
+                    <p class="text-sm font-medium leading-relaxed opacity-80" id="reading-banner-desc">Track your vocabulary and comprehension progress through accumulated pages.</p>
                 </div>
 
-                <div class="flex gap-4 bg-slate-900/80 backdrop-blur-sm border border-slate-700 p-4 rounded-xl text-center w-full md:w-auto justify-around">
+                <div class="flex gap-5 border-2 p-5 rounded-xl text-center w-full md:w-auto justify-around shadow-sm banner-stats-box">
                     <div>
-                        <span class="block text-xs uppercase tracking-wider text-slate-400" id="lbl-total-books">Total Livros</span>
-                        <span id="reading-stat-books" class="text-xl font-extrabold text-emerald-400">0</span>
+                        <span class="block text-[10px] font-black uppercase tracking-wider opacity-70" id="lbl-total-books">Total Books</span>
+                        <span id="reading-stat-books" class="text-xl font-black">0</span>
                     </div>
-                    <div class="w-px bg-slate-700"></div>
+                    <div class="w-px opacity-25 bg-current"></div>
                     <div>
-                        <span class="block text-xs uppercase tracking-wider text-slate-400" id="lbl-total-pages">Total Páginas</span>
-                        <span id="reading-stat-pages" class="text-xl font-extrabold text-emerald-300">0</span>
+                        <span class="block text-[10px] font-black uppercase tracking-wider opacity-70" id="lbl-total-pages">Total Pages</span>
+                        <span id="reading-stat-pages" class="text-xl font-black text-emerald-600">0</span>
                     </div>
                 </div>
             </section>
 
             <section id="reading-tab-dashboard" class="space-y-6">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                    <div class="lg:col-span-2 p-7 rounded-2xl border-2 shadow-md flex flex-col justify-between panel-card">
                         <div>
-                            <h3 class="text-base font-bold text-slate-900 dark:text-white mb-1" id="lbl-pages-per-book">Páginas Lidas por Livro</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4" id="lbl-pages-per-book-desc">Volume de leitura acumulado por cada obra cadastrada.</p>
+                            <h3 class="text-base font-bold font-serif mb-1" id="lbl-pages-per-book">Pages Read per Book</h3>
+                            <p class="text-xs mb-4 font-medium opacity-75" id="lbl-pages-per-book-desc">Volume of reading per registered work.</p>
                         </div>
                         <div class="relative h-64 w-full">
                             <canvas id="readingBarChart"></canvas>
                         </div>
                     </div>
 
-                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
-                        <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 uppercase tracking-wider text-xs" id="lbl-registered-books">Livros Cadastrados</h3>
+                    <div class="p-7 rounded-2xl border-2 shadow-md flex flex-col panel-card">
+                        <h3 class="text-xs font-black mb-4 uppercase tracking-wider flex items-center gap-2 opacity-80" id="lbl-registered-books">
+                            <i class="fa-solid fa-bookmark"></i> Saved Books
+                        </h3>
                         <div id="reading-details-list" class="space-y-3 overflow-y-auto max-h-80 pr-1 flex-grow"></div>
-                        <div class="border-t border-dashed border-slate-200 dark:border-slate-800 pt-3 mt-4 text-xs font-semibold text-slate-600 dark:text-slate-400 space-y-1">
+                        <div class="border-t pt-4 mt-4 text-xs font-bold space-y-1.5 summary-footer">
                             <div class="flex justify-between">
-                                <span id="lbl-sum-pages">TOTAL DE PÁGINAS:</span>
-                                <span id="summary-reading-pages" class="text-slate-900 dark:text-white">0</span>
+                                <span id="lbl-sum-pages" class="opacity-70">TOTAL PAGES:</span>
+                                <span id="summary-reading-pages" class="font-black">0</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section id="reading-tab-cadastro" class="hidden max-w-xl mx-auto bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <section id="reading-tab-cadastro" class="hidden max-w-xl mx-auto p-7 sm:p-9 rounded-2xl border-2 shadow-md panel-card">
                 <div class="mb-6">
-                    <h2 class="text-xl font-bold text-slate-900 dark:text-white" id="lbl-add-book-title">Cadastrar Novo Livro</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400" id="lbl-add-book-desc">Adicione livros lidos no idioma para contabilizar suas páginas.</p>
+                    <h2 class="text-xl font-black font-serif" id="lbl-add-book-title">Add New Book</h2>
+                    <p class="text-xs font-medium mt-0.5 opacity-75" id="lbl-add-book-desc">Log books read to calculate total pages.</p>
                 </div>
 
                 <form id="book-form" class="space-y-4" onsubmit="handleReadingFormSubmit(event)">
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-book-title">Título do Livro</label>
-                        <input type="text" id="bookTitle" required placeholder="Ex: Harry Potter..." class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm">
+                        <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-book-title">Book Title</label>
+                        <input type="text" id="bookTitle" required placeholder="Ex: Harry Potter..." class="w-full px-4 py-2.5 rounded-xl border-2 text-sm form-input">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-book-author">Autor(a) (Opcional)</label>
-                        <input type="text" id="bookAuthor" placeholder="Ex: J.K. Rowling" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm">
+                        <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-book-author">Author (Optional)</label>
+                        <input type="text" id="bookAuthor" placeholder="Ex: J.K. Rowling" class="w-full px-4 py-2.5 rounded-xl border-2 text-sm form-input">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-book-pages">Quantidade de Páginas Lidas</label>
-                        <input type="number" id="bookPages" min="1" required placeholder="Ex: 320" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm">
+                        <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-book-pages">Number of Pages</label>
+                        <input type="number" id="bookPages" min="1" required placeholder="Ex: 320" class="w-full px-4 py-2.5 rounded-xl border-2 text-sm form-input">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-book-cover">Capa do Livro (Arquivo)</label>
-                        <input type="file" id="bookCoverFile" accept="image/*" class="w-full px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-200 dark:file:bg-slate-700 file:text-slate-800 dark:file:text-white">
+                        <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-book-cover">Book Cover (File)</label>
+                        <input type="file" id="bookCoverFile" accept="image/*" class="w-full px-3 py-2 rounded-xl border-2 text-xs file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold cursor-pointer form-input">
                     </div>
                     <div class="flex gap-3 pt-3">
-                        <button type="submit" class="flex-grow bg-emerald-600 text-white font-bold py-2.5 rounded-xl hover:bg-emerald-700 transition-all text-xs uppercase tracking-wider btn-save">Salvar Livro</button>
-                        <button type="button" onclick="switchTab('dashboard')" class="px-5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold py-2.5 rounded-xl transition-all text-xs uppercase tracking-wider btn-cancel">Cancelar</button>
+                        <button type="submit" class="flex-grow text-white font-black py-3 rounded-xl transition-all text-xs uppercase tracking-wider shadow btn-save">Save Book</button>
+                        <button type="button" onclick="switchTab('dashboard')" class="px-5 font-bold py-3 rounded-xl transition-all text-xs uppercase tracking-wider border-2 btn-cancel">Cancel</button>
                     </div>
                 </form>
             </section>
@@ -454,26 +468,27 @@
 
         <!-- MÓDULO VOCABULARY -->
         <div id="module-vocabulary" class="hidden space-y-6 pt-2">
-            <section class="bg-gradient-to-r from-amber-900 to-slate-900 rounded-2xl shadow-xl border border-slate-700/50 p-6 text-white flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="space-y-2 max-w-xl">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-800/80 border border-amber-400/30 text-xs font-semibold tracking-widest uppercase text-amber-100">
-                        <i class="fa-solid fa-brain text-amber-400"></i> Vocabulary Trainer
+            <section class="rounded-2xl shadow-md border-2 p-7 relative flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden panel-card">
+                <div class="absolute top-0 left-0 right-0 h-2 flag-accent-bar"></div>
+                <div class="space-y-2 max-w-xl pt-2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md border text-xs font-bold tracking-widest uppercase banner-tag">
+                        <i class="fa-solid fa-brain"></i> Vocabulary Trainer
                     </div>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-                        <span id="vocab-title-prefix">Treine suas Palavras</span> <span id="vocab-flag-icon">🇺🇸</span>
+                    <h2 class="text-2xl sm:text-3xl font-black font-serif tracking-tight flex items-center gap-3">
+                        <span id="vocab-title-prefix">Practice Vocabulary</span> <span id="vocab-flag-icon" class="text-3xl">🇺🇸</span>
                     </h2>
-                    <p class="text-sm text-slate-300 leading-relaxed" id="vocab-banner-desc">Flashcards dinâmicos com sorteio aleatório e verificação direta de acertos e erros.</p>
+                    <p class="text-sm font-medium leading-relaxed opacity-80" id="vocab-banner-desc">Interactive flashcards with random draw and direct scoring.</p>
                 </div>
 
-                <div class="flex gap-4 bg-slate-900/80 backdrop-blur-sm border border-slate-700 p-4 rounded-xl text-center w-full md:w-auto justify-around">
+                <div class="flex gap-5 border-2 p-5 rounded-xl text-center w-full md:w-auto justify-around shadow-sm banner-stats-box">
                     <div>
-                        <span class="block text-xs uppercase tracking-wider text-slate-400" id="lbl-total-words">Palavras</span>
-                        <span id="vocab-stat-count" class="text-xl font-extrabold text-amber-400">0</span>
+                        <span class="block text-[10px] font-black uppercase tracking-wider opacity-70" id="lbl-total-words">Words</span>
+                        <span id="vocab-stat-count" class="text-xl font-black">0</span>
                     </div>
-                    <div class="w-px bg-slate-700"></div>
+                    <div class="w-px opacity-25 bg-current"></div>
                     <div>
-                        <span class="block text-xs uppercase tracking-wider text-slate-400" id="lbl-accuracy-rate">Taxa Acerto</span>
-                        <span id="vocab-stat-accuracy" class="text-xl font-extrabold text-emerald-400">0%</span>
+                        <span class="block text-[10px] font-black uppercase tracking-wider opacity-70" id="lbl-accuracy-rate">Accuracy Rate</span>
+                        <span id="vocab-stat-accuracy" class="text-xl font-black text-emerald-600">0%</span>
                     </div>
                 </div>
             </section>
@@ -481,40 +496,40 @@
             <section id="vocabulary-tab-dashboard" class="space-y-6">
                 
                 <!-- FLASHCARD INTERATIVO -->
-                <div class="max-w-xl mx-auto bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm text-center space-y-6">
-                    <div class="flex justify-between items-center text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                        <span id="vocab-card-number" class="text-amber-500 font-bold">#0</span>
-                        <span id="vocab-card-counter">Sorteio Aleatório</span>
+                <div class="max-w-xl mx-auto p-7 sm:p-9 rounded-2xl border-2 shadow-md text-center space-y-6 panel-card">
+                    <div class="flex justify-between items-center text-xs font-bold opacity-75 uppercase tracking-wider">
+                        <span id="vocab-card-number" class="font-black">#0</span>
+                        <span id="vocab-card-counter">Random Draw</span>
                     </div>
 
                     <!-- Container 3D do Flashcard -->
-                    <div class="perspective-1000 w-full h-64 cursor-pointer" onclick="flipFlashcard()">
+                    <div class="perspective-1000 w-full h-72 cursor-pointer" onclick="flipFlashcard()">
                         <div id="flip-card-inner" class="flip-card-inner">
                             
                             <!-- FRENTE DO CARD -->
-                            <div class="flip-card-front bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white p-6 border-2 border-indigo-500/30 flex flex-col items-center justify-between shadow-md">
-                                <span class="text-[10px] font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/80 px-2.5 py-1 rounded-full border border-indigo-200 dark:border-indigo-500/30" id="card-front-lang-label">
-                                    Termo
+                            <div class="flip-card-front p-7 border-2 flex flex-col items-center justify-between shadow-xl rounded-2xl card-front-side">
+                                <span class="text-[10px] font-black uppercase tracking-widest px-3.5 py-1.5 rounded-full border shadow-inner card-badge-front" id="card-front-lang-label">
+                                    Term
                                 </span>
-                                <div class="space-y-2 my-auto">
-                                    <h3 id="fc-word" class="text-3xl font-black text-slate-900 dark:text-white">Clique em Sortear</h3>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400 italic" id="lbl-click-to-flip">Clique no cartão para revelar a tradução 🔄</p>
+                                <div class="space-y-3 my-auto">
+                                    <h3 id="fc-word" class="text-3xl sm:text-4xl font-black font-serif">Click Draw</h3>
+                                    <p class="text-xs font-medium italic opacity-75" id="lbl-click-to-flip">Click card to reveal translation 🔄</p>
                                 </div>
-                                <span class="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-widest" id="lbl-tap-flip">Toque para Virar</span>
+                                <span class="text-[10px] uppercase tracking-widest font-black opacity-60" id="lbl-tap-flip">Tap to Flip</span>
                             </div>
 
                             <!-- VERSO DO CARD -->
-                            <div class="flip-card-back bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white p-6 border-2 border-emerald-500/30 flex flex-col items-center justify-between shadow-md">
-                                <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-500/30" id="lbl-translation-tag">
-                                    Tradução
+                            <div class="flip-card-back p-7 border-2 flex flex-col items-center justify-between shadow-xl rounded-2xl card-back-side">
+                                <span class="text-[10px] font-black uppercase tracking-widest px-3.5 py-1.5 rounded-full border shadow-inner card-badge-back" id="lbl-translation-tag">
+                                    Translation
                                 </span>
-                                <div class="space-y-2 my-auto max-w-sm">
-                                    <h3 id="fc-translation" class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-300">-</h3>
-                                    <p id="fc-example" class="text-xs text-slate-600 dark:text-slate-300 italic bg-white dark:bg-slate-900/80 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">"-"</p>
+                                <div class="space-y-3 my-auto max-w-sm">
+                                    <h3 id="fc-translation" class="text-2xl sm:text-3xl font-black font-serif">-</h3>
+                                    <p id="fc-example" class="text-xs font-medium italic p-3 rounded-xl border-2 shadow-sm card-example-box">"-"</p>
                                 </div>
-                                <div class="flex justify-center gap-6 text-xs font-semibold">
-                                    <span class="text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-check mr-1"></i> <span id="lbl-correct-hits">Acertos:</span> <strong id="fc-correct">0</strong></span>
-                                    <span class="text-red-600 dark:text-red-400"><i class="fa-solid fa-xmark mr-1"></i> <span id="lbl-wrong-hits">Erros:</span> <strong id="fc-wrong">0</strong></span>
+                                <div class="flex justify-center gap-6 text-xs font-bold">
+                                    <span class="text-emerald-600"><i class="fa-solid fa-check mr-1"></i> <span id="lbl-correct-hits">Correct:</span> <strong id="fc-correct" class="font-black">0</strong></span>
+                                    <span class="text-red-600"><i class="fa-solid fa-xmark mr-1"></i> <span id="lbl-wrong-hits">Wrong:</span> <strong id="fc-wrong" class="font-black">0</strong></span>
                                 </div>
                             </div>
 
@@ -524,49 +539,51 @@
                     <!-- Botões de Ação -->
                     <div class="space-y-3 pt-2">
                         <div class="grid grid-cols-2 gap-3">
-                            <button onclick="gradeFlashcard(false)" class="bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 font-bold py-3 rounded-xl hover:bg-red-500/20 transition-all text-xs uppercase tracking-wider shadow-sm">
-                                <i class="fa-solid fa-xmark mr-1.5"></i> <span id="btn-wrong-action">Não Lembrei</span>
+                            <button onclick="gradeFlashcard(false)" class="bg-red-50 border-2 border-red-200 text-red-700 font-black py-3.5 rounded-xl hover:bg-red-100 transition-all text-xs uppercase tracking-wider shadow-sm">
+                                <i class="fa-solid fa-xmark mr-1.5"></i> <span id="btn-wrong-action">Forgot</span>
                             </button>
-                            <button onclick="gradeFlashcard(true)" class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-bold py-3 rounded-xl hover:bg-emerald-500/20 transition-all text-xs uppercase tracking-wider shadow-sm">
-                                <i class="fa-solid fa-check mr-1.5"></i> <span id="btn-correct-action">Lembrei (Certo!)</span>
+                            <button onclick="gradeFlashcard(true)" class="bg-emerald-50 border-2 border-emerald-200 text-emerald-700 font-black py-3.5 rounded-xl hover:bg-emerald-100 transition-all text-xs uppercase tracking-wider shadow-sm">
+                                <i class="fa-solid fa-check mr-1.5"></i> <span id="btn-correct-action">Remembered!</span>
                             </button>
                         </div>
 
-                        <button onclick="nextFlashcardRandom()" class="w-full bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 font-bold py-3 rounded-xl hover:opacity-90 transition-all text-xs uppercase tracking-wider shadow-md">
-                            <i class="fa-solid fa-shuffle mr-2"></i> <span id="btn-next-random">Sortear Próxima Palavra Aleatória</span>
+                        <button onclick="nextFlashcardRandom()" class="w-full text-white font-black py-3.5 rounded-xl transition-all text-xs uppercase tracking-wider shadow btn-random">
+                            <i class="fa-solid fa-shuffle mr-2"></i> <span id="btn-next-random">Draw Next Random Word</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Lista de Vocabulário -->
-                <div class="max-w-xl mx-auto bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-                    <h3 class="text-base font-bold text-slate-900 dark:text-white uppercase tracking-wider text-xs" id="lbl-registered-vocab">Suas Palavras Cadastradas</h3>
+                <div class="max-w-xl mx-auto p-7 rounded-2xl border-2 shadow-md space-y-4 panel-card">
+                    <h3 class="text-xs font-black uppercase tracking-wider flex items-center gap-2 opacity-80" id="lbl-registered-vocab">
+                        <i class="fa-solid fa-list-check"></i> Saved Vocabulary
+                    </h3>
                     <div id="vocabulary-details-list" class="space-y-3 overflow-y-auto max-h-64 pr-1"></div>
                 </div>
             </section>
 
-            <section id="vocabulary-tab-cadastro" class="hidden max-w-xl mx-auto bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <section id="vocabulary-tab-cadastro" class="hidden max-w-xl mx-auto p-7 sm:p-9 rounded-2xl border-2 shadow-md panel-card">
                 <div class="mb-6">
-                    <h2 class="text-xl font-bold text-slate-900 dark:text-white" id="lbl-add-word-title">Cadastrar Nova Palavra</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400" id="lbl-add-word-desc">Adicione termos e frases de exemplo para seus treinos.</p>
+                    <h2 class="text-xl font-black font-serif" id="lbl-add-word-title">Add New Word</h2>
+                    <p class="text-xs font-medium mt-0.5 opacity-75" id="lbl-add-word-desc">Add new terms for training.</p>
                 </div>
 
                 <form id="vocab-form" class="space-y-4" onsubmit="handleVocabularyFormSubmit(event)">
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-term-in-lang">Palavra / Termo no Idioma</label>
-                        <input type="text" id="vocabWord" required placeholder="Ex: Breakthrough" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm">
+                        <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-term-in-lang">Word / Term in Target Language</label>
+                        <input type="text" id="vocabWord" required placeholder="Ex: Breakthrough" class="w-full px-4 py-2.5 rounded-xl border-2 text-sm form-input">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-term-translation">Tradução / Significado</label>
-                        <input type="text" id="vocabTranslation" required placeholder="Ex: Grande descoberta" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm">
+                        <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-term-translation">Translation / Meaning</label>
+                        <input type="text" id="vocabTranslation" required placeholder="Ex: Grande descoberta" class="w-full px-4 py-2.5 rounded-xl border-2 text-sm form-input">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1" id="lbl-term-example">Exemplo de Frase (Opcional)</label>
-                        <input type="text" id="vocabExample" placeholder="Ex: This was a major breakthrough." class="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm">
+                        <label class="block text-[10px] font-black uppercase tracking-wider mb-1.5 opacity-80" id="lbl-term-example">Example Sentence (Optional)</label>
+                        <input type="text" id="vocabExample" placeholder="Ex: This was a major breakthrough." class="w-full px-4 py-2.5 rounded-xl border-2 text-sm form-input">
                     </div>
                     <div class="flex gap-3 pt-3">
-                        <button type="submit" class="flex-grow bg-amber-600 text-white font-bold py-2.5 rounded-xl hover:bg-amber-700 transition-all text-xs uppercase tracking-wider btn-save">Salvar Palavra</button>
-                        <button type="button" onclick="switchTab('dashboard')" class="px-5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold py-2.5 rounded-xl transition-all text-xs uppercase tracking-wider btn-cancel">Cancelar</button>
+                        <button type="submit" class="flex-grow text-white font-black py-3 rounded-xl transition-all text-xs uppercase tracking-wider shadow btn-save">Save Word</button>
+                        <button type="button" onclick="switchTab('dashboard')" class="px-5 font-bold py-3 rounded-xl transition-all text-xs uppercase tracking-wider border-2 btn-cancel">Cancel</button>
                     </div>
                 </form>
             </section>
@@ -574,9 +591,9 @@
 
     </main>
 
-    <!-- RODAPÉ -->
-    <footer class="text-center py-6 text-xs text-slate-400 border-t border-slate-200 dark:border-slate-800 mt-auto">
-        Luis Immersion Tracker • Global Language Platform
+    <!-- RODAPÉ COM ORNAMENTOS VITORIANOS -->
+    <footer class="text-center py-6 text-xs border-t mt-auto font-semibold opacity-75 footer-box flex items-center justify-center gap-3">
+        <span>❧</span> <span id="footer-text">Vintage Immersion Tracker • American Edition • 2026</span> <span>❧</span>
     </footer>
 
     <!-- JS Externo -->

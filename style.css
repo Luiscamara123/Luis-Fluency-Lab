@@ -1,37 +1,103 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 html {
     scroll-behavior: smooth;
 }
 
 body { 
-    font-family: 'Inter', sans-serif; 
+    font-family: 'Plus Jakarta Sans', sans-serif; 
 }
 
-.font-serif-header { 
-    font-family: 'Cinzel', serif; 
+.font-serif { 
+    font-family: 'Playfair Display', serif; 
 }
 
-.us-flag-card {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    position: relative;
-    overflow: hidden;
+/* -------------------------------------------------------------
+   PALETAS EXATAS DE CADA PAÍS (INSPIRAÇÃO VITORIANA DOS PRINTS)
+   ------------------------------------------------------------- */
+/* 🇺🇸 EUA: Fundo pergaminho clássico, azul marinho & vermelho carmesim */
+body.theme-en.mode-light { background-color: #f7f3e8; color: #1c1917; --country-primary: #1e3a8a; --country-secondary: #991b1b; }
+body.theme-en.mode-dark { background-color: #121417; color: #f3f4f6; --country-primary: #3b82f6; --country-secondary: #ef4444; }
+
+/* 🇪🇸 ESPANHA: Fundo pergaminho quente, amarelo ouro & vermelho terracota */
+body.theme-es.mode-light { background-color: #fcf6ec; color: #1c1917; --country-primary: #b45309; --country-secondary: #991b1b; }
+body.theme-es.mode-dark { background-color: #171512; color: #f3f4f6; --country-primary: #f59e0b; --country-secondary: #dc2626; }
+
+/* 🇫🇷 FRANÇA: Fundo pergaminho neutro, azul royal & vermelho tricolor */
+body.theme-fr.mode-light { background-color: #f8f7f4; color: #0f172a; --country-primary: #1d4ed8; --country-secondary: #b91c1c; }
+body.theme-fr.mode-dark { background-color: #0f1117; color: #f3f4f6; --country-primary: #3b82f6; --country-secondary: #ef4444; }
+
+/* 🇯🇵 JAPÃO: Fundo pergaminho wabi-sabi suave, vermelho cereja & cinza sumi */
+body.theme-ja.mode-light { background-color: #faf7f2; color: #1c1917; --country-primary: #991b1b; --country-secondary: #44403c; }
+body.theme-ja.mode-dark { background-color: #141212; color: #f3f4f6; --country-primary: #ef4444; --country-secondary: #78716c; }
+
+/* 🇧🇷 BRASIL: Fundo pergaminho tropical, verde floresta & amarelo imperial */
+body.theme-pt.mode-light { background-color: #f3f7f0; color: #064e3b; --country-primary: #15803d; --country-secondary: #ca8a04; }
+body.theme-pt.mode-dark { background-color: #09110e; color: #ecfdf5; --country-primary: #22c55e; --country-secondary: #eab308; }
+
+
+/* -------------------------------------------------------------
+   ESTILIZAÇÃO VITORIANA DOS COMPONENTES (COMO NAS FOTOS)
+   ------------------------------------------------------------- */
+/* Barra decorativa superior dos cards e banners */
+.flag-accent-bar {
+    background: linear-gradient(90deg, var(--country-primary), var(--country-secondary));
 }
 
-.us-flag-banner {
-    background: repeating-linear-gradient(
-        180deg,
-        #B22234,
-        #B22234 12px,
-        #ffffff 12px,
-        #ffffff 24px
-    );
+/* Modo Claro (Pergaminho ornamentado idêntico às fotos) */
+body.mode-light .app-header { background-color: rgba(247, 243, 232, 0.95); border-color: #d6ccc2; }
+body.mode-light .theme-toggle-btn { background-color: #ede8dc; border-color: #c5b9ab; color: #44403c; }
+body.mode-light .dropdown-box { background-color: #fffdf9; border-color: #d6ccc2; }
+body.mode-light .nav-container { background-color: #fffdf9; border-color: #d6ccc2; }
+body.mode-light .nav-btn-active { background-color: #1c1917; color: #ffffff; }
+body.mode-light .vintage-card, body.mode-light .panel-card { background-color: #fffdf9; border-color: #d6ccc2; box-shadow: 0 6px 18px rgba(0,0,0,0.04); }
+body.mode-light .card-icon-box { background-color: #f5efe6; border-color: #e2d9cd; color: #1c1917; }
+body.mode-light .hub-badge { background-color: #fffdf9; border-color: #d6ccc2; color: #1c1917; }
+body.mode-light .banner-vintage { background-color: #fffdf9; border-color: #d6ccc2; }
+body.mode-light .banner-stats-box { background-color: #f5efe6; border-color: #e2d9cd; }
+body.mode-light .sub-card { background-color: #f5efe6; border-color: #e2d9cd; }
+body.mode-light .form-input { background-color: #fffdf9; border-color: #d6ccc2; color: #1c1917; }
+body.mode-light .summary-footer { border-color: #e2d9cd; }
+body.mode-light .footer-box { border-color: #d6ccc2; color: #78716c; }
+body.mode-light .decor-corner { color: var(--country-primary); }
+body.mode-light .btn-save { background-color: var(--country-primary); }
+body.mode-light .btn-save:hover { opacity: 0.9; }
+body.mode-light .btn-random { background-color: var(--country-primary); }
+body.mode-light .card-front-side { background-color: #1c1917; color: #ffffff; border-color: #44403c; }
+body.mode-light .card-back-side { background-color: #fffdf9; color: #1c1917; border-color: #d6ccc2; }
+body.mode-light .card-example-box { background-color: #f5efe6; border-color: #e2d9cd; }
+
+/* Modo Escuro (Grafite elegante com detalhes iluminados) */
+body.mode-dark .app-header { background-color: rgba(24, 26, 31, 0.95); border-color: rgba(255,255,255,0.1); }
+body.mode-dark .theme-toggle-btn { background-color: #21252b; border-color: rgba(255,255,255,0.15); color: #f3f4f6; }
+body.mode-dark .dropdown-box { background-color: #21252b; border-color: rgba(255,255,255,0.15); }
+body.mode-dark .nav-container { background-color: #21252b; border-color: rgba(255,255,255,0.15); }
+body.mode-dark .nav-btn-active { background-color: #ffffff; color: #121417; }
+body.mode-dark .vintage-card, body.mode-dark .panel-card { background-color: #181a1f; border-color: rgba(255,255,255,0.12); box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+body.mode-dark .card-icon-box { background-color: #21252b; border-color: rgba(255,255,255,0.1); color: #ffffff; }
+body.mode-dark .hub-badge { background-color: #1e2229; border-color: rgba(255,255,255,0.1); color: #ffffff; }
+body.mode-dark .banner-vintage { background-color: #181a1f; border-color: rgba(255,255,255,0.1); }
+body.mode-dark .banner-stats-box { background-color: #21252b; border-color: rgba(255,255,255,0.1); }
+body.mode-dark .sub-card { background-color: #21252b; border-color: rgba(255,255,255,0.1); }
+body.mode-dark .form-input { background-color: #121417; border-color: rgba(255,255,255,0.15); color: #ffffff; }
+body.mode-dark .summary-footer { border-color: rgba(255,255,255,0.1); }
+body.mode-dark .footer-box { border-color: rgba(255,255,255,0.1); color: #94a3b8; }
+body.mode-dark .decor-corner { color: var(--country-primary); opacity: 0.6; }
+body.mode-dark .btn-save { background-color: var(--country-primary); }
+body.mode-dark .btn-save:hover { opacity: 0.9; }
+body.mode-dark .btn-random { background-color: var(--country-primary); }
+body.mode-dark .card-front-side { background-color: #121417; color: #ffffff; border-color: rgba(255,255,255,0.15); }
+body.mode-dark .card-back-side { background-color: #21252b; color: #ffffff; border-color: rgba(255,255,255,0.15); }
+body.mode-dark .card-example-box { background-color: #121417; border-color: rgba(255,255,255,0.1); }
+
+/* Animações e Efeitos */
+.vintage-card {
+    transition: all 0.3s ease;
 }
 
-.us-stars-canton {
-    background-color: #3C3B6E;
-    background-image: radial-gradient(white 20%, transparent 20%);
-    background-size: 14px 14px;
+.vintage-card:hover {
+    border-color: var(--country-primary);
+    transform: translateY(-3px);
 }
 
 .perspective-1000 {
@@ -56,7 +122,6 @@ body {
     height: 100%;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    border-radius: 1rem;
 }
 
 .flip-card-back {
