@@ -25,19 +25,68 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts Vintage -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Estilos Personalizados Vintage -->
+    <!-- Estilos Personalizados -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body id="app-body" class="theme-en mode-light min-h-screen transition-all duration-500 flex flex-col relative overflow-x-hidden">
 
-    <!-- IMAGEM DE FUNDO DA BANDEIRA (MARCA D'ÁGUA COM OPACIDADE) -->
+    <!-- MARCA D'ÁGUA DA BANDEIRA -->
     <div id="bg-flag-watermark" class="fixed inset-0 pointer-events-none z-0 bg-cover bg-center transition-all duration-700 opacity-5"></div>
 
-    <!-- HEADER PRINCIPAL VINTAGE -->
-    <header class="app-header border-b sticky top-0 z-50 backdrop-blur-md">
+    <!-- ANIMAÇÃO CENTRAL DO FOGUINHO (POP-UP DE SUCESSO) -->
+    <div id="streak-animation-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white dark:bg-slate-900 border-2 p-8 rounded-3xl shadow-2xl text-center space-y-4 transform scale-75 transition-transform duration-300 panel-card" id="streak-popup-box">
+            <div class="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center text-4xl bg-amber-100 dark:bg-amber-900/40 text-amber-500 animate-bounce shadow-inner">
+                <i class="fa-solid fa-fire"></i>
+            </div>
+            <h3 class="text-xl font-black font-serif">Ofensiva Acesa! 🔥</h3>
+            <p class="text-xs opacity-80 font-medium">Parabéns, Luis! Tarefa de vocabulário concluída com sucesso hoje.</p>
+            <button onclick="closeStreakAnimation()" class="px-6 py-2.5 rounded-xl text-xs font-bold text-white uppercase tracking-wider btn-save shadow">Continuar</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE DETALHES DA OFENSIVA (AO CLICAR NO FOGUINHO) -->
+    <div id="streak-details-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
+        <div class="max-w-md w-full mx-4 p-7 rounded-3xl border-2 shadow-2xl space-y-5 panel-card relative">
+            <button onclick="closeStreakModal()" class="absolute top-4 right-4 opacity-70 hover:opacity-100 text-sm font-bold"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl border flex items-center justify-center text-2xl text-amber-500 card-icon-box">
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-black font-serif">Estatísticas de Ofensiva</h3>
+                    <p class="text-[11px] opacity-75">Controlo diário e tolerância mensal</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-center">
+                <div class="p-3.5 rounded-2xl border-2 sub-card">
+                    <span class="text-[10px] font-black uppercase opacity-70 block">Sequência Atual</span>
+                    <span id="modal-streak-count" class="text-xl font-black text-amber-500">0 dias</span>
+                </div>
+                <div class="p-3.5 rounded-2xl border-2 sub-card">
+                    <span class="text-[10px] font-black uppercase opacity-70 block">Faltas no Mês</span>
+                    <span id="modal-missed-count" class="text-xl font-black text-red-500">0 / 3</span>
+                </div>
+            </div>
+
+            <!-- SEQUÊNCIA DOS DIAS DA SEMANA -->
+            <div class="space-y-2 pt-2">
+                <span class="text-[10px] font-black uppercase tracking-wider opacity-70 block">Dias da Semana (Últimos 7 dias)</span>
+                <div id="week-days-container" class="grid grid-cols-7 gap-1.5 text-center">
+                    <!-- Preenchido via JS -->
+                </div>
+            </div>
+
+            <p class="text-[11px] opacity-70 text-center font-medium pt-1">Tens uma tolerância máxima de 3 faltas por mês antes de a ofensiva reiniciar.</p>
+            <button onclick="closeStreakModal()" class="w-full py-3 rounded-xl text-xs font-bold text-white uppercase tracking-wider btn-save shadow">Entendido</button>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="app-header border-b sticky top-0 z-40 backdrop-blur-md">
         <div class="max-w-6xl mx-auto px-4 py-3.5 flex flex-col md:flex-row justify-between items-center gap-4">
             
-            <!-- LINHA SUPERIOR / LOGO + STREAK MOBILE -->
             <div class="flex items-center justify-between w-full md:w-auto">
                 <div class="flex items-center gap-3 cursor-pointer" onclick="openModule('hub')">
                     <div class="w-11 h-11 rounded-xl flex items-center justify-center shadow-sm border flag-badge-box overflow-hidden shrink-0">
@@ -51,9 +100,9 @@
                     </div>
                 </div>
 
-                <!-- CONTADOR DE OFENSIVA (ÚNICO E VISÍVEL EM TODAS AS TELAS) -->
+                <!-- STREAK MOBILE (CLICÁVEL) -->
                 <div class="flex items-center gap-2 md:hidden">
-                    <div id="header-streak-badge" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold shadow-sm sub-card" title="Ofensiva de Vocabulário">
+                    <div id="header-streak-badge" onclick="openStreakModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold shadow-sm sub-card cursor-pointer hover:opacity-80 transition-all" title="Ver estatísticas de ofensiva">
                         <i class="fa-solid fa-fire text-stone-400 opacity-60" id="header-streak-icon"></i>
                         <span id="header-streak-count">0</span>
                     </div>
@@ -63,10 +112,7 @@
                 </div>
             </div>
             
-            <!-- CONTROLES E NAVEGAÇÃO -->
             <div class="flex flex-wrap items-center justify-center gap-2.5 w-full md:w-auto">
-                
-                <!-- DROPDOWN: IDIOMA ESTUDADO -->
                 <div class="relative flex-1 sm:flex-initial min-w-[150px]">
                     <div class="flex items-center gap-2 border px-3 py-2 rounded-xl shadow-sm transition-all dropdown-box">
                         <i class="fa-solid fa-earth-americas text-xs shrink-0 opacity-70"></i>
@@ -84,7 +130,6 @@
                     </div>
                 </div>
 
-                <!-- DROPDOWN: INTERFACE -->
                 <div class="relative flex-1 sm:flex-initial min-w-[140px]">
                     <div class="flex items-center gap-2 border px-3 py-2 rounded-xl shadow-sm transition-all dropdown-box">
                         <i class="fa-solid fa-language text-xs shrink-0 opacity-70"></i>
@@ -102,7 +147,6 @@
                     </div>
                 </div>
 
-                <!-- NAVEGAÇÃO DOS MÓDULOS -->
                 <nav id="main-nav" class="hidden flex gap-1.5 border p-1.5 rounded-xl shadow-sm nav-container">
                     <button onclick="openModule('hub')" id="nav-btn-hub" class="px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all opacity-70 hover:opacity-100">
                         <i class="fa-solid fa-house mr-1"></i> <span id="lbl-nav-hub">Home</span>
@@ -115,13 +159,12 @@
                     </button>
                 </nav>
 
-                <!-- CONTADOR DE OFENSIVA DESKTOP (ÚNICO) -->
-                <div class="hidden md:flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs font-bold shadow-sm sub-card" title="Ofensiva de Vocabulário">
+                <!-- STREAK DESKTOP (CLICÁVEL) -->
+                <div id="header-streak-badge-desktop" onclick="openStreakModal()" class="hidden md:flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs font-bold shadow-sm sub-card cursor-pointer hover:opacity-80 transition-all" title="Ver estatísticas de ofensiva">
                     <i class="fa-solid fa-fire text-stone-400 opacity-60" id="header-streak-icon-desktop"></i>
                     <span id="header-streak-count-desktop">0</span>
                 </div>
 
-                <!-- BOTÃO TEMA DESKTOP -->
                 <button onclick="toggleDarkMode()" class="hidden md:block p-3 rounded-xl border transition-all theme-toggle-btn shadow-sm">
                     <i id="theme-icon-desktop" class="fa-solid fa-moon"></i>
                 </button>
@@ -132,13 +175,12 @@
     <!-- CONTEÚDO PRINCIPAL -->
     <main class="flex-grow max-w-6xl w-full mx-auto p-4 sm:p-6 relative z-10">
 
-        <!-- CANTOS DECORATIVOS -->
         <div class="absolute top-2 left-2 text-lg pointer-events-none opacity-40 select-none decor-corner">❧</div>
         <div class="absolute top-2 right-2 text-lg pointer-events-none opacity-40 select-none decor-corner transform scale-x-[-1]">❧</div>
         <div class="absolute bottom-2 left-2 text-lg pointer-events-none opacity-40 select-none decor-corner transform scale-y-[-1]">❧</div>
         <div class="absolute bottom-2 right-2 text-lg pointer-events-none opacity-40 select-none decor-corner transform scale-[-1]">❧</div>
 
-        <!-- HUB / INÍCIO -->
+        <!-- HUB -->
         <section id="module-hub" class="py-8 sm:py-12 space-y-8">
             <div class="text-center space-y-3 max-w-xl mx-auto">
                 <div id="hub-badge-flag" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-bold uppercase tracking-widest shadow-sm hub-badge">
@@ -149,8 +191,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto pt-4">
-                
-                <!-- CARD LISTENING -->
                 <div onclick="openModule('listening')" class="vintage-card group relative rounded-2xl p-7 border-2 shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col justify-between">
                     <div class="absolute top-0 left-0 right-0 h-1.5 flag-accent-bar"></div>
                     <div class="space-y-4 pt-1">
@@ -161,16 +201,13 @@
                             <span id="card-listening-goal" class="text-[11px] font-black uppercase tracking-widest opacity-70">HOURS GOAL</span>
                             <h3 id="card-listening-title" class="text-xl font-bold font-serif group-hover:opacity-80 transition-colors mt-0.5">LISTENING TRACKER</h3>
                         </div>
-                        <p id="card-listening-desc" class="text-xs leading-relaxed font-medium opacity-80">
-                            Podcasts & series watched in target language. Track listening time.
-                        </p>
+                        <p id="card-listening-desc" class="text-xs leading-relaxed font-medium opacity-80">Podcasts & series watched in target language. Track listening time.</p>
                     </div>
                     <div class="pt-6 flex items-center text-xs font-bold group-hover:translate-x-1 transition-transform">
                         <span class="hub-btn-access">Open Dashboard</span> <i class="fa-solid fa-arrow-right ml-2"></i>
                     </div>
                 </div>
 
-                <!-- CARD READING -->
                 <div onclick="openModule('reading')" class="vintage-card group relative rounded-2xl p-7 border-2 shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col justify-between">
                     <div class="absolute top-0 left-0 right-0 h-1.5 flag-accent-bar"></div>
                     <div class="space-y-4 pt-1">
@@ -181,16 +218,13 @@
                             <span id="card-reading-tag" class="text-[11px] font-black uppercase tracking-widest opacity-70">BOOKS READ / PAGES</span>
                             <h3 id="card-reading-title" class="text-xl font-bold font-serif group-hover:opacity-80 transition-colors mt-0.5">READING TRACKER</h3>
                         </div>
-                        <p id="card-reading-desc" class="text-xs leading-relaxed font-medium opacity-80">
-                            Books read, total pages completed. Build your reading habit.
-                        </p>
+                        <p id="card-reading-desc" class="text-xs leading-relaxed font-medium opacity-80">Books read, total pages completed. Build your reading habit.</p>
                     </div>
                     <div class="pt-6 flex items-center text-xs font-bold group-hover:translate-x-1 transition-transform">
                         <span class="hub-btn-access">Open Dashboard</span> <i class="fa-solid fa-arrow-right ml-2"></i>
                     </div>
                 </div>
 
-                <!-- CARD VOCABULARY -->
                 <div onclick="openModule('vocabulary')" class="vintage-card group relative rounded-2xl p-7 border-2 shadow-md transition-all duration-300 cursor-pointer overflow-hidden flex flex-col justify-between">
                     <div class="absolute top-0 left-0 right-0 h-1.5 flag-accent-bar"></div>
                     <div class="space-y-4 pt-1">
@@ -201,15 +235,12 @@
                             <span id="card-vocab-tag" class="text-[11px] font-black uppercase tracking-widest opacity-70">FLASHCARDS & WORDS</span>
                             <h3 id="card-vocab-title" class="text-xl font-bold font-serif group-hover:opacity-80 transition-colors mt-0.5">VOCABULARY TRAINER</h3>
                         </div>
-                        <p id="card-vocab-desc" class="text-xs leading-relaxed font-medium opacity-80">
-                            Practice vocabulary with flashcards. Review and strengthen recall.
-                        </p>
+                        <p id="card-vocab-desc" class="text-xs leading-relaxed font-medium opacity-80">Practice vocabulary with flashcards. Review and strengthen recall.</p>
                     </div>
                     <div class="pt-6 flex items-center text-xs font-bold group-hover:translate-x-1 transition-transform">
                         <span id="hub-btn-train">Practice Now</span> <i class="fa-solid fa-arrow-right ml-2"></i>
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -225,9 +256,7 @@
                         <span id="listening-welcome-prefix">Listening</span> 
                         <img id="listening-flag-img" src="img/bandeira-eua.webp" class="w-8 h-5 object-cover rounded shadow-sm">
                     </h2>
-                    <p id="listening-banner-desc" class="text-sm font-medium leading-relaxed opacity-80">
-                        Customize your listening goal below. Every movie and series watched counts!
-                    </p>
+                    <p id="listening-banner-desc" class="text-sm font-medium leading-relaxed opacity-80">Customize your listening goal below. Every movie and series watched counts!</p>
                 </div>
 
                 <div class="z-10 flex gap-5 border-2 p-5 rounded-xl text-center w-full md:w-auto justify-around shadow-sm banner-stats-box items-center">
@@ -250,9 +279,7 @@
                         <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
                             <span id="total-hours-display" class="text-3xl font-black font-serif tracking-tight">0.00h</span>
                             <span class="text-xs font-bold uppercase tracking-wider opacity-70" id="lbl-of-target">de 1000h</span>
-                            <span id="percentage-display" class="text-xs font-black text-emerald-600 mt-1 px-3 py-1 rounded-full border shadow-sm percentage-badge">
-                                0.00%
-                            </span>
+                            <span id="percentage-display" class="text-xs font-black text-emerald-600 mt-1 px-3 py-1 rounded-full border shadow-sm percentage-badge">0.00%</span>
                         </div>
                     </div>
 
@@ -279,9 +306,7 @@
                             <h3 class="text-base font-bold font-serif mb-1" id="lbl-hours-by-type">Hours by Study Type</h3>
                             <p class="text-xs mb-4 font-medium opacity-75" id="lbl-hours-by-type-desc">Visual breakdown by Diamond, Silver, and Gold categories.</p>
                         </div>
-                        <div class="relative h-64 w-full">
-                            <canvas id="barTypeChart"></canvas>
-                        </div>
+                        <div class="relative h-64 w-full"><canvas id="barTypeChart"></canvas></div>
                     </div>
 
                     <div class="p-7 rounded-2xl border-2 shadow-md flex flex-col panel-card">
@@ -436,9 +461,7 @@
                             <h3 class="text-base font-bold font-serif mb-1" id="lbl-pages-per-book">Pages Read per Book</h3>
                             <p class="text-xs mb-4 font-medium opacity-75" id="lbl-pages-per-book-desc">Volume of reading per registered work.</p>
                         </div>
-                        <div class="relative h-64 w-full">
-                            <canvas id="readingBarChart"></canvas>
-                        </div>
+                        <div class="relative h-64 w-full"><canvas id="readingBarChart"></canvas></div>
                     </div>
 
                     <div class="p-7 rounded-2xl border-2 shadow-md flex flex-col panel-card">
@@ -526,9 +549,7 @@
                     <div class="perspective-1000 w-full h-72 cursor-pointer" onclick="flipFlashcard()">
                         <div id="flip-card-inner" class="flip-card-inner">
                             <div class="flip-card-front p-7 border-2 flex flex-col items-center justify-between shadow-xl rounded-2xl card-front-side">
-                                <span class="text-[10px] font-black uppercase tracking-widest px-3.5 py-1.5 rounded-full border shadow-inner card-badge-front" id="card-front-lang-label">
-                                    Term
-                                </span>
+                                <span class="text-[10px] font-black uppercase tracking-widest px-3.5 py-1.5 rounded-full border shadow-inner card-badge-front" id="card-front-lang-label">Term</span>
                                 <div class="space-y-3 my-auto">
                                     <h3 id="fc-word" class="text-3xl sm:text-4xl font-black font-serif">Click Draw</h3>
                                     <p class="text-xs font-medium italic opacity-75" id="lbl-click-to-flip">Click card to reveal translation 🔄</p>
@@ -537,9 +558,7 @@
                             </div>
 
                             <div class="flip-card-back p-7 border-2 flex flex-col items-center justify-between shadow-xl rounded-2xl card-back-side">
-                                <span class="text-[10px] font-black uppercase tracking-widest px-3.5 py-1.5 rounded-full border shadow-inner card-badge-back" id="lbl-translation-tag">
-                                    Translation
-                                </span>
+                                <span class="text-[10px] font-black uppercase tracking-widest px-3.5 py-1.5 rounded-full border shadow-inner card-badge-back" id="lbl-translation-tag">Translation</span>
                                 <div class="space-y-3 my-auto max-w-sm">
                                     <h3 id="fc-translation" class="text-2xl sm:text-3xl font-black font-serif">-</h3>
                                     <p id="fc-example" class="text-xs font-medium italic p-3 rounded-xl border-2 shadow-sm card-example-box">"-"</p>
@@ -610,7 +629,7 @@
         <span>❧</span> <span id="footer-text">Fluency Lab • American Edition • 2026</span> <span>❧</span>
     </footer>
 
-    <!-- JS Externo -->
+    <!-- JS -->
     <script src="script.js"></script>
 </body>
 </html>

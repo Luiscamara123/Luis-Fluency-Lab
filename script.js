@@ -123,7 +123,7 @@ const UI_TEXTS = {
         termInLang: "Término en el Idioma", termTranslation: "Traducción / Significado", termExample: "Ejemplo (Opcional)",
         tapFlip: "Toca para Girar", clickToFlip: "Haz clic en la tarjeta para ver traducción 🔄", translationTag: "Traducción",
         correctHits: "Aciertos:", wrongHits: "Errores:", btnWrong: "Olvidé", btnCorrect: "¡Recordé!", btnNextRandom: "Siguiente Palabra Aleatoria",
-        emptyVocabTitle: "Sin palabras", emptyVocabExample: "Añade palabras desde el menú superior.", emptyVocabList: "No hay palabras registradas.", emptyMediaList: "No hay títulos registrados.", emptyBookList: "No hay libros registrados."
+        emptyVocabTitle: "Sin palabras", emptyVocabExample: "Añade palabras desde el menu superior.", emptyVocabList: "No hay palabras registradas.", emptyMediaList: "No hay títulos registrados.", emptyBookList: "No hay libros registrados."
     },
     fr: {
         learningLabel: "Apprentissage", uiLabel: "Interface",
@@ -195,14 +195,53 @@ let isCardFlipped = false;
 function loadLanguageData() {
     listeningList = JSON.parse(localStorage.getItem(`luis_listening_${targetLang}`)) || [];
     readingList = JSON.parse(localStorage.getItem(`luis_reading_${targetLang}`)) || [];
-    vocabStreakData = JSON.parse(localStorage.getItem(`luis_vocab_streak_${targetLang}`)) || { lastPracticeDate: '', streakCount: 0 };
     
+    vocabStreakData = JSON.parse(localStorage.getItem(`luis_vocab_streak_${targetLang}`)) || { 
+        lastPracticeDate: '', 
+        streakCount: 0, 
+        history: {}, 
+        currentMonth: new Date().getMonth(),
+        missedThisMonth: 0 
+    };
+
+    checkMidnightAndTolerance();
+
     let savedVocab = JSON.parse(localStorage.getItem(`luis_vocab_${uiLang}`));
     if (!savedVocab || savedVocab.length === 0) {
         vocabularyList = VOCAB_TRANSLATIONS[uiLang] || VOCAB_TRANSLATIONS['pt'];
         saveVocabularyData();
     } else {
         vocabularyList = savedVocab;
+    }
+}
+
+function checkMidnightAndTolerance() {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const currentMonth = new Date().getMonth();
+
+    if (vocabStreakData.currentMonth !== currentMonth) {
+        vocabStreakData.currentMonth = currentMonth;
+        vocabStreakData.missedThisMonth = 0;
+        saveVocabStreakData();
+    }
+
+    if (!vocabStreakData.lastPracticeDate) return;
+
+    const lastDate = new Date(vocabStreakData.lastPracticeDate);
+    const currentDate = new Date(todayStr);
+    const diffTime = currentDate - lastDate;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays > 1) {
+        const missedDays = diffDays - 1;
+        for (let i = 0; i < missedDays; i++) {
+            if (vocabStreakData.missedThisMonth < 3) {
+                vocabStreakData.missedThisMonth += 1; 
+            } else {
+                vocabStreakData.streakCount = 0;
+            }
+        }
+        saveVocabStreakData();
     }
 }
 
@@ -245,10 +284,7 @@ function toggleDarkMode() {
 function updateThemeAndFlags() {
     const meta = LANG_META[targetLang] || LANG_META['en'];
     const body = document.getElementById('app-body');
-    
-    if (body) {
-        body.className = `${meta.themeClass} mode-${themeMode} min-h-screen transition-all duration-500 flex flex-col relative overflow-x-hidden`;
-    }
+    if (body) body.className = `${meta.themeClass} mode-${themeMode} min-h-screen transition-all duration-500 flex flex-col relative overflow-x-hidden`;
     
     const setImgSrc = (id, src) => { const el = document.getElementById(id); if (el) el.src = src; };
     setImgSrc('header-flag-img', meta.flagImg);
@@ -289,7 +325,6 @@ function refreshAllDashboards() {
 
 function applyUITranslations() {
     const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
-
     const setText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
     const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
 
@@ -300,7 +335,6 @@ function applyUITranslations() {
     setText('lbl-nav-cad', txt.navCad);
     setText('hub-title', txt.hubTitle);
     setText('hub-desc', txt.hubDesc);
-
     setText('card-listening-goal', txt.cardListeningGoal);
     setText('card-listening-title', txt.cardListeningTitle);
     setText('card-listening-desc', txt.cardListeningDesc);
@@ -313,7 +347,6 @@ function applyUITranslations() {
 
     document.querySelectorAll('.hub-btn-access').forEach(el => el.innerText = txt.btnAccess);
     setText('hub-btn-train', txt.btnTrain);
-
     setText('lbl-goal-fixed', txt.goalFixed);
     setText('lbl-progress', txt.progress);
     setText('lbl-of-target', txt.ofTarget);
@@ -325,7 +358,6 @@ function applyUITranslations() {
     setHtml('lbl-titles-watched', `<i class="fa-solid fa-list"></i> ${txt.titlesWatched}`);
     setText('lbl-decimal-total', txt.decimalTotal);
     setText('lbl-target', txt.target);
-
     setText('lbl-add-media-title', txt.addMediaTitle);
     setText('lbl-add-media-desc', txt.addMediaDesc);
     setText('lbl-media-type', txt.mediaType);
@@ -359,7 +391,6 @@ function applyUITranslations() {
     setText('lbl-book-author', txt.bookAuthor);
     setText('lbl-book-pages', txt.bookPages);
     setText('lbl-book-cover', txt.bookCover);
-
     setText('lbl-total-words', txt.totalWords);
     setText('lbl-accuracy-rate', txt.accuracyRate);
     setHtml('lbl-registered-vocab', `<i class="fa-solid fa-list-check"></i> ${txt.registeredVocab}`);
@@ -368,7 +399,6 @@ function applyUITranslations() {
     setText('lbl-term-in-lang', txt.termInLang);
     setText('lbl-term-translation', txt.termTranslation);
     setText('lbl-term-example', txt.termExample);
-
     setText('lbl-tap-flip', txt.tapFlip);
     setText('lbl-click-to-flip', txt.clickToFlip);
     setText('lbl-translation-tag', txt.translationTag);
@@ -442,7 +472,6 @@ let listeningDonutChart = null, listeningBarChart = null, readingBarChart = null
 
 function renderListeningDashboard() {
     let totalMins = 0, hoursByStudy = { 'DIAMANTE': 0, 'PRATA': 0, 'OURO': 0 };
-    
     listeningList.forEach(item => {
         const mins = (Number(item.hours) * 60) + Number(item.minutes);
         totalMins += mins;
@@ -634,9 +663,7 @@ function flipFlashcard() {
     if (vocabularyList.length === 0) return;
     const cardInner = document.getElementById('flip-card-inner');
     isCardFlipped = !isCardFlipped;
-    if (cardInner) {
-        cardInner.classList.toggle('flipped', isCardFlipped);
-    }
+    if (cardInner) cardInner.classList.toggle('flipped', isCardFlipped);
 }
 
 function nextFlashcardRandom() {
@@ -655,34 +682,95 @@ function nextFlashcardRandom() {
 
 function recordVocabPracticeToday() {
     const todayStr = new Date().toISOString().split('T')[0];
-    
-    if (vocabStreakData.lastPracticeDate === todayStr) {
-        return; 
-    }
+    const isAlreadyDone = vocabStreakData.lastPracticeDate === todayStr;
 
-    if (!vocabStreakData.lastPracticeDate) {
-        vocabStreakData.streakCount = 1;
-    } else {
-        const lastDate = new Date(vocabStreakData.lastPracticeDate);
-        const currentDate = new Date(todayStr);
-        const diffTime = Math.abs(currentDate - lastDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        if (diffDays === 1) {
-            vocabStreakData.streakCount += 1;
-        } else if (diffDays > 1) {
+    if (!isAlreadyDone) {
+        if (!vocabStreakData.lastPracticeDate) {
             vocabStreakData.streakCount = 1;
-        }
-    }
+        } else {
+            const lastDate = new Date(vocabStreakData.lastPracticeDate);
+            const currentDate = new Date(todayStr);
+            const diffTime = currentDate - lastDate;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    vocabStreakData.lastPracticeDate = todayStr;
-    saveVocabStreakData();
-    updateHeaderStreakUI();
+            if (diffDays === 1) {
+                vocabStreakData.streakCount += 1;
+            } else if (diffDays > 1) {
+                vocabStreakData.streakCount += 1; 
+            } else {
+                vocabStreakData.streakCount = 1;
+            }
+        }
+
+        vocabStreakData.lastPracticeDate = todayStr;
+        if (!vocabStreakData.history) vocabStreakData.history = {};
+        vocabStreakData.history[todayStr] = true;
+        
+        saveVocabStreakData();
+        updateHeaderStreakUI();
+        triggerStreakAnimation(); 
+    }
+}
+
+function triggerStreakAnimation() {
+    const overlay = document.getElementById('streak-animation-overlay');
+    const popup = document.getElementById('streak-popup-box');
+    if (overlay && popup) {
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+        popup.classList.remove('scale-75');
+        popup.classList.add('scale-100');
+    }
+}
+
+function closeStreakAnimation() {
+    const overlay = document.getElementById('streak-animation-overlay');
+    const popup = document.getElementById('streak-popup-box');
+    if (overlay && popup) {
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+        popup.classList.remove('scale-100');
+        popup.classList.add('scale-75');
+    }
+}
+
+function openStreakModal() {
+    const modal = document.getElementById('streak-details-modal');
+    if (modal) {
+        document.getElementById('modal-streak-count').innerText = `${vocabStreakData.streakCount || 0} dias`;
+        document.getElementById('modal-missed-count').innerText = `${vocabStreakData.missedThisMonth || 0} / 3`;
+        
+        const weekContainer = document.getElementById('week-days-container');
+        if (weekContainer) {
+            weekContainer.innerHTML = '';
+            const daysOfWeek = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const dateStr = d.toISOString().split('T')[0];
+                const dayName = daysOfWeek[d.getDay()];
+                const isDone = vocabStreakData.history && vocabStreakData.history[dateStr];
+
+                const div = document.createElement('div');
+                div.className = `p-2 rounded-xl border flex flex-col items-center justify-center gap-1 ${isDone ? 'bg-amber-500/10 border-amber-500 text-amber-600 font-bold' : 'sub-card opacity-60'}`;
+                div.innerHTML = `
+                    <span class="text-[9px] uppercase">${dayName}</span>
+                    <i class="fa-solid fa-fire text-xs ${isDone ? 'text-amber-500' : 'text-stone-400 opacity-40'}"></i>
+                `;
+                weekContainer.appendChild(div);
+            }
+        }
+
+        modal.classList.remove('hidden');
+    }
+}
+
+function closeStreakModal() {
+    const modal = document.getElementById('streak-details-modal');
+    if (modal) modal.classList.add('hidden');
 }
 
 function updateHeaderStreakUI() {
     const todayStr = new Date().toISOString().split('T')[0];
-    const isAcessedToday = vocabStreakData.lastPracticeDate === todayStr;
+    const isAccessedToday = vocabStreakData.lastPracticeDate === todayStr;
     const count = vocabStreakData.streakCount || 0;
 
     const countMobile = document.getElementById('header-streak-count');
@@ -693,9 +781,9 @@ function updateHeaderStreakUI() {
     if (countMobile) countMobile.innerText = count;
     if (countDesk) countDesk.innerText = count;
 
-    if (isAcessedToday) {
-        if (iconMobile) iconMobile.className = "fa-solid fa-fire text-amber-500 opacity-100";
-        if (iconDesk) iconDesk.className = "fa-solid fa-fire text-amber-500 opacity-100";
+    if (isAccessedToday) {
+        if (iconMobile) iconMobile.className = "fa-solid fa-fire text-amber-500 opacity-100 animate-pulse";
+        if (iconDesk) iconDesk.className = "fa-solid fa-fire text-amber-500 opacity-100 animate-pulse";
     } else {
         if (iconMobile) iconMobile.className = "fa-solid fa-fire text-stone-400 opacity-60";
         if (iconDesk) iconDesk.className = "fa-solid fa-fire text-stone-400 opacity-60";
