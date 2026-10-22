@@ -130,3 +130,11 @@ body {
 }
 .flip-card-back { transform: rotateY(180deg); }
 .decor-corner { color: var(--border-color); }
+
+/* COR DO BOTÃO ATIVO NO FILTRO DE CONQUISTAS */
+.ach-filter-active {
+    background-color: #f59e0b !important;
+    color: #ffffff !important;
+    border-color: #d97706 !important;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}

@@ -20,12 +20,17 @@ const UI_TEXTS = {
         learningLabel: "Estudando", uiLabel: "Interface",
         navHub: "Início", navDash: "Dashboard", navCad: "Cadastrar",
         welcome: "BEM-VINDO, LUIS •",
+        headerAch: "Conquistas",
         hubTitle: "O que você deseja registrar ou praticar hoje?",
         hubDesc: "Selecione um módulo abaixo para acompanhar seu progresso.",
         cardListeningGoal: "META DE HORAS", cardListeningTitle: "Rastreador de Escuta", cardListeningDesc: "Filmes, séries e podcasts assistidos no idioma.",
         cardReadingTag: "LEITURA DE LIVROS", cardReadingTitle: "Rastreador de Leitura", cardReadingDesc: "Livros lidos, páginas e total de obras.",
         cardVocabTag: "FLASHCARDS", cardVocabTitle: "Treinador de Vocabulário", cardVocabDesc: "Pratique com exercícios de memória e vocabulário.",
-        btnAccess: "Acessar o Painel", btnTrain: "Treinar Vocabulário",
+        cardAchTag: "DESAFIOS & TROFÉUS", cardAchTitle: "GALERIA DE CONQUISTAS", cardAchDesc: "Desbloqueie até 100 conquistas únicas com sua evolução.",
+        btnAccess: "Acessar o Painel", btnTrain: "Treinar Vocabulário", btnAch: "Ver Conquistas",
+        achBannerTag: "Galeria de Troféus", achBannerTitle: "Galeria de 100 Conquistas", achBannerDesc: "Acompanhe seu progresso e conquiste badges estudando diariamente.",
+        lblAchUnlocked: "Desbloqueadas", lblAchProgress: "Progresso Geral",
+        achFilterAll: "Todas (100)", achFilterStreak: "🔥 Ofensiva", achFilterVocab: "🧠 Vocabulário", achFilterListening: "🎧 Listening", achFilterReading: "📖 Leitura", achFilterPoly: "🌍 Poliglota",
         goalFixed: "Meta (Horas)", progress: "Progresso", ofTarget: "da meta",
         summaryListening: "Resumo de Escuta", realTime: "Tempo Real", registered: "Cadastrados",
         hoursByType: "Horas por Tipo de Estudo", hoursByTypeDesc: "Separação por Diamante, Prata e Ouro.",
@@ -43,18 +48,25 @@ const UI_TEXTS = {
         termInLang: "Palavra / Termo no Idioma", termTranslation: "Tradução / Significado", termExample: "Exemplo de Frase (Opcional)",
         tapFlip: "Toque para Virar", clickToFlip: "Clique no cartão para revelar a tradução 🔄", translationTag: "Tradução",
         correctHits: "Acertos:", wrongHits: "Erros:", btnWrong: "Não Lembrei", btnCorrect: "Lembrei (Certo!)", btnNextRandom: "Sortear Próxima Palavra Aleatória",
-        emptyVocabTitle: "Nenhuma palavra cadastrada", emptyVocabExample: "Cadastre sua primeira palavra no menu superior.", emptyVocabList: "Nenhuma palavra cadastrada.", emptyMediaList: "Nenhum título cadastrado.", emptyBookList: "Nenhum livro cadastrado."
+        emptyVocabTitle: "Nenhuma palavra cadastrada", emptyVocabExample: "Cadastre sua primeira palavra no menu superior.", emptyVocabList: "Nenhuma palavra cadastrada.", emptyMediaList: "Nenhum título cadastrado.", emptyBookList: "Nenhum livro cadastrado.",
+        popupStreakTitle: "Foguinho Acendido! 🔥", popupStreakDesc: "Excelente, Luis! Ofensiva garantida e salva no histórico diário.", btnContinue: "Continuar",
+        modalStreakTitle: "Estatísticas de Ofensiva", modalStreakSub: "Controlo diário e histórico persistente", modalSeq: "Sequência Atual", modalMissed: "Faltas no Mês", modalWeek: "Histórico da Semana", modalNote: "Dias sem realizar a tarefa ficam marcados a vermelho.", btnUnderstood: "Entendido"
     },
     en: {
         learningLabel: "Studying", uiLabel: "Interface",
         navHub: "Home", navDash: "Dashboard", navCad: "Add New",
         welcome: "WELCOME, LUIS •",
+        headerAch: "Achievements",
         hubTitle: "What would you like to track or practice today?",
         hubDesc: "Select a module below to monitor your progress.",
         cardListeningGoal: "HOURS GOAL", cardListeningTitle: "LISTENING TRACKER", cardListeningDesc: "Podcasts & series watched in target language. Track listening time.",
         cardReadingTag: "BOOKS READ / PAGES", cardReadingTitle: "READING TRACKER", cardReadingDesc: "Books read, total pages completed. Build your reading habit.",
         cardVocabTag: "FLASHCARDS & WORDS", cardVocabTitle: "VOCABULARY TRAINER", cardVocabDesc: "Practice vocabulary with flashcards. Review and strengthen recall.",
-        btnAccess: "Open Dashboard", btnTrain: "Practice Now",
+        cardAchTag: "CHALLENGES & TROPHIES", cardAchTitle: "ACHIEVEMENTS GALLERY", cardAchDesc: "Unlock up to 100 unique achievements with your study progress.",
+        btnAccess: "Open Dashboard", btnTrain: "Practice Now", btnAch: "View Achievements",
+        achBannerTag: "Hall of Fame", achBannerTitle: "100 Achievements Gallery", achBannerDesc: "Track your progress and earn badges studying daily.",
+        lblAchUnlocked: "Unlocked", lblAchProgress: "Overall Progress",
+        achFilterAll: "All (100)", achFilterStreak: "🔥 Streak", achFilterVocab: "🧠 Vocabulary", achFilterListening: "🎧 Listening", achFilterReading: "📖 Reading", achFilterPoly: "🌍 Polyglot",
         goalFixed: "Goal (Hours)", progress: "Progress", ofTarget: "of goal",
         summaryListening: "Listening Summary", realTime: "Real Time", registered: "Tracked Items",
         hoursByType: "Hours by Study Type", hoursByTypeDesc: "Breakdown by Diamond, Silver, and Gold categories.",
@@ -72,39 +84,143 @@ const UI_TEXTS = {
         termInLang: "Word / Term in Target Language", termTranslation: "Translation / Meaning", termExample: "Example Sentence (Optional)",
         tapFlip: "Tap to Flip", clickToFlip: "Click card to reveal translation 🔄", translationTag: "Translation",
         correctHits: "Correct:", wrongHits: "Wrong:", btnWrong: "Forgot", btnCorrect: "Remembered!", btnNextRandom: "Draw Next Random Word",
-        emptyVocabTitle: "No words added", emptyVocabExample: "Add your first word using the top menu.", emptyVocabList: "No words registered.", emptyMediaList: "No titles registered.", emptyBookList: "No books registered."
+        emptyVocabTitle: "No words added", emptyVocabExample: "Add your first word using the top menu.", emptyVocabList: "No words registered.", emptyMediaList: "No titles registered.", emptyBookList: "No books registered.",
+        popupStreakTitle: "Streak Lit! 🔥", popupStreakDesc: "Awesome, Luis! Daily streak secured and recorded.", btnContinue: "Continue",
+        modalStreakTitle: "Streak Statistics", modalStreakSub: "Daily control & persistent history", modalSeq: "Current Streak", modalMissed: "Missed This Month", modalWeek: "Weekly History", modalNote: "Days without practice are marked in red.", btnUnderstood: "Got It"
+    },
+    es: {
+        learningLabel: "Estudando", uiLabel: "Interfaz",
+        navHub: "Inicio", navDash: "Panel", navCad: "Añadir",
+        welcome: "BIENVENIDO, LUIS •",
+        headerAch: "Logros",
+        hubTitle: "¿Qué quieres registrar o practicar hoy?",
+        hubDesc: "Selecciona un módulo a continuación para seguir tu progreso.",
+        cardListeningGoal: "META DE HORAS", cardListeningTitle: "Seguimiento de Escucha", cardListeningDesc: "Podcasts, series y vídeos en el idioma.",
+        cardReadingTag: "LECTURA DE LIBROS", cardReadingTitle: "Seguimiento de Lectura", cardReadingDesc: "Libros leídos, obras completadas y total de páginas.",
+        cardVocabTag: "TARJETAS", cardVocabTitle: "Entrenador de Vocabulario", cardVocabDesc: "Practica con tarjetas y ejercicios de memoria.",
+        cardAchTag: "DESAFÍOS Y TROFEOS", cardAchTitle: "GALERÍA DE LOGROS", cardAchDesc: "Desbloquea hasta 100 logros únicos con tu estudio.",
+        btnAccess: "Acceder al Panel", btnTrain: "Practicar Vocabulario", btnAch: "Ver Logros",
+        achBannerTag: "Galería de Trofeos", achBannerTitle: "Galería de 100 Logros", achBannerDesc: "Sigue tu progreso y gana medallas estudiando a diario.",
+        lblAchUnlocked: "Desbloqueados", lblAchProgress: "Progreso General",
+        achFilterAll: "Todos (100)", achFilterStreak: "🔥 Racha", achFilterVocab: "🧠 Vocabulario", achFilterListening: "🎧 Listening", achFilterReading: "📖 Lectura", achFilterPoly: "🌍 Políglota",
+        goalFixed: "Meta (Horas)", progress: "Progreso", ofTarget: "de la meta",
+        summaryListening: "Resumen de Escucha", realTime: "Tiempo Real", registered: "Registrados",
+        hoursByType: "Horas por Tipo de Estudio", hoursByTypeDesc: "Separación por Diamante, Plata y Oro.",
+        titlesWatched: "Títulos Vistos", decimalTotal: "TOTAL DECIMAL:", target: "OBJETIVO:",
+        addMediaTitle: "Añadir Película o Serie", addMediaDesc: "Registra tus horas de inmersión.",
+        mediaType: "Tipo de Medio", optMovie: "Película", optSeries: "Serie",
+        titleName: "Nombre del Título", coverImg: "Portada (Imagen)", listeningMode: "Modo de Escucha",
+        descDiamond: "Sin subtítulos (Práctica 100% enfocada)", descGold: "Audio y subtítulos en el idioma", descSilver: "Audio original con subtítulos traducidos",
+        hours: "Horas", minutes: "Minutos", season: "Temporada (Opcional)", epCount: "Episodios Vistos", avgHours: "Media Ep (Horas)", avgMins: "Media Ep (Minutos)",
+        save: "Guardar", cancel: "Cancelar",
+        totalBooks: "Total Libros", totalPages: "Total Páginas", pagesPerBook: "Páginas por Libro", pagesPerBookDesc: "Volumen de lectura acumulado.",
+        registeredBooks: "Libros Guardados", sumPages: "TOTAL DE PÁGINAS:", addBookTitle: "Añadir Nuevo Libro", addBookDesc: "Registra libros para calcular páginas.",
+        bookTitle: "Título del Libro", bookAuthor: "Autor/a (Opcional)", bookPages: "Número de Páginas", bookCover: "Portada del Libro",
+        totalWords: "Palabras", accuracyRate: "Aciertos", registeredVocab: "Vocabulario Guardado", addWordTitle: "Añadir Palabra", addWordDesc: "Añade nuevos términos.",
+        termInLang: "Término en el Idioma", termTranslation: "Traducción / Significado", termExample: "Ejemplo (Opcional)",
+        tapFlip: "Toca para Girar", clickToFlip: "Haz clic en la tarjeta para ver traducción 🔄", translationTag: "Traducción",
+        correctHits: "Aciertos:", wrongHits: "Errores:", btnWrong: "Olvidé", btnCorrect: "¡Recordé!", btnNextRandom: "Siguiente Palabra Aleatoria",
+        emptyVocabTitle: "Sin palabras", emptyVocabExample: "Añade tu primera palabra desde el menú.", emptyVocabList: "No hay palabras registradas.", emptyMediaList: "No hay títulos registrados.", emptyBookList: "No hay libros registrados.",
+        popupStreakTitle: "¡Fuego Encendido! 🔥", popupStreakDesc: "¡Excelente, Luis! Racha diaria garantizada.", btnContinue: "Continuar",
+        modalStreakTitle: "Estadísticas de Racha", modalStreakSub: "Control diario e historial persistente", modalSeq: "Racha Actual", modalMissed: "Faltas del Mes", modalWeek: "Historial Semanal", modalNote: "Días sin práctica quedan en rojo.", btnUnderstood: "Entendido"
+    },
+    fr: {
+        learningLabel: "Apprentissage", uiLabel: "Interface",
+        navHub: "Accueil", navDash: "Tableau", navCad: "Ajouter",
+        welcome: "BIENVENUE, LUIS •",
+        headerAch: "Succès",
+        hubTitle: "Que souhaitez-vous enregistrer ou pratiquer aujourd'hui ?",
+        hubDesc: "Sélectionnez un module ci-dessous pour suivre vos progrès.",
+        cardListeningGoal: "OBJECTIF HEURES", cardListeningTitle: "Listening Tracker", cardListeningDesc: "Films et séries regardés dans la langue cible.",
+        cardReadingTag: "LECTURE DE LIVRES", cardReadingTitle: "Reading Tracker", cardReadingDesc: "Livres lus, nombre d'ouvrages et total de pages.",
+        cardVocabTag: "FLASHCARDS", cardVocabTitle: "Vocabulary Trainer", cardVocabDesc: "Entraînez-vous avec des tests de mémoire.",
+        cardAchTag: "DÉFIS & TROPHEES", cardAchTitle: "GALERIE DES SUCCÈS", cardAchDesc: "Débloquez jusqu'à 100 succès uniques grâce à vos progrès.",
+        btnAccess: "Accéder au Tableau", btnTrain: "Entraîner le Vocabulaire", btnAch: "Voir les Succès",
+        achBannerTag: "Galerie des Trophées", achBannerTitle: "Galerie des 100 Succès", achBannerDesc: "Suivez vos progrès et gagnez des badges en étudiant chaque jour.",
+        lblAchUnlocked: "Débloqués", lblAchProgress: "Progrès Global",
+        achFilterAll: "Tous (100)", achFilterStreak: "🔥 Série", achFilterVocab: "🧠 Vocabulaire", achFilterListening: "🎧 Listening", achFilterReading: "📖 Lecture", achFilterPoly: "🌍 Polyglotte",
+        goalFixed: "Objectif (Heures)", progress: "Progrès", ofTarget: "de l'objectif",
+        summaryListening: "Résumé d'Écoute", realTime: "Temps Réel", registered: "Enregistrés",
+        hoursByType: "Heures par Type d'Étude", hoursByTypeDesc: "Répartition Diamant, Argent et Or.",
+        titlesWatched: "Titres Visionnés", decimalTotal: "TOTAL DÉCIMAL :", target: "CIBLE :",
+        addMediaTitle: "Ajouter Film ou Série", addMediaDesc: "Enregistrez vos heures d'immersion.",
+        mediaType: "Type de Média", optMovie: "Film", optSeries: "Série",
+        titleName: "Titre", coverImg: "Pochette (Image)", listeningMode: "Mode d'Écoute",
+        descDiamond: "Sans sous-titres (Entraînement 100% focalisé)", descGold: "Audio et sous-titres dans la langue", descSilver: "Audio original avec sous-titres traduits",
+        hours: "Heures", minutes: "Minutes", season: "Saison (Optionnel)", epCount: "Épisodes Regardés", avgHours: "Moy. Ép (Heures)", avgMins: "Moy. Ép (Minutes)",
+        save: "Enregistrer", cancel: "Annuler",
+        totalBooks: "Total Livres", totalPages: "Total Pages", pagesPerBook: "Pages par Livre", pagesPerBookDesc: "Volume de lecture par ouvrage.",
+        registeredBooks: "Livres Enregistrés", sumPages: "TOTAL DE PAGES :", addBookTitle: "Ajouter un Livre", addBookDesc: "Enregistrez vos livres lus.",
+        bookTitle: "Titre du Livre", bookAuthor: "Auteur (Optionnel)", bookPages: "Nombre de Pages", bookCover: "Couverture",
+        totalWords: "Mots", accuracyRate: "Taux de Réussite", registeredVocab: "Vocabulaire Enregistré", addWordTitle: "Ajouter un Mot", addWordDesc: "Ajoutez de nouveaux termes.",
+        termInLang: "Terme dans la Langue", termTranslation: "Traduction / Sens", termExample: "Exemple (Optionnel)",
+        tapFlip: "Appuyez pour Retourner", clickToFlip: "Cliquez pour voir la traduction 🔄", translationTag: "Traduction",
+        correctHits: "Correct :", wrongHits: "Erreurs :", btnWrong: "Oublié", btnCorrect: "Rappelé !", btnNextRandom: "Tirer un Mot au Hasard",
+        emptyVocabTitle: "Aucun mot", emptyVocabExample: "Ajoutez un mot depuis le menu.", emptyVocabList: "Aucun mot enregistré.", emptyMediaList: "Aucun titre enregistré.", emptyBookList: "Aucun livre enregistré.",
+        popupStreakTitle: "Série Allumée ! 🔥", popupStreakDesc: "Excellent, Luis ! Série quotidienne validée.", btnContinue: "Continuer",
+        modalStreakTitle: "Statistiques de Série", modalStreakSub: "Suivi quotidien et historique", modalSeq: "Série Actuelle", modalMissed: "Manqués ce mois", modalWeek: "Historique Semaine", modalNote: "Les jours sans pratique sont marqués en rouge.", btnUnderstood: "Compris"
+    },
+    ja: {
+        learningLabel: "学習モード", uiLabel: "インターフェース",
+        navHub: "ホーム", navDash: "ダッシュボード", navCad: "新規登録",
+        welcome: "ようこそ、ルイイスさん •",
+        headerAch: "実績",
+        hubTitle: "今日は何を記録・練習しますか？",
+        hubDesc: "下のモジュールを選択して、進捗を記録しましょう。",
+        cardListeningGoal: "目標時間", cardListeningTitle: "リスニングトラッカー", cardListeningDesc: "アニメ・ドラマ・ポッドキャストで聞き取り練習。",
+        cardReadingTag: "読書・テキスト学習", cardReadingTitle: "リーディングトラッカー", cardReadingDesc: "本・漫画・記事を読んで、ページ数と作品数を記録。",
+        cardVocabTag: "語彙学習", cardVocabTitle: "語彙トレーナー", cardVocabDesc: "単語を復習し、記憶を定着させるフラッシュカード。",
+        cardAchTag: "実績とトロフィー", cardAchTitle: "実績ギャラリー", cardAchDesc: "学習の進捗に応じて最大100の実績を解除。",
+        btnAccess: "ダッシュボードへ", btnTrain: "学習を開始", btnAch: "実績を見る",
+        achBannerTag: "トロフィーギャラリー", achBannerTitle: "100の実績ギャラリー", achBannerDesc: "毎日勉強してバッジを獲得し、進捗を追跡しましょう。",
+        lblAchUnlocked: "解除済み", lblAchProgress: "全体進捗",
+        achFilterAll: "すべて (100)", achFilterStreak: "🔥 連続記録", achFilterVocab: "🧠 単語", achFilterListening: "🎧 リスニング", achFilterReading: "📖 読書", achFilterPoly: "🌍 マルチリンガル",
+        goalFixed: "目標時間 (時間)", progress: "進捗率", ofTarget: "の目標",
+        summaryListening: "リスニング概要", realTime: "実時間", registered: "登録数",
+        hoursByType: "学習タイプ別時間", hoursByTypeDesc: "ダイヤモンド、シルバー、ゴールド分類。",
+        titlesWatched: "視聴タイトル一覧", decimalTotal: "合計時間:", target: "目標:",
+        addMediaTitle: "作品の登録", addMediaDesc: "学習時間を追加します。",
+        mediaType: "メディア形式", optMovie: "映画", optSeries: "ドラマ・アニメ",
+        titleName: "作品名", coverImg: "カバー画像", listeningMode: "リスニングモード",
+        descDiamond: "字幕なし（集中トレーニング）", descGold: "学習言語の音声＋字幕", descSilver: "原語音声＋翻訳字幕",
+        hours: "時間", minutes: "分", season: "シーズン（任意）", epCount: "視聴話数", avgHours: "1話の平均（時間）", avgMins: "1話の平均（分）",
+        save: "保存する", cancel: "キャンセル",
+        totalBooks: "総本数", totalPages: "総ページ数", pagesPerBook: "本ごとのページ数", pagesPerBookDesc: "各作品の読書量。",
+        registeredBooks: "登録済みの本", sumPages: "合計ページ数:", addBookTitle: "新しい本を登録", addBookDesc: "読了した本を追加します。",
+        bookTitle: "本のタイトル", bookAuthor: "著者（任意）", bookPages: "ページ数", bookCover: "表紙画像",
+        totalWords: "単語数", accuracyRate: "正解率", registeredVocab: "登録済みの単語", addWordTitle: "新しい単語を追加", addWordDesc: "練習用の単語を追加します。",
+        termInLang: "学習言語の単語", termTranslation: "翻訳・意味", termExample: "例文（任意）",
+        tapFlip: "タップして裏返す", clickToFlip: "カードをクリックして意味を表示 🔄", translationTag: "翻訳・意味",
+        correctHits: "正解:", wrongHits: "不正解:", btnWrong: "覚えていない", btnCorrect: "覚えていた！", btnNextRandom: "次の単語をランダム抽出",
+        emptyVocabTitle: "単語がありません", emptyVocabExample: "メニューから単語を追加してください。", emptyVocabList: "登録済みの単語はありません。", emptyMediaList: "登録済みの作品はありません。", emptyBookList: "登録済みの本はありません。",
+        popupStreakTitle: "ストリーク達成！ 🔥", popupStreakDesc: "素晴らしいです、ルイイスさん！今日のストリークを記録しました。", btnContinue: "次へ",
+        modalStreakTitle: "ストリーク統計", modalStreakSub: "毎日の管理と履歴", modalSeq: "現在のストリーク", modalMissed: "今月の欠席", modalWeek: "週間履歴", modalNote: "練習しなかった日は赤く表示されます。", btnUnderstood: "確認"
     }
 };
 
-// GERADOR DAS 100 CONQUISTAS
 function generate100Achievements() {
     const list = [];
     
-    // 20 de Ofensiva (Streak)
     const streakDays = [1, 2, 3, 5, 7, 10, 14, 21, 30, 45, 60, 90, 100, 120, 150, 180, 200, 250, 300, 365];
     streakDays.forEach((days, i) => {
         list.push({ id: `streak_${days}`, category: 'streak', title: `Chama Nível ${i+1}`, desc: `Alcance ${days} dia(s) seguidos de ofensiva.`, icon: 'fa-fire' });
     });
 
-    // 25 de Vocabulário
     const vocabCounts = [1, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000, 1250, 1500, 2000];
     vocabCounts.forEach((cnt, i) => {
         list.push({ id: `vocab_${cnt}`, category: 'vocab', title: `Colecionador ${i+1}`, desc: `Cadastre ${cnt} palavra(s) no idioma ativo.`, icon: 'fa-brain' });
     });
 
-    // 25 de Listening
     const listeningHours = [1, 2, 5, 10, 15, 20, 30, 40, 50, 75, 100, 125, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000, 1250, 1500];
     listeningHours.forEach((hrs, i) => {
         list.push({ id: `listening_${hrs}`, category: 'listening', title: `Ouvinte Nível ${i+1}`, desc: `Acumule ${hrs} hora(s) de imersão de áudio.`, icon: 'fa-headphones' });
     });
 
-    // 20 de Reading
     const pageCounts = [10, 25, 50, 100, 150, 200, 300, 400, 500, 750, 1000, 1250, 1500, 2000, 2500, 3000, 4000, 5000, 7500, 10000];
     pageCounts.forEach((pgs, i) => {
         list.push({ id: `pages_${pgs}`, category: 'reading', title: `Leitor Nível ${i+1}`, desc: `Leia um total de ${pgs} página(s).`, icon: 'fa-book-open' });
     });
 
-    // 10 Poliglota & Especiais
     const polyList = [
         { id: 'poly_2', desc: 'Cadastre palavras em pelo menos 2 idiomas.' },
         { id: 'poly_3', desc: 'Cadastre palavras em pelo menos 3 idiomas.' },
@@ -147,6 +263,8 @@ function loadLanguageData() {
     };
 
     checkMidnightAndTolerance();
+    
+    // ZERADO GARANTIDO: Inicia estritamente vazio sem nenhuma palavra predefinida
     vocabularyList = JSON.parse(localStorage.getItem(`luis_vocab_${targetLang}`)) || [];
 }
 
@@ -293,6 +411,7 @@ function applyUITranslations() {
     setText('lbl-nav-hub', txt.navHub);
     setText('lbl-nav-dash', txt.navDash);
     setText('lbl-nav-cad', txt.navCad);
+    setText('lbl-header-achievements', txt.headerAch);
     setText('hub-title', txt.hubTitle);
     setText('hub-desc', txt.hubDesc);
     setText('card-listening-goal', txt.cardListeningGoal);
@@ -304,9 +423,27 @@ function applyUITranslations() {
     setText('card-vocab-tag', txt.cardVocabTag);
     setText('card-vocab-title', txt.cardVocabTitle);
     setText('card-vocab-desc', txt.cardVocabDesc);
+    setText('card-ach-tag', txt.cardAchTag);
+    setText('card-ach-title', txt.cardAchTitle);
+    setText('card-ach-desc', txt.cardAchDesc);
 
     document.querySelectorAll('.hub-btn-access').forEach(el => el.innerText = txt.btnAccess);
     setText('hub-btn-train', txt.btnTrain);
+    setText('hub-btn-ach', txt.btnAch);
+
+    setText('ach-banner-tag', txt.achBannerTag);
+    setText('ach-banner-title', txt.achBannerTitle);
+    setText('ach-banner-desc', txt.achBannerDesc);
+    setText('lbl-ach-unlocked', txt.lblAchUnlocked);
+    setText('lbl-ach-progress', txt.lblAchProgress);
+
+    setText('ach-filter-all', txt.achFilterAll);
+    setText('ach-filter-streak', txt.achFilterStreak);
+    setText('ach-filter-vocab', txt.achFilterVocab);
+    setText('ach-filter-listening', txt.achFilterListening);
+    setText('ach-filter-reading', txt.achFilterReading);
+    setText('ach-filter-polyglot', txt.achFilterPoly);
+
     setText('lbl-goal-fixed', txt.goalFixed);
     setText('lbl-progress', txt.progress);
     setText('lbl-of-target', txt.ofTarget);
@@ -367,6 +504,18 @@ function applyUITranslations() {
     setText('btn-wrong-action', txt.btnWrong);
     setText('btn-correct-action', txt.btnCorrect);
     setText('btn-next-random', txt.btnNextRandom);
+
+    setText('popup-streak-title', txt.popupStreakTitle);
+    setText('popup-streak-desc', txt.popupStreakDesc);
+    setText('btn-streak-continue', txt.btnContinue);
+
+    setText('modal-streak-title', txt.modalStreakTitle);
+    setText('modal-streak-sub', txt.modalStreakSub);
+    setText('lbl-modal-current-seq', txt.modalSeq);
+    setText('lbl-modal-missed-month', txt.modalMissed);
+    setText('lbl-modal-week-hist', txt.modalWeek);
+    setText('lbl-modal-red-note', txt.modalNote);
+    setText('btn-modal-understood', txt.btnUnderstood);
 }
 
 function openModule(moduleName) {
@@ -762,6 +911,18 @@ function closeStreakModal() {
 function renderAchievementsModule() {
     const grid = document.getElementById('achievements-full-grid');
     if (!grid) return;
+
+    // ATUALIZA ESTILOS DOS BOTÕES DE FILTRO COM INDICADOR DE COR
+    ['all', 'streak', 'vocab', 'listening', 'reading', 'polyglot'].forEach(cat => {
+        const btn = document.getElementById(`ach-filter-${cat}`);
+        if (btn) {
+            if (cat === currentAchFilter) {
+                btn.className = "px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border ach-filter-active";
+            } else {
+                btn.className = "px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border sub-card";
+            }
+        }
+    });
 
     grid.innerHTML = '';
     let unlockedTotal = 0;

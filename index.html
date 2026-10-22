@@ -39,9 +39,9 @@
             <div class="w-28 h-28 mx-auto rounded-3xl flex items-center justify-center text-6xl bg-amber-100 dark:bg-amber-950/60 text-amber-500 shadow-inner flame-duolingo-animation">
                 <i class="fa-solid fa-fire"></i>
             </div>
-            <h3 class="text-2xl font-black font-serif">Foguinho Acendido! 🔥</h3>
-            <p class="text-xs opacity-80 font-medium">Excelente, Luis! Ofensiva garantida e salva no histórico diário.</p>
-            <button onclick="closeStreakAnimation()" class="w-full py-3 rounded-xl text-xs font-bold text-white uppercase tracking-wider btn-save shadow">Continuar</button>
+            <h3 class="text-2xl font-black font-serif" id="popup-streak-title">Foguinho Acendido! 🔥</h3>
+            <p class="text-xs opacity-80 font-medium" id="popup-streak-desc">Excelente, Luis! Ofensiva garantida e salva no histórico diário.</p>
+            <button onclick="closeStreakAnimation()" class="w-full py-3 rounded-xl text-xs font-bold text-white uppercase tracking-wider btn-save shadow" id="btn-streak-continue">Continuar</button>
         </div>
     </div>
 
@@ -54,29 +54,29 @@
                     <i class="fa-solid fa-fire"></i>
                 </div>
                 <div>
-                    <h3 class="text-lg font-black font-serif">Estatísticas de Ofensiva</h3>
-                    <p class="text-[11px] opacity-75">Controlo diário e histórico persistente</p>
+                    <h3 class="text-lg font-black font-serif" id="modal-streak-title">Estatísticas de Ofensiva</h3>
+                    <p class="text-[11px] opacity-75" id="modal-streak-sub">Controlo diário e histórico persistente</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-3 text-center">
                 <div class="p-3.5 rounded-2xl border-2 sub-card">
-                    <span class="text-[10px] font-black uppercase opacity-70 block">Sequência Atual</span>
+                    <span class="text-[10px] font-black uppercase opacity-70 block" id="lbl-modal-current-seq">Sequência Atual</span>
                     <span id="modal-streak-count" class="text-xl font-black text-amber-500">0 dias</span>
                 </div>
                 <div class="p-3.5 rounded-2xl border-2 sub-card">
-                    <span class="text-[10px] font-black uppercase opacity-70 block">Faltas no Mês</span>
+                    <span class="text-[10px] font-black uppercase opacity-70 block" id="lbl-modal-missed-month">Faltas no Mês</span>
                     <span id="modal-missed-count" class="text-xl font-black text-red-500">0 / 3</span>
                 </div>
             </div>
 
             <div class="space-y-2 pt-2">
-                <span class="text-[10px] font-black uppercase tracking-wider opacity-70 block">Histórico da Semana</span>
+                <span class="text-[10px] font-black uppercase tracking-wider opacity-70 block" id="lbl-modal-week-hist">Histórico da Semana</span>
                 <div id="week-days-container" class="grid grid-cols-7 gap-1.5 text-center"></div>
             </div>
 
-            <p class="text-[11px] opacity-70 text-center font-medium pt-1">Dias sem realizar a tarefa ficam marcados a vermelho.</p>
-            <button onclick="closeStreakModal()" class="w-full py-3 rounded-xl text-xs font-bold text-white uppercase tracking-wider btn-save shadow">Entendido</button>
+            <p class="text-[11px] opacity-70 text-center font-medium pt-1" id="lbl-modal-red-note">Dias sem realizar a tarefa ficam marcados a vermelho.</p>
+            <button onclick="closeStreakModal()" class="w-full py-3 rounded-xl text-xs font-bold text-white uppercase tracking-wider btn-save shadow" id="btn-modal-understood">Entendido</button>
         </div>
     </div>
 
@@ -114,7 +114,7 @@
             <div class="flex flex-wrap items-center justify-center gap-2.5 w-full md:w-auto">
                 <button onclick="openModule('achievements')" class="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-bold shadow-sm sub-card hover:opacity-80 transition-all text-amber-500">
                     <i class="fa-solid fa-trophy"></i>
-                    <span>Conquistas</span>
+                    <span id="lbl-header-achievements">Conquistas</span>
                 </button>
 
                 <div class="relative flex-1 sm:flex-initial min-w-[150px]">
@@ -252,51 +252,51 @@
                             <i class="fa-solid fa-trophy"></i>
                         </div>
                         <div>
-                            <span class="text-[11px] font-black uppercase tracking-widest opacity-70">DESAFIOS & TROFÉUS</span>
-                            <h3 class="text-lg font-bold font-serif group-hover:opacity-80 transition-colors mt-0.5">GALERIA DE CONQUISTAS</h3>
+                            <span class="text-[11px] font-black uppercase tracking-widest opacity-70" id="card-ach-tag">DESAFIOS & TROFÉUS</span>
+                            <h3 class="text-lg font-bold font-serif group-hover:opacity-80 transition-colors mt-0.5" id="card-ach-title">GALERIA DE CONQUISTAS</h3>
                         </div>
-                        <p class="text-xs leading-relaxed font-medium opacity-80">Desbloqueie até 100 conquistas únicas com sua evolução de estudos.</p>
+                        <p class="text-xs leading-relaxed font-medium opacity-80" id="card-ach-desc">Desbloqueie até 100 conquistas únicas com sua evolução de estudos.</p>
                     </div>
                     <div class="pt-6 flex items-center text-xs font-bold group-hover:translate-x-1 transition-transform text-amber-500">
-                        <span>Ver Conquistas</span> <i class="fa-solid fa-arrow-right ml-2"></i>
+                        <span id="hub-btn-ach">Ver Conquistas</span> <i class="fa-solid fa-arrow-right ml-2"></i>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- MÓDULO CONQUISTAS (PÁGINA EXCLUSIVA COM 100 BADGES) -->
+        <!-- MÓDULO CONQUISTAS (PÁGINA EXCLUSIVA COM 100 BADGES E INDICADOR DE COR) -->
         <div id="module-achievements" class="hidden space-y-6 pt-2">
             <section class="banner-vintage rounded-2xl shadow-md border-2 p-7 relative flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden panel-card">
                 <div class="absolute top-0 left-0 right-0 h-2 flag-accent-bar"></div>
                 <div class="space-y-2 max-w-xl pt-2">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md border text-xs font-bold tracking-widest uppercase banner-tag text-amber-500">
-                        <i class="fa-solid fa-trophy"></i> Hall of Fame
+                        <i class="fa-solid fa-trophy"></i> <span id="ach-banner-tag">Hall of Fame</span>
                     </div>
-                    <h2 class="text-2xl sm:text-3xl font-black font-serif tracking-tight">Galeria de 100 Conquistas</h2>
-                    <p class="text-sm font-medium leading-relaxed opacity-80">Acompanhe seu progresso e conquiste badges estudando diariamente.</p>
+                    <h2 class="text-2xl sm:text-3xl font-black font-serif tracking-tight" id="ach-banner-title">Galeria de 100 Conquistas</h2>
+                    <p class="text-sm font-medium leading-relaxed opacity-80" id="ach-banner-desc">Acompanhe seu progresso e conquiste badges estudando diariamente.</p>
                 </div>
 
                 <div class="flex gap-5 border-2 p-5 rounded-xl text-center w-full md:w-auto justify-around shadow-sm banner-stats-box items-center">
                     <div>
-                        <span class="block text-[10px] font-black uppercase tracking-wider opacity-70">Desbloqueadas</span>
+                        <span class="block text-[10px] font-black uppercase tracking-wider opacity-70" id="lbl-ach-unlocked">Desbloqueadas</span>
                         <span id="ach-unlocked-count" class="text-2xl font-black text-amber-500">0 / 100</span>
                     </div>
                     <div class="w-px opacity-25 bg-current h-10"></div>
                     <div>
-                        <span class="block text-[10px] font-black uppercase tracking-wider opacity-70">Progresso Geral</span>
+                        <span class="block text-[10px] font-black uppercase tracking-wider opacity-70" id="lbl-ach-progress">Progresso Geral</span>
                         <span id="ach-progress-pct" class="text-xl font-black text-emerald-600">0%</span>
                     </div>
                 </div>
             </section>
 
-            <!-- FILTROS DE CATEGORIA -->
+            <!-- FILTROS DE CATEGORIA COM DESTAQUE DE COR ATIVA -->
             <div class="flex flex-wrap items-center gap-2 border-b pb-4">
-                <button onclick="filterAchievements('all')" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all shadow btn-save">Todas (100)</button>
-                <button onclick="filterAchievements('streak')" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border sub-card">🔥 Ofensiva</button>
-                <button onclick="filterAchievements('vocab')" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border sub-card">🧠 Vocabulário</button>
-                <button onclick="filterAchievements('listening')" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border sub-card">🎧 Listening</button>
-                <button onclick="filterAchievements('reading')" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border sub-card">📖 Leitura</button>
-                <button onclick="filterAchievements('polyglot')" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border sub-card">🌍 Poliglota</button>
+                <button onclick="filterAchievements('all')" id="ach-filter-all" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border ach-filter-btn">Todas (100)</button>
+                <button onclick="filterAchievements('streak')" id="ach-filter-streak" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border ach-filter-btn">🔥 Ofensiva</button>
+                <button onclick="filterAchievements('vocab')" id="ach-filter-vocab" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border ach-filter-btn">🧠 Vocabulário</button>
+                <button onclick="filterAchievements('listening')" id="ach-filter-listening" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border ach-filter-btn">🎧 Listening</button>
+                <button onclick="filterAchievements('reading')" id="ach-filter-reading" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border ach-filter-btn">📖 Leitura</button>
+                <button onclick="filterAchievements('polyglot')" id="ach-filter-polyglot" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border ach-filter-btn">🌍 Poliglota</button>
             </div>
 
             <!-- GRID COM 100 CONQUISTAS -->
