@@ -122,9 +122,9 @@
             
             <div class="flex items-center gap-4 border-b pb-5">
                 <div class="relative group cursor-pointer shrink-0" onclick="document.getElementById('profile-avatar-input').click()">
-                    <div id="user-avatar-container" class="w-16 h-16 rounded-2xl border-2 flex items-center justify-center text-3xl text-amber-500 card-icon-box shadow-sm overflow-hidden">
+                    <div id="user-avatar-container" class="w-16 h-16 rounded-2xl border-2 flex items-center justify-center text-3xl text-amber-500 card-icon-box shadow-sm overflow-hidden relative">
                         <i id="user-avatar-icon" class="fa-solid fa-user"></i>
-                        <img id="user-avatar-img" class="w-full h-full object-cover hidden" alt="Avatar">
+                        <img id="user-avatar-img" class="absolute inset-0 w-full h-full object-cover hidden" alt="Avatar">
                     </div>
                     <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center text-[10px] shadow border-2 border-stone-100 dark:border-stone-900">
                         <i class="fa-solid fa-pencil"></i>
@@ -219,7 +219,7 @@
         </div>
     </div>
 
-    <!-- HEADER LIMPO COM FOTO DE PERFIL SINCRONIZADA -->
+    <!-- HEADER LIMPO COM BOTOES DE PERFIL DEDICADOS -->
     <header class="app-header border-b sticky top-0 z-40 backdrop-blur-md">
         <div class="max-w-6xl mx-auto px-4 py-3.5 flex flex-col md:flex-row justify-between items-center gap-4">
             
@@ -236,20 +236,20 @@
                     </div>
                 </div>
 
-                <!-- BOTOES MOBILE -->
+                <!-- BOTÕES MOBILE -->
                 <div class="flex items-center gap-2 md:hidden">
-                    <button onclick="openUserProfileModal()" class="p-2.5 rounded-xl border transition-all sub-card text-amber-500 overflow-hidden w-10 h-10 flex items-center justify-center">
+                    <button onclick="openUserProfileModal()" class="w-10 h-10 rounded-xl border-2 transition-all sub-card text-amber-500 overflow-hidden relative flex items-center justify-center shrink-0">
                         <i id="header-user-icon-mobile" class="fa-solid fa-user text-xs"></i>
-                        <img id="header-user-img-mobile" class="w-full h-full object-cover hidden" alt="User">
+                        <img id="header-user-img-mobile" class="absolute inset-0 w-full h-full object-cover hidden" alt="User">
                     </button>
-                    <button onclick="openModule('achievements')" class="p-2.5 rounded-xl border transition-all text-amber-500 sub-card">
+                    <button onclick="openModule('achievements')" class="p-2.5 rounded-xl border-2 transition-all text-amber-500 sub-card">
                         <i class="fa-solid fa-trophy text-xs"></i>
                     </button>
-                    <div id="header-streak-badge" onclick="openStreakModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold shadow-sm sub-card cursor-pointer hover:opacity-80 transition-all">
+                    <div id="header-streak-badge" onclick="openStreakModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 text-xs font-bold shadow-sm sub-card cursor-pointer hover:opacity-80 transition-all">
                         <i class="fa-solid fa-fire text-stone-400 opacity-60" id="header-streak-icon"></i>
                         <span id="header-streak-count">0</span>
                     </div>
-                    <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl border transition-all theme-toggle-btn">
+                    <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl border-2 transition-all theme-toggle-btn">
                         <i id="theme-icon-mobile" class="fa-solid fa-moon"></i>
                     </button>
                 </div>
@@ -283,10 +283,10 @@
                     <i id="theme-icon-desktop" class="fa-solid fa-moon"></i>
                 </button>
 
-                <!-- BOTÃO DE USUÁRIO COM FOTO SINCRONIZADA NO HEADER -->
-                <button onclick="openUserProfileModal()" class="hidden md:flex items-center justify-center w-11 h-11 rounded-xl border transition-all text-amber-500 sub-card shadow-sm hover:opacity-80 overflow-hidden relative">
+                <!-- BOTÃO DE USUÁRIO DESKTOP -->
+                <button onclick="openUserProfileModal()" class="hidden md:flex items-center justify-center w-11 h-11 rounded-xl border transition-all text-amber-500 sub-card shadow-sm hover:opacity-80 overflow-hidden relative shrink-0">
                     <i id="header-user-icon-desktop" class="fa-solid fa-user"></i>
-                    <img id="header-user-img-desktop" class="w-full h-full object-cover hidden" alt="User">
+                    <img id="header-user-img-desktop" class="absolute inset-0 w-full h-full object-cover hidden" alt="User">
                 </button>
             </div>
         </div>

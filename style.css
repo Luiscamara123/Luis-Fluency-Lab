@@ -60,7 +60,7 @@
     --btn-primary: #15803d;
 }
 
-/* MODO ESCURO CORRIGIDO */
+/* MODO ESCURO */
 .mode-dark {
     --bg-main: #090d16;
     --text-main: #f1f5f9;
@@ -113,7 +113,7 @@ input, select, textarea {
     0% { transform: scale(0.3) rotate(-15deg); filter: drop-shadow(0 0 0px rgba(245, 158, 11, 0)); opacity: 0; }
     40% { transform: scale(1.25) rotate(10deg); filter: drop-shadow(0 0 30px rgba(245, 158, 11, 0.9)); opacity: 1; }
     70% { transform: scale(0.95) rotate(-5deg); filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.6)); }
-    100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.7)); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); filter: shadow(0 0 20px rgba(245, 158, 11, 0.7)); opacity: 1; }
 }
 
 .flame-duolingo-animation {
@@ -152,4 +152,16 @@ input, select, textarea {
 .ob-option-selected {
     border-color: #f59e0b !important;
     background-color: rgba(245, 158, 11, 0.15) !important;
+}
+
+/* FOTOS DE PERFIL - MOBILE & DESKTOP */
+#header-user-img-desktop,
+#header-user-img-mobile,
+#user-avatar-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
 }
