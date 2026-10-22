@@ -14,29 +14,6 @@ const LANG_META = {
     pt: { name: 'Português', flagImg: 'img/bandeira-brasil.webp', themeClass: 'theme-pt', platformName: 'Plataforma de Imersão Brasileira', edition: 'Edición Brasil' }
 };
 
-const VOCAB_TRANSLATIONS = {
-    pt: [
-        { id: '1', word: 'Breathtaking', translation: 'De tirar o fôlego / Deslumbrante', example: 'The view from the mountain was breathtaking.', correctCount: 0, wrongCount: 0 },
-        { id: '2', word: 'Achievement', translation: 'Conquista / Realização', example: 'Learning a new language is a great achievement.', correctCount: 0, wrongCount: 0 }
-    ],
-    en: [
-        { id: '1', word: 'Breathtaking', translation: 'Stunning / Extremely exciting', example: 'The view from the mountain was breathtaking.', correctCount: 0, wrongCount: 0 },
-        { id: '2', word: 'Achievement', translation: 'A thing done successfully with effort', example: 'Learning a new language is a great achievement.', correctCount: 0, wrongCount: 0 }
-    ],
-    es: [
-        { id: '1', word: 'Breathtaking', translation: 'Impresionante / Deslumbrante', example: 'The view from the mountain was breathtaking.', correctCount: 0, wrongCount: 0 },
-        { id: '2', word: 'Achievement', translation: 'Logro / Conquista', example: 'Learning a new language is a great achievement.', correctCount: 0, wrongCount: 0 }
-    ],
-    fr: [
-        { id: '1', word: 'Breathtaking', translation: 'Époustouflant / Saisissant', example: 'The view from the mountain was breathtaking.', correctCount: 0, wrongCount: 0 },
-        { id: '2', word: 'Achievement', translation: 'Réussite / Réalisation', example: 'Learning a new language is a great achievement.', correctCount: 0, wrongCount: 0 }
-    ],
-    ja: [
-        { id: '1', word: 'Breathtaking', translation: '息をのむような (Subarashii)', example: 'The view from the mountain was breathtaking.', correctCount: 0, wrongCount: 0 },
-        { id: '2', word: 'Achievement', translation: '達成 / 成果 (Tassei)', example: 'Learning a new language is a great achievement.', correctCount: 0, wrongCount: 0 }
-    ]
-};
-
 const UI_TEXTS = {
     pt: {
         learningLabel: "Estudando", uiLabel: "Interface",
@@ -65,7 +42,7 @@ const UI_TEXTS = {
         termInLang: "Palavra / Termo no Idioma", termTranslation: "Tradução / Significado", termExample: "Exemplo de Frase (Opcional)",
         tapFlip: "Toque para Virar", clickToFlip: "Clique no cartão para revelar a tradução 🔄", translationTag: "Tradução",
         correctHits: "Acertos:", wrongHits: "Erros:", btnWrong: "Não Lembrei", btnCorrect: "Lembrei (Certo!)", btnNextRandom: "Sortear Próxima Palavra Aleatória",
-        emptyVocabTitle: "Nenhuma palavra", emptyVocabExample: "Cadastre palavras no menu superior.", emptyVocabList: "Nenhuma palavra cadastrada.", emptyMediaList: "Nenhum título cadastrado.", emptyBookList: "Nenhum livro cadastrado."
+        emptyVocabTitle: "Nenhuma palavra cadastrada", emptyVocabExample: "Cadastre sua primeira palavra no menu superior.", emptyVocabList: "Nenhuma palavra cadastrada.", emptyMediaList: "Nenhum título cadastrado.", emptyBookList: "Nenhum livro cadastrado."
     },
     en: {
         learningLabel: "Studying", uiLabel: "Interface",
@@ -94,7 +71,7 @@ const UI_TEXTS = {
         termInLang: "Word / Term in Target Language", termTranslation: "Translation / Meaning", termExample: "Example Sentence (Optional)",
         tapFlip: "Tap to Flip", clickToFlip: "Click card to reveal translation 🔄", translationTag: "Translation",
         correctHits: "Correct:", wrongHits: "Wrong:", btnWrong: "Forgot", btnCorrect: "Remembered!", btnNextRandom: "Draw Next Random Word",
-        emptyVocabTitle: "No words added", emptyVocabExample: "Add words using the top menu.", emptyVocabList: "No words registered.", emptyMediaList: "No titles registered.", emptyBookList: "No books registered."
+        emptyVocabTitle: "No words added", emptyVocabExample: "Add your first word using the top menu.", emptyVocabList: "No words registered.", emptyMediaList: "No titles registered.", emptyBookList: "No books registered."
     },
     es: {
         learningLabel: "Estudando", uiLabel: "Interfaz",
@@ -123,7 +100,7 @@ const UI_TEXTS = {
         termInLang: "Término en el Idioma", termTranslation: "Traducción / Significado", termExample: "Ejemplo (Opcional)",
         tapFlip: "Toca para Girar", clickToFlip: "Haz clic en la tarjeta para ver traducción 🔄", translationTag: "Traducción",
         correctHits: "Aciertos:", wrongHits: "Errores:", btnWrong: "Olvidé", btnCorrect: "¡Recordé!", btnNextRandom: "Siguiente Palabra Aleatoria",
-        emptyVocabTitle: "Sin palabras", emptyVocabExample: "Añade palabras desde el menu superior.", emptyVocabList: "No hay palabras registradas.", emptyMediaList: "No hay títulos registrados.", emptyBookList: "No hay libros registrados."
+        emptyVocabTitle: "Sin palabras", emptyVocabExample: "Añade tu primera palabra desde el menú.", emptyVocabList: "No hay palabras registradas.", emptyMediaList: "No hay títulos registrados.", emptyBookList: "No hay libros registrados."
     },
     fr: {
         learningLabel: "Apprentissage", uiLabel: "Interface",
@@ -152,7 +129,7 @@ const UI_TEXTS = {
         termInLang: "Terme dans la Langue", termTranslation: "Traduction / Sens", termExample: "Exemple (Optionnel)",
         tapFlip: "Appuyez pour Retourner", clickToFlip: "Cliquez pour voir la traduction 🔄", translationTag: "Traduction",
         correctHits: "Correct :", wrongHits: "Erreurs :", btnWrong: "Oublié", btnCorrect: "Rappelé !", btnNextRandom: "Tirer un Mot au Hasard",
-        emptyVocabTitle: "Aucun mot", emptyVocabExample: "Ajoutez des mots depuis le menu haut.", emptyVocabList: "Aucun mot enregistré.", emptyMediaList: "Aucun titre enregistré.", emptyBookList: "Aucun livre enregistré."
+        emptyVocabTitle: "Aucun mot", emptyVocabExample: "Ajoutez un mot depuis le menu.", emptyVocabList: "Aucun mot enregistré.", emptyMediaList: "Aucun titre enregistré.", emptyBookList: "Aucun livre enregistré."
     },
     ja: {
         learningLabel: "学習モード", uiLabel: "インターフェース",
@@ -181,7 +158,7 @@ const UI_TEXTS = {
         termInLang: "学習言語の単語", termTranslation: "翻訳・意味", termExample: "例文（任意）",
         tapFlip: "タップして裏返す", clickToFlip: "カードをクリックして意味を表示 🔄", translationTag: "翻訳・意味",
         correctHits: "正解:", wrongHits: "不正解:", btnWrong: "覚えていない", btnCorrect: "覚えていた！", btnNextRandom: "次の単語をランダム抽出",
-        emptyVocabTitle: "単語がありません", emptyVocabExample: "上のメニューから単語を追加してください。", emptyVocabList: "登録済みの単語はありません。", emptyMediaList: "登録済みの作品はありません。", emptyBookList: "登録済みの本はありません。"
+        emptyVocabTitle: "単語がありません", emptyVocabExample: "メニューから単語を追加してください。", emptyVocabList: "登録済みの単語はありません。", emptyMediaList: "登録済みの作品はありません。", emptyBookList: "登録済みの本はありません。"
     }
 };
 
@@ -206,13 +183,8 @@ function loadLanguageData() {
 
     checkMidnightAndTolerance();
 
-    let savedVocab = JSON.parse(localStorage.getItem(`luis_vocab_${uiLang}`));
-    if (!savedVocab || savedVocab.length === 0) {
-        vocabularyList = VOCAB_TRANSLATIONS[uiLang] || VOCAB_TRANSLATIONS['pt'];
-        saveVocabularyData();
-    } else {
-        vocabularyList = savedVocab;
-    }
+    // Palavras salvas estritamente no idioma ativo (targetLang), iniciando vazias sem exemplos prontos
+    vocabularyList = JSON.parse(localStorage.getItem(`luis_vocab_${targetLang}`)) || [];
 }
 
 function checkMidnightAndTolerance() {
@@ -255,7 +227,7 @@ function checkMidnightAndTolerance() {
 
 function saveListeningData() { localStorage.setItem(`luis_listening_${targetLang}`, JSON.stringify(listeningList)); }
 function saveReadingData() { localStorage.setItem(`luis_reading_${targetLang}`, JSON.stringify(readingList)); }
-function saveVocabularyData() { localStorage.setItem(`luis_vocab_${uiLang}`, JSON.stringify(vocabularyList)); }
+function saveVocabularyData() { localStorage.setItem(`luis_vocab_${targetLang}`, JSON.stringify(vocabularyList)); }
 function saveVocabStreakData() { localStorage.setItem(`luis_vocab_streak_${targetLang}`, JSON.stringify(vocabStreakData)); }
 
 function updateListeningGoal(newVal) {
@@ -528,8 +500,8 @@ function renderListeningDashboard() {
         });
     }
 
-    const chartDonutColor = themeMode === 'dark' ? '#ffffff' : '#1c1917';
-    const chartRestColor = themeMode === 'dark' ? '#21252b' : '#e2d9cd';
+    const chartDonutColor = themeMode === 'dark' ? '#f8fafc' : '#1c1917';
+    const chartRestColor = themeMode === 'dark' ? '#1e293b' : '#e2d9cd';
     const gridColor = themeMode === 'dark' ? 'rgba(255,255,255,0.06)' : '#e7dfd3';
 
     const canvasDonut = document.getElementById('progressDonutChart');
@@ -885,7 +857,7 @@ function handleVocabularyFormSubmit(e) {
     const example = document.getElementById('vocabExample')?.value.trim() || '';
 
     vocabularyList.push({ id: Date.now().toString(), word, translation, example, correctCount: 0, wrongCount: 0 });
-    saveVocabularyData();
+    saveVocabularyData(); 
     const form = document.getElementById('vocab-form');
     if (form) form.reset();
     switchTab('dashboard');

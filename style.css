@@ -60,14 +60,14 @@
     --btn-primary: #15803d;
 }
 
-/* MODO ESCURO */
+/* MODO ESCURO REESTILIZADO EM TOM GRAFITE/PRETO (SEM AZUL) */
 .mode-dark {
-    --bg-main: #0f172a;
-    --text-main: #f8fafc;
-    --border-color: #334155;
-    --card-bg: #1e293b;
-    --sub-card-bg: #0f172a;
-    --btn-primary: #3b82f6;
+    --bg-main: #090d16;
+    --text-main: #f1f5f9;
+    --border-color: #262f3f;
+    --card-bg: #111822;
+    --sub-card-bg: #0d121b;
+    --btn-primary: #475569;
 }
 
 body {
@@ -94,7 +94,19 @@ body {
 }
 
 .btn-save:hover, .btn-random:hover {
-    filter: brightness(0.9);
+    filter: brightness(1.15);
+}
+
+/* ANIMAÇÃO DINÂMICA DO FOGUINHO (ESTILO DUOLINGO) */
+@keyframes duolingoFlame {
+    0% { transform: scale(0.3) rotate(-15deg); filter: drop-shadow(0 0 0px rgba(245, 158, 11, 0)); opacity: 0; }
+    40% { transform: scale(1.25) rotate(10deg); filter: drop-shadow(0 0 30px rgba(245, 158, 11, 0.9)); opacity: 1; }
+    70% { transform: scale(0.95) rotate(-5deg); filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.6)); }
+    100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.7)); opacity: 1; }
+}
+
+.flame-duolingo-animation {
+    animation: duolingoFlame 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 /* FLASHCARD 3D */
