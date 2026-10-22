@@ -1,4 +1,4 @@
-let targetListeningHours = Number(localStorage.getItem('luis_target_listening_hours')) || 1000;
+let targetListeningHours = 1000;
 let currentModule = 'hub';
 let currentTab = 'dashboard';
 let currentAchFilter = 'all';
@@ -170,7 +170,7 @@ const UI_TEXTS = {
         correctHits: "Correct :", wrongHits: "Erreurs :", btnWrong: "Oublié", btnCorrect: "Rappelé !", btnNextRandom: "Tirer un Mot au Hasard",
         emptyVocabTitle: "Aucun mot", emptyVocabExample: "Ajoutez un mot depuis le menu.", emptyVocabList: "Aucun mot enregistré.", emptyMediaList: "Aucun titre enregistré.", emptyBookList: "Aucun livre enregistré.",
         popupStreakTitle: "Série Allumée ! 🔥", popupStreakDesc: "Excellent ! Série quotidienne validée.", btnContinue: "Continuer",
-        modalStreakTitle: "Statistiques de Série", modalStreakSub: "Suivi quotidien et historique", modalSeq: "Série Actuelle", modalMissed: "Manqués ce mois", modalWeek: "Historique Semaine", modalNote: "Les jours sans pratique sont marqués en rouge.", btnUnderstood: "Compris",
+        modalStreakTitle: "Statistiques de Série", modalStreakSub: "Suivi quotidien et historique", modalSeq: "Série Actuelle", modalMissed: "Manqués ce mois", modalWeek: "Historique Semanal", modalNote: "Les jours sans pratique sont marqués en rouge.", btnUnderstood: "Compris",
         lblModalStudying: "Langue étudiée", lblModalUi: "Langue de l'interface",
         refazerPerguntas: "Réinitialiser Onboarding", modalClose: "Fermer"
     },
@@ -362,15 +362,12 @@ async function handleAvatarUpload(e) {
 }
 
 function updateUserAvatarUI() {
-    // Modal
     const avatarImg = document.getElementById('user-avatar-img');
     const avatarIcon = document.getElementById('user-avatar-icon');
     
-    // Header Desktop
     const headerImgDesk = document.getElementById('header-user-img-desktop');
     const headerIconDesk = document.getElementById('header-user-icon-desktop');
 
-    // Header Mobile
     const headerImgMob = document.getElementById('header-user-img-mobile');
     const headerIconMob = document.getElementById('header-user-icon-mobile');
 
@@ -418,6 +415,9 @@ function closeUserProfileModal() {
 }
 
 function loadLanguageData() {
+    // Carrega a meta específica do idioma ativo
+    targetListeningHours = Number(localStorage.getItem(`luis_target_listening_hours_${targetLang}`)) || 1000;
+    
     listeningList = JSON.parse(localStorage.getItem(`luis_listening_${targetLang}`)) || [];
     readingList = JSON.parse(localStorage.getItem(`luis_reading_${targetLang}`)) || [];
     
@@ -493,11 +493,12 @@ function speakCurrentWord() {
     if (item && item.word) speakWord(item.word);
 }
 
+// Salva a meta de listening de forma isolada para cada idioma
 function updateListeningGoal(newVal) {
     const val = Number(newVal);
     if (val > 0) {
         targetListeningHours = val;
-        localStorage.setItem('luis_target_listening_hours', targetListeningHours);
+        localStorage.setItem(`luis_target_listening_hours_${targetLang}`, targetListeningHours);
         renderListeningDashboard();
     }
 }
