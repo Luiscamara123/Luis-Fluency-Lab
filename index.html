@@ -33,7 +33,7 @@
     <!-- MARCA D'ÁGUA DA BANDEIRA -->
     <div id="bg-flag-watermark" class="fixed inset-0 pointer-events-none z-0 bg-cover bg-center transition-all duration-700 opacity-5"></div>
 
-    <!-- ANIMAÇÃO CENTRAL DO FOGUINHO (AJUSTADA PARA O MODO ESCURO GRAFITE) -->
+    <!-- ANIMAÇÃO CENTRAL DO FOGUINHO (ESTILO DUOLINGO - APENAS 1X AO DIA) -->
     <div id="streak-animation-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
         <div class="border-2 p-8 rounded-3xl shadow-2xl text-center space-y-4 max-w-sm w-full mx-4 transform scale-75 transition-all duration-300 panel-card" id="streak-popup-box">
             <div class="w-28 h-28 mx-auto rounded-3xl flex items-center justify-center text-6xl bg-amber-100 dark:bg-amber-950/60 text-amber-500 shadow-inner flame-duolingo-animation">
@@ -42,6 +42,28 @@
             <h3 class="text-2xl font-black font-serif">Foguinho Acendido! 🔥</h3>
             <p class="text-xs opacity-80 font-medium">Excelente, Luis! Ofensiva garantida e salva no histórico diário.</p>
             <button onclick="closeStreakAnimation()" class="w-full py-3 rounded-xl text-xs font-bold text-white uppercase tracking-wider btn-save shadow">Continuar</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONQUISTAS / BADGES -->
+    <div id="achievements-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden">
+        <div class="max-w-md w-full mx-4 p-7 rounded-3xl border-2 shadow-2xl space-y-5 panel-card relative">
+            <button onclick="closeAchievementsModal()" class="absolute top-4 right-4 opacity-70 hover:opacity-100 text-sm font-bold"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl border flex items-center justify-center text-2xl text-amber-500 card-icon-box">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-black font-serif">Suas Conquistas</h3>
+                    <p class="text-[11px] opacity-75">Desbloqueie prêmios com seu progresso</p>
+                </div>
+            </div>
+
+            <div id="achievements-list-container" class="grid grid-cols-2 gap-3 max-h-64 overflow-y-auto pr-1">
+                <!-- Gerado dinamicamente via JS -->
+            </div>
+
+            <button onclick="closeAchievementsModal()" class="w-full py-3 rounded-xl text-xs font-bold text-white uppercase tracking-wider btn-save shadow">Fechar</button>
         </div>
     </div>
 
@@ -100,8 +122,11 @@
                     </div>
                 </div>
 
-                <!-- STREAK MOBILE -->
+                <!-- BOTOES MOBILE -->
                 <div class="flex items-center gap-2 md:hidden">
+                    <button onclick="openAchievementsModal()" class="p-2.5 rounded-xl border transition-all text-amber-500 sub-card">
+                        <i class="fa-solid fa-trophy text-xs"></i>
+                    </button>
                     <div id="header-streak-badge" onclick="openStreakModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold shadow-sm sub-card cursor-pointer hover:opacity-80 transition-all">
                         <i class="fa-solid fa-fire text-stone-400 opacity-60" id="header-streak-icon"></i>
                         <span id="header-streak-count">0</span>
@@ -113,6 +138,11 @@
             </div>
             
             <div class="flex flex-wrap items-center justify-center gap-2.5 w-full md:w-auto">
+                <button onclick="openAchievementsModal()" class="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-bold shadow-sm sub-card hover:opacity-80 transition-all text-amber-500">
+                    <i class="fa-solid fa-trophy"></i>
+                    <span>Conquistas</span>
+                </button>
+
                 <div class="relative flex-1 sm:flex-initial min-w-[150px]">
                     <div class="flex items-center gap-2 border px-3 py-2 rounded-xl shadow-sm transition-all dropdown-box">
                         <i class="fa-solid fa-earth-americas text-xs shrink-0 opacity-70"></i>
@@ -549,7 +579,12 @@
                     <div class="perspective-1000 w-full h-72 cursor-pointer" onclick="flipFlashcard()">
                         <div id="flip-card-inner" class="flip-card-inner">
                             <div class="flip-card-front p-7 border-2 flex flex-col items-center justify-between shadow-xl rounded-2xl card-front-side">
-                                <span class="text-[10px] font-black uppercase tracking-widest px-3.5 py-1.5 rounded-full border shadow-inner card-badge-front" id="card-front-lang-label">Term</span>
+                                <div class="w-full flex justify-between items-center">
+                                    <span class="text-[10px] font-black uppercase tracking-widest px-3.5 py-1.5 rounded-full border shadow-inner card-badge-front" id="card-front-lang-label">Term</span>
+                                    <button onclick="event.stopPropagation(); speakCurrentWord();" class="p-2 rounded-lg border hover:opacity-80 transition-all text-amber-500 sub-card" title="Ouvir pronúncia">
+                                        <i class="fa-solid fa-volume-high text-xs"></i>
+                                    </button>
+                                </div>
                                 <div class="space-y-3 my-auto">
                                     <h3 id="fc-word" class="text-3xl sm:text-4xl font-black font-serif">Click Draw</h3>
                                     <p class="text-xs font-medium italic opacity-75" id="lbl-click-to-flip">Click card to reveal translation 🔄</p>
@@ -558,7 +593,12 @@
                             </div>
 
                             <div class="flip-card-back p-7 border-2 flex flex-col items-center justify-between shadow-xl rounded-2xl card-back-side">
-                                <span class="text-[10px] font-black uppercase tracking-widest px-3.5 py-1.5 rounded-full border shadow-inner card-badge-back" id="lbl-translation-tag">Translation</span>
+                                <div class="w-full flex justify-between items-center">
+                                    <span class="text-[10px] font-black uppercase tracking-widest px-3.5 py-1.5 rounded-full border shadow-inner card-badge-back" id="lbl-translation-tag">Translation</span>
+                                    <button onclick="event.stopPropagation(); speakCurrentWord();" class="p-2 rounded-lg border hover:opacity-80 transition-all text-amber-500 sub-card" title="Ouvir pronúncia">
+                                        <i class="fa-solid fa-volume-high text-xs"></i>
+                                    </button>
+                                </div>
                                 <div class="space-y-3 my-auto max-w-sm">
                                     <h3 id="fc-translation" class="text-2xl sm:text-3xl font-black font-serif">-</h3>
                                     <p id="fc-example" class="text-xs font-medium italic p-3 rounded-xl border-2 shadow-sm card-example-box">"-"</p>

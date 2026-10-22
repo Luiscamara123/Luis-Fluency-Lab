@@ -169,6 +169,13 @@ let vocabStreakData = {};
 let currentVocabularyIndex = 0;
 let isCardFlipped = false;
 
+const ACHIEVEMENTS_DATA = [
+    { id: 'first_word', title: 'Primeira Palavra', desc: 'Cadastre sua primeira palavra no vocabulário.', icon: 'fa-book-bookmark' },
+    { id: 'streak_3', title: 'Foco Inicial', desc: 'Mantenha uma ofensiva de 3 dias seguidos.', icon: 'fa-fire' },
+    { id: 'vocab_10', title: 'Léxico em Expansão', desc: 'Cadastre ao menos 10 palavras no idioma ativo.', icon: 'fa-brain' },
+    { id: 'listening_10', title: 'Ouvido Atento', desc: 'Registre pelo menos 10 horas de imersão.', icon: 'fa-headphones' }
+];
+
 function loadLanguageData() {
     listeningList = JSON.parse(localStorage.getItem(`luis_listening_${targetLang}`)) || [];
     readingList = JSON.parse(localStorage.getItem(`luis_reading_${targetLang}`)) || [];
@@ -178,12 +185,13 @@ function loadLanguageData() {
         streakCount: 0, 
         history: {}, 
         currentMonth: new Date().getMonth(),
-        missedThisMonth: 0 
+        missedThisMonth: 0,
+        popShownDates: {} // Controla exibição única da popup por dia
     };
 
     checkMidnightAndTolerance();
 
-    // Palavras salvas estritamente no idioma ativo (targetLang), iniciando vazias sem exemplos prontos
+    // Idioma isolado
     vocabularyList = JSON.parse(localStorage.getItem(`luis_vocab_${targetLang}`)) || [];
 }
 
@@ -229,6 +237,22 @@ function saveListeningData() { localStorage.setItem(`luis_listening_${targetLang
 function saveReadingData() { localStorage.setItem(`luis_reading_${targetLang}`, JSON.stringify(readingList)); }
 function saveVocabularyData() { localStorage.setItem(`luis_vocab_${targetLang}`, JSON.stringify(vocabularyList)); }
 function saveVocabStreakData() { localStorage.setItem(`luis_vocab_streak_${targetLang}`, JSON.stringify(vocabStreakData)); }
+
+function speakWord(wordText) {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(wordText);
+    const langMap = { en: 'en-US', es: 'es-ES', fr: 'fr-FR', ja: 'ja-JP', pt: 'pt-BR' };
+    utterance.lang = langMap[targetLang] || 'en-US';
+    utterance.rate = 0.9;
+    window.speechSynthesis.speak(utterance);
+}
+
+function speakCurrentWord() {
+    if (vocabularyList.length === 0) return;
+    const item = vocabularyList[currentVocabularyIndex];
+    if (item && item.word) speakWord(item.word);
+}
 
 function updateListeningGoal(newVal) {
     const val = Number(newVal);
@@ -598,7 +622,10 @@ function renderVocabularyDashboard() {
                         <span class="text-[10px] opacity-80 block">${txt.correctHits} <strong class="text-emerald-600 font-black">${v.correctCount || 0}</strong> | ${txt.wrongHits} <strong class="text-red-600 font-black">${v.wrongCount || 0}</strong></span>
                     </div>
                 </div>
-                <button onclick="deleteVocabularyItem('${v.id}', '${v.word}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2.5 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                <div class="flex items-center gap-1">
+                    <button onclick="speakWord('${v.word}')" class="p-2 opacity-70 hover:opacity-100 text-amber-500 transition-colors" title="Ouvir"><i class="fa-solid fa-volume-high text-xs"></i></button>
+                    <button onclick="deleteVocabularyItem('${v.id}', '${v.word}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2.5 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                </div>
             `;
             container.appendChild(div);
         });
@@ -664,6 +691,8 @@ function recordVocabPracticeToday() {
     const todayStr = new Date().toISOString().split('T')[0];
     const isAlreadyDone = vocabStreakData.lastPracticeDate === todayStr;
 
+    if (!vocabStreakData.popShownDates) vocabStreakData.popShownDates = {};
+
     if (!isAlreadyDone) {
         if (!vocabStreakData.lastPracticeDate) {
             vocabStreakData.streakCount = 1;
@@ -685,10 +714,17 @@ function recordVocabPracticeToday() {
         vocabStreakData.lastPracticeDate = todayStr;
         if (!vocabStreakData.history) vocabStreakData.history = {};
         vocabStreakData.history[todayStr] = 'done';
-        
+    }
+
+    // DISPARO DA POPUP CENTRAL DA OFENSIVA APENAS 1 VEZ AO DIA
+    if (!vocabStreakData.popShownDates[todayStr]) {
+        vocabStreakData.popShownDates[todayStr] = true;
         saveVocabStreakData();
         updateHeaderStreakUI();
         triggerStreakAnimation(); 
+    } else {
+        saveVocabStreakData();
+        updateHeaderStreakUI();
     }
 }
 
@@ -759,6 +795,43 @@ function openStreakModal() {
 
 function closeStreakModal() {
     const modal = document.getElementById('streak-details-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function openAchievementsModal() {
+    const modal = document.getElementById('achievements-modal');
+    const container = document.getElementById('achievements-list-container');
+    if (!modal || !container) return;
+
+    container.innerHTML = '';
+    ACHIEVEMENTS_DATA.forEach(ach => {
+        let isUnlocked = false;
+        if (ach.id === 'first_word') isUnlocked = vocabularyList.length > 0;
+        if (ach.id === 'streak_3') isUnlocked = (vocabStreakData.streakCount || 0) >= 3;
+        if (ach.id === 'vocab_10') isUnlocked = vocabularyList.length >= 10;
+        if (ach.id === 'listening_10') {
+            let sumMins = 0;
+            listeningList.forEach(item => sumMins += (Number(item.hours) * 60) + Number(item.minutes));
+            isUnlocked = (sumMins / 60) >= 10;
+        }
+
+        const div = document.createElement('div');
+        div.className = `p-3 rounded-2xl border-2 flex flex-col items-center text-center space-y-1.5 ${isUnlocked ? 'sub-card border-amber-500/50' : 'opacity-40 grayscale sub-card'}`;
+        div.innerHTML = `
+            <div class="w-8 h-8 rounded-xl flex items-center justify-center text-amber-500 font-bold ${isUnlocked ? 'bg-amber-500/10' : 'bg-stone-500/10'}">
+                <i class="fa-solid ${ach.icon}"></i>
+            </div>
+            <span class="text-xs font-black block">${ach.title}</span>
+            <span class="text-[10px] opacity-75 font-medium leading-tight block">${ach.desc}</span>
+        `;
+        container.appendChild(div);
+    });
+
+    modal.classList.remove('hidden');
+}
+
+function closeAchievementsModal() {
+    const modal = document.getElementById('achievements-modal');
     if (modal) modal.classList.add('hidden');
 }
 
