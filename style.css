@@ -138,3 +138,8 @@ body {
     border-color: #d97706 !important;
     box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 }
+
+.ob-option-selected {
+    border-color: #f59e0b !important;
+    background-color: rgba(245, 158, 11, 0.15) !important;
+}

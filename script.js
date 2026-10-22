@@ -3,9 +3,14 @@ let currentModule = 'hub';
 let currentTab = 'dashboard';
 let currentAchFilter = 'all';
 
+let userName = localStorage.getItem('luis_user_name') || 'Luis';
+let userOrigin = localStorage.getItem('luis_user_origin') || 'pt';
 let targetLang = localStorage.getItem('luis_target_language') || 'en';
 let uiLang = localStorage.getItem('luis_ui_language') || 'pt';
 let themeMode = localStorage.getItem('luis_theme_mode') || 'light';
+
+let obTempTarget = targetLang;
+let obTempOrigin = userOrigin;
 
 const LANG_META = {
     en: { name: 'English', flagImg: 'img/bandeira-eua.webp', themeClass: 'theme-en', platformName: 'American Immersion Platform', edition: 'American Edition' },
@@ -19,7 +24,7 @@ const UI_TEXTS = {
     pt: {
         learningLabel: "Estudando", uiLabel: "Interface",
         navHub: "Início", navDash: "Dashboard", navCad: "Cadastrar",
-        welcome: "BEM-VINDO, LUIS •",
+        welcome: "BEM-VINDO, {NAME} •",
         headerAch: "Conquistas",
         hubTitle: "O que você deseja registrar ou praticar hoje?",
         hubDesc: "Selecione um módulo abaixo para acompanhar seu progresso.",
@@ -28,7 +33,7 @@ const UI_TEXTS = {
         cardVocabTag: "FLASHCARDS", cardVocabTitle: "Treinador de Vocabulário", cardVocabDesc: "Pratique com exercícios de memória e vocabulário.",
         cardAchTag: "DESAFIOS & TROFÉUS", cardAchTitle: "GALERIA DE CONQUISTAS", cardAchDesc: "Desbloqueie até 100 conquistas únicas com sua evolução.",
         btnAccess: "Acessar o Painel", btnTrain: "Treinar Vocabulário", btnAch: "Ver Conquistas",
-        achBannerTag: "Galeria de Troféus", achBannerTitle: "Galeria de 100 Conquistas", achBannerDesc: "Acompanhe seu progresso e conquiste badges estudando diariamente.",
+        achBannerTag: "Galería de Troféus", achBannerTitle: "Galeria de 100 Conquistas", achBannerDesc: "Acompanhe seu progresso e conquiste badges estudando diariamente.",
         lblAchUnlocked: "Desbloqueadas", lblAchProgress: "Progresso Geral",
         achFilterAll: "Todas (100)", achFilterStreak: "🔥 Ofensiva", achFilterVocab: "🧠 Vocabulário", achFilterListening: "🎧 Listening", achFilterReading: "📖 Leitura", achFilterPoly: "🌍 Poliglota",
         goalFixed: "Meta (Horas)", progress: "Progresso", ofTarget: "da meta",
@@ -49,13 +54,14 @@ const UI_TEXTS = {
         tapFlip: "Toque para Virar", clickToFlip: "Clique no cartão para revelar a tradução 🔄", translationTag: "Tradução",
         correctHits: "Acertos:", wrongHits: "Erros:", btnWrong: "Não Lembrei", btnCorrect: "Lembrei (Certo!)", btnNextRandom: "Sortear Próxima Palavra Aleatória",
         emptyVocabTitle: "Nenhuma palavra cadastrada", emptyVocabExample: "Cadastre sua primeira palavra no menu superior.", emptyVocabList: "Nenhuma palavra cadastrada.", emptyMediaList: "Nenhum título cadastrado.", emptyBookList: "Nenhum livro cadastrado.",
-        popupStreakTitle: "Foguinho Acendido! 🔥", popupStreakDesc: "Excelente, Luis! Ofensiva garantida e salva no histórico diário.", btnContinue: "Continuar",
-        modalStreakTitle: "Estatísticas de Ofensiva", modalStreakSub: "Controlo diário e histórico persistente", modalSeq: "Sequência Atual", modalMissed: "Faltas no Mês", modalWeek: "Histórico da Semana", modalNote: "Dias sem realizar a tarefa ficam marcados a vermelho.", btnUnderstood: "Entendido"
+        popupStreakTitle: "Foguinho Acendido! 🔥", popupStreakDesc: "Excelente! Ofensiva garantida e salva no histórico diário.", btnContinue: "Continuar",
+        modalStreakTitle: "Estatísticas de Ofensiva", modalStreakSub: "Controlo diário e histórico persistente", modalSeq: "Sequência Atual", modalMissed: "Faltas no Mês", modalWeek: "Histórico da Semana", modalNote: "Dias sem realizar a tarefa ficam marcados a vermelho.", btnUnderstood: "Entendido",
+        lblModalStudying: "Idioma que está Estudando", lblModalUi: "Idioma da Interface"
     },
     en: {
         learningLabel: "Studying", uiLabel: "Interface",
         navHub: "Home", navDash: "Dashboard", navCad: "Add New",
-        welcome: "WELCOME, LUIS •",
+        welcome: "WELCOME, {NAME} •",
         headerAch: "Achievements",
         hubTitle: "What would you like to track or practice today?",
         hubDesc: "Select a module below to monitor your progress.",
@@ -85,13 +91,14 @@ const UI_TEXTS = {
         tapFlip: "Tap to Flip", clickToFlip: "Click card to reveal translation 🔄", translationTag: "Translation",
         correctHits: "Correct:", wrongHits: "Wrong:", btnWrong: "Forgot", btnCorrect: "Remembered!", btnNextRandom: "Draw Next Random Word",
         emptyVocabTitle: "No words added", emptyVocabExample: "Add your first word using the top menu.", emptyVocabList: "No words registered.", emptyMediaList: "No titles registered.", emptyBookList: "No books registered.",
-        popupStreakTitle: "Streak Lit! 🔥", popupStreakDesc: "Awesome, Luis! Daily streak secured and recorded.", btnContinue: "Continue",
-        modalStreakTitle: "Streak Statistics", modalStreakSub: "Daily control & persistent history", modalSeq: "Current Streak", modalMissed: "Missed This Month", modalWeek: "Weekly History", modalNote: "Days without practice are marked in red.", btnUnderstood: "Got It"
+        popupStreakTitle: "Streak Lit! 🔥", popupStreakDesc: "Awesome! Daily streak secured and recorded.", btnContinue: "Continue",
+        modalStreakTitle: "Streak Statistics", modalStreakSub: "Daily control & persistent history", modalSeq: "Current Streak", modalMissed: "Missed This Month", modalWeek: "Weekly History", modalNote: "Days without practice are marked in red.", btnUnderstood: "Got It",
+        lblModalStudying: "Studying Language", lblModalUi: "Interface Language"
     },
     es: {
         learningLabel: "Estudando", uiLabel: "Interfaz",
         navHub: "Inicio", navDash: "Panel", navCad: "Añadir",
-        welcome: "BIENVENIDO, LUIS •",
+        welcome: "BIENVENIDO, {NAME} •",
         headerAch: "Logros",
         hubTitle: "¿Qué quieres registrar o practicar hoy?",
         hubDesc: "Selecciona un módulo a continuación para seguir tu progreso.",
@@ -121,13 +128,14 @@ const UI_TEXTS = {
         tapFlip: "Toca para Girar", clickToFlip: "Haz clic en la tarjeta para ver traducción 🔄", translationTag: "Traducción",
         correctHits: "Aciertos:", wrongHits: "Errores:", btnWrong: "Olvidé", btnCorrect: "¡Recordé!", btnNextRandom: "Siguiente Palabra Aleatoria",
         emptyVocabTitle: "Sin palabras", emptyVocabExample: "Añade tu primera palabra desde el menú.", emptyVocabList: "No hay palabras registradas.", emptyMediaList: "No hay títulos registrados.", emptyBookList: "No hay libros registrados.",
-        popupStreakTitle: "¡Fuego Encendido! 🔥", popupStreakDesc: "¡Excelente, Luis! Racha diaria garantizada.", btnContinue: "Continuar",
-        modalStreakTitle: "Estadísticas de Racha", modalStreakSub: "Control diario e historial persistente", modalSeq: "Racha Actual", modalMissed: "Faltas del Mes", modalWeek: "Historial Semanal", modalNote: "Días sin práctica quedan en rojo.", btnUnderstood: "Entendido"
+        popupStreakTitle: "¡Fuego Encendido! 🔥", popupStreakDesc: "¡Excelente! Racha diaria garantizada.", btnContinue: "Continuar",
+        modalStreakTitle: "Estadísticas de Racha", modalStreakSub: "Control diario e historial persistente", modalSeq: "Racha Actual", modalMissed: "Faltas del Mes", modalWeek: "Historial Semanal", modalNote: "Días sin práctica quedan en rojo.", btnUnderstood: "Entendido",
+        lblModalStudying: "Idioma que estudias", lblModalUi: "Idioma de la interfaz"
     },
     fr: {
         learningLabel: "Apprentissage", uiLabel: "Interface",
         navHub: "Accueil", navDash: "Tableau", navCad: "Ajouter",
-        welcome: "BIENVENUE, LUIS •",
+        welcome: "BIENVENUE, {NAME} •",
         headerAch: "Succès",
         hubTitle: "Que souhaitez-vous enregistrer ou pratiquer aujourd'hui ?",
         hubDesc: "Sélectionnez un module ci-dessous pour suivre vos progrès.",
@@ -157,13 +165,14 @@ const UI_TEXTS = {
         tapFlip: "Appuyez pour Retourner", clickToFlip: "Cliquez pour voir la traduction 🔄", translationTag: "Traduction",
         correctHits: "Correct :", wrongHits: "Erreurs :", btnWrong: "Oublié", btnCorrect: "Rappelé !", btnNextRandom: "Tirer un Mot au Hasard",
         emptyVocabTitle: "Aucun mot", emptyVocabExample: "Ajoutez un mot depuis le menu.", emptyVocabList: "Aucun mot enregistré.", emptyMediaList: "Aucun titre enregistré.", emptyBookList: "Aucun livre enregistré.",
-        popupStreakTitle: "Série Allumée ! 🔥", popupStreakDesc: "Excellent, Luis ! Série quotidienne validée.", btnContinue: "Continuer",
-        modalStreakTitle: "Statistiques de Série", modalStreakSub: "Suivi quotidien et historique", modalSeq: "Série Actuelle", modalMissed: "Manqués ce mois", modalWeek: "Historique Semaine", modalNote: "Les jours sans pratique sont marqués en rouge.", btnUnderstood: "Compris"
+        popupStreakTitle: "Série Allumée ! 🔥", popupStreakDesc: "Excellent ! Série quotidienne validée.", btnContinue: "Continuer",
+        modalStreakTitle: "Statistiques de Série", modalStreakSub: "Suivi quotidien et historique", modalSeq: "Série Actuelle", modalMissed: "Manqués ce mois", modalWeek: "Historique Semaine", modalNote: "Les jours sans pratique sont marqués en rouge.", btnUnderstood: "Compris",
+        lblModalStudying: "Langue étudiée", lblModalUi: "Langue de l'interface"
     },
     ja: {
         learningLabel: "学習モード", uiLabel: "インターフェース",
         navHub: "ホーム", navDash: "ダッシュボード", navCad: "新規登録",
-        welcome: "ようこそ、ルイイスさん •",
+        welcome: "ようこそ、{NAME}さん •",
         headerAch: "実績",
         hubTitle: "今日は何を記録・練習しますか？",
         hubDesc: "下のモジュールを選択して、進捗を記録しましょう。",
@@ -193,14 +202,14 @@ const UI_TEXTS = {
         tapFlip: "タップして裏返す", clickToFlip: "カードをクリックして意味を表示 🔄", translationTag: "翻訳・意味",
         correctHits: "正解:", wrongHits: "不正解:", btnWrong: "覚えていない", btnCorrect: "覚えていた！", btnNextRandom: "次の単語をランダム抽出",
         emptyVocabTitle: "単語がありません", emptyVocabExample: "メニューから単語を追加してください。", emptyVocabList: "登録済みの単語はありません。", emptyMediaList: "登録済みの作品はありません。", emptyBookList: "登録済みの本はありません。",
-        popupStreakTitle: "ストリーク達成！ 🔥", popupStreakDesc: "素晴らしいです、ルイイスさん！今日のストリークを記録しました。", btnContinue: "次へ",
-        modalStreakTitle: "ストリーク統計", modalStreakSub: "毎日の管理と履歴", modalSeq: "現在のストリーク", modalMissed: "今月の欠席", modalWeek: "週間履歴", modalNote: "練習しなかった日は赤く表示されます。", btnUnderstood: "確認"
+        popupStreakTitle: "ストリーク達成！ 🔥", popupStreakDesc: "素晴らしいです！今日のストリークを記録しました。", btnContinue: "次へ",
+        modalStreakTitle: "ストリーク統計", modalStreakSub: "毎日の管理と履歴", modalSeq: "現在のストリーク", modalMissed: "今月の欠席", modalWeek: "週間履歴", modalNote: "練習しなかった日は赤く表示されます。", btnUnderstood: "確認",
+        lblModalStudying: "学習中の言語", lblModalUi: " UIの言語"
     }
 };
 
 function generate100Achievements() {
     const list = [];
-    
     const streakDays = [1, 2, 3, 5, 7, 10, 14, 21, 30, 45, 60, 90, 100, 120, 150, 180, 200, 250, 300, 365];
     streakDays.forEach((days, i) => {
         list.push({ id: `streak_${days}`, category: 'streak', title: `Chama Nível ${i+1}`, desc: `Alcance ${days} dia(s) seguidos de ofensiva.`, icon: 'fa-fire' });
@@ -249,6 +258,110 @@ let vocabStreakData = {};
 let currentVocabularyIndex = 0;
 let isCardFlipped = false;
 
+// ONBOARDING LOGIC
+function checkOnboardingStatus() {
+    const isCompleted = localStorage.getItem('luis_onboarding_completed');
+    const overlay = document.getElementById('onboarding-overlay');
+    if (!isCompleted) {
+        if (overlay) overlay.classList.remove('hidden');
+        selectOnboardingTarget(targetLang);
+        selectOnboardingOrigin(userOrigin);
+    } else {
+        if (overlay) overlay.classList.add('hidden');
+    }
+}
+
+function nextOnboardingStep(step) {
+    if (step === 2) {
+        const inputName = document.getElementById('onboarding-input-name')?.value.trim();
+        if (!inputName) {
+            alert("Por favor, digite seu nome!");
+            return;
+        }
+        userName = inputName;
+    }
+
+    document.getElementById('onboarding-step-1')?.classList.add('hidden');
+    document.getElementById('onboarding-step-2')?.classList.add('hidden');
+    document.getElementById('onboarding-step-3')?.classList.add('hidden');
+
+    document.getElementById(`onboarding-step-${step}`)?.classList.remove('hidden');
+
+    const progressEl = document.getElementById('onboarding-progress');
+    if (progressEl) {
+        progressEl.style.width = step === 1 ? '33%' : step === 2 ? '66%' : '100%';
+    }
+}
+
+function selectOnboardingTarget(lang) {
+    obTempTarget = lang;
+    ['en', 'es', 'fr', 'ja'].forEach(l => {
+        const btn = document.getElementById(`ob-target-${l}`);
+        if (btn) {
+            if (l === lang) btn.classList.add('ob-option-selected');
+            else btn.classList.remove('ob-option-selected');
+        }
+    });
+}
+
+function selectOnboardingOrigin(countryLang) {
+    obTempOrigin = countryLang;
+    ['pt', 'en', 'es', 'fr'].forEach(c => {
+        const btn = document.getElementById(`ob-origin-${c}`);
+        if (btn) {
+            if (c === countryLang) btn.classList.add('ob-option-selected');
+            else btn.classList.remove('ob-option-selected');
+        }
+    });
+}
+
+function finishOnboarding() {
+    targetLang = obTempTarget;
+    userOrigin = obTempOrigin;
+    uiLang = obTempOrigin; 
+
+    localStorage.setItem('luis_user_name', userName);
+    localStorage.setItem('luis_user_origin', userOrigin);
+    localStorage.setItem('luis_target_language', targetLang);
+    localStorage.setItem('luis_ui_language', uiLang);
+    localStorage.setItem('luis_onboarding_completed', 'true');
+
+    const overlay = document.getElementById('onboarding-overlay');
+    if (overlay) overlay.classList.add('hidden');
+
+    loadLanguageData();
+    updateThemeAndFlags();
+    applyUITranslations();
+    refreshAllDashboards();
+}
+
+function resetOnboardingData() {
+    localStorage.removeItem('luis_onboarding_completed');
+    closeUserProfileModal();
+    checkOnboardingStatus();
+}
+
+function openUserProfileModal() {
+    const modal = document.getElementById('user-profile-modal');
+    if (modal) {
+        const originNames = { pt: 'Brasil 🇧🇷', en: 'USA 🇺🇸', es: 'España 🇪🇸', fr: 'France 🇫🇷' };
+        document.getElementById('user-modal-name').innerText = userName;
+        document.getElementById('user-modal-origin').innerText = `Origem: ${originNames[userOrigin] || 'Brasil 🇧🇷'}`;
+        
+        const targetSel = document.getElementById('user-modal-target-select');
+        const uiSel = document.getElementById('user-modal-ui-select');
+        if (targetSel) targetSel.value = targetLang;
+        if (uiSel) uiSel.value = uiLang;
+
+        modal.classList.remove('hidden');
+    }
+}
+
+function closeUserProfileModal() {
+    const modal = document.getElementById('user-profile-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
 function loadLanguageData() {
     listeningList = JSON.parse(localStorage.getItem(`luis_listening_${targetLang}`)) || [];
     readingList = JSON.parse(localStorage.getItem(`luis_reading_${targetLang}`)) || [];
@@ -263,8 +376,6 @@ function loadLanguageData() {
     };
 
     checkMidnightAndTolerance();
-    
-    // ZERADO GARANTIDO: Inicia estritamente vazio sem nenhuma palavra predefinida
     vocabularyList = JSON.parse(localStorage.getItem(`luis_vocab_${targetLang}`)) || [];
 }
 
@@ -373,13 +484,16 @@ function updateThemeAndFlags() {
     const watermark = document.getElementById('bg-flag-watermark');
     if (watermark) watermark.style.backgroundImage = `url('${meta.flagImg}')`;
 
-    const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
+    const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
+    const welcomeStr = txt.welcome.replace('{NAME}', userName.toUpperCase());
+
+    const setText = (id, textVal) => { const el = document.getElementById(id); if (el) el.innerText = textVal; };
     setText('header-subtitle', meta.platformName);
     setText('listening-welcome-prefix', `Listening (${meta.name})`);
     setText('reading-title-prefix', `Reading (${meta.name})`);
     setText('vocab-title-prefix', `Vocabulary (${meta.name})`);
     setText('card-front-lang-label', meta.name);
-    setText('hub-welcome', `WELCOME, LUIS • ${meta.name.toUpperCase()}`);
+    setText('hub-welcome', `${welcomeStr} ${meta.name.toUpperCase()}`);
     setText('footer-text', `Fluency Lab • ${meta.edition} • 2026`);
 
     const iconClass = themeMode === 'dark' ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-stone-700';
@@ -516,6 +630,9 @@ function applyUITranslations() {
     setText('lbl-modal-week-hist', txt.modalWeek);
     setText('lbl-modal-red-note', txt.modalNote);
     setText('btn-modal-understood', txt.btnUnderstood);
+
+    setText('lbl-modal-studying', txt.lblModalStudying);
+    setText('lbl-modal-ui', txt.lblModalUi);
 }
 
 function openModule(moduleName) {
@@ -912,7 +1029,6 @@ function renderAchievementsModule() {
     const grid = document.getElementById('achievements-full-grid');
     if (!grid) return;
 
-    // ATUALIZA ESTILOS DOS BOTÕES DE FILTRO COM INDICADOR DE COR
     ['all', 'streak', 'vocab', 'listening', 'reading', 'polyglot'].forEach(cat => {
         const btn = document.getElementById(`ach-filter-${cat}`);
         if (btn) {
@@ -1086,7 +1202,7 @@ function handleVocabularyFormSubmit(e) {
 }
 
 function deleteListeningItem(id, name) {
-    if (confirm(`Luis, tem certeza que quer excluir "${name}"?`)) {
+    if (confirm(`Tem certeza que quer excluir "${name}"?`)) {
         listeningList = listeningList.filter(i => i.id !== id);
         saveListeningData();
         renderListeningDashboard();
@@ -1094,7 +1210,7 @@ function deleteListeningItem(id, name) {
 }
 
 function deleteReadingItem(id, title) {
-    if (confirm(`Luis, tem certeza que quer excluir o livro "${title}"?`)) {
+    if (confirm(`Tem certeza que quer excluir o livro "${title}"?`)) {
         readingList = readingList.filter(i => i.id !== id);
         saveReadingData();
         renderReadingDashboard();
@@ -1102,7 +1218,7 @@ function deleteReadingItem(id, title) {
 }
 
 function deleteVocabularyItem(id, word) {
-    if (confirm(`Luis, tem certeza que quer excluir a palavra "${word}"?`)) {
+    if (confirm(`Tem certeza que quer excluir a palavra "${word}"?`)) {
         vocabularyList = vocabularyList.filter(i => i.id !== id);
         saveVocabularyData();
         renderVocabularyDashboard();
@@ -1110,10 +1226,7 @@ function deleteVocabularyItem(id, word) {
 }
 
 window.onload = function() {
-    const targetLangSelect = document.getElementById('select-target-lang');
-    const uiLangSelect = document.getElementById('select-ui-lang');
-    if (targetLangSelect) targetLangSelect.value = targetLang;
-    if (uiLangSelect) uiLangSelect.value = uiLang;
+    checkOnboardingStatus();
     loadLanguageData();
     updateThemeAndFlags();
     applyUITranslations();
