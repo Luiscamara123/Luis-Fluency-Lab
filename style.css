@@ -60,14 +60,14 @@
     --btn-primary: #15803d;
 }
 
-/* MODO ESCURO EM TOM GRAFITE/PRETO (SEM AZUL) */
+/* MODO ESCURO CORRIGIDO */
 .mode-dark {
     --bg-main: #090d16;
     --text-main: #f1f5f9;
     --border-color: #262f3f;
     --card-bg: #111822;
     --sub-card-bg: #0d121b;
-    --btn-primary: #475569;
+    --btn-primary: #3b82f6;
 }
 
 body {
@@ -83,6 +83,17 @@ body {
 
 .sub-card {
     background-color: var(--sub-card-bg);
+}
+
+input, select, textarea {
+    background-color: var(--sub-card-bg);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+.mode-dark input, .mode-dark select, .mode-dark textarea {
+    background-color: #0d121b;
+    color: #f1f5f9;
 }
 
 .flag-accent-bar {
@@ -131,7 +142,6 @@ body {
 .flip-card-back { transform: rotateY(180deg); }
 .decor-corner { color: var(--border-color); }
 
-/* COR DO BOTÃO ATIVO NO FILTRO DE CONQUISTAS */
 .ach-filter-active {
     background-color: #f59e0b !important;
     color: #ffffff !important;

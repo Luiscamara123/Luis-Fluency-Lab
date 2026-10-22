@@ -5,6 +5,7 @@ let currentAchFilter = 'all';
 
 let userName = localStorage.getItem('luis_user_name') || 'Luis';
 let userOrigin = localStorage.getItem('luis_user_origin') || 'pt';
+let userAvatar = localStorage.getItem('luis_user_avatar') || '';
 let targetLang = localStorage.getItem('luis_target_language') || 'en';
 let uiLang = localStorage.getItem('luis_ui_language') || 'pt';
 let themeMode = localStorage.getItem('luis_theme_mode') || 'light';
@@ -56,7 +57,8 @@ const UI_TEXTS = {
         emptyVocabTitle: "Nenhuma palavra cadastrada", emptyVocabExample: "Cadastre sua primeira palavra no menu superior.", emptyVocabList: "Nenhuma palavra cadastrada.", emptyMediaList: "Nenhum título cadastrado.", emptyBookList: "Nenhum livro cadastrado.",
         popupStreakTitle: "Foguinho Acendido! 🔥", popupStreakDesc: "Excelente! Ofensiva garantida e salva no histórico diário.", btnContinue: "Continuar",
         modalStreakTitle: "Estatísticas de Ofensiva", modalStreakSub: "Controlo diário e histórico persistente", modalSeq: "Sequência Atual", modalMissed: "Faltas no Mês", modalWeek: "Histórico da Semana", modalNote: "Dias sem realizar a tarefa ficam marcados a vermelho.", btnUnderstood: "Entendido",
-        lblModalStudying: "Idioma que está Estudando", lblModalUi: "Idioma da Interface"
+        lblModalStudying: "Idioma que está Estudando", lblModalUi: "Idioma da Interface",
+        refazerPerguntas: "Refazer Perguntas Iniciais", modalClose: "Fechar"
     },
     en: {
         learningLabel: "Studying", uiLabel: "Interface",
@@ -93,7 +95,8 @@ const UI_TEXTS = {
         emptyVocabTitle: "No words added", emptyVocabExample: "Add your first word using the top menu.", emptyVocabList: "No words registered.", emptyMediaList: "No titles registered.", emptyBookList: "No books registered.",
         popupStreakTitle: "Streak Lit! 🔥", popupStreakDesc: "Awesome! Daily streak secured and recorded.", btnContinue: "Continue",
         modalStreakTitle: "Streak Statistics", modalStreakSub: "Daily control & persistent history", modalSeq: "Current Streak", modalMissed: "Missed This Month", modalWeek: "Weekly History", modalNote: "Days without practice are marked in red.", btnUnderstood: "Got It",
-        lblModalStudying: "Studying Language", lblModalUi: "Interface Language"
+        lblModalStudying: "Studying Language", lblModalUi: "Interface Language",
+        refazerPerguntas: "Reset Onboarding", modalClose: "Close"
     },
     es: {
         learningLabel: "Estudando", uiLabel: "Interfaz",
@@ -130,7 +133,8 @@ const UI_TEXTS = {
         emptyVocabTitle: "Sin palabras", emptyVocabExample: "Añade tu primera palabra desde el menú.", emptyVocabList: "No hay palabras registradas.", emptyMediaList: "No hay títulos registrados.", emptyBookList: "No hay libros registrados.",
         popupStreakTitle: "¡Fuego Encendido! 🔥", popupStreakDesc: "¡Excelente! Racha diaria garantizada.", btnContinue: "Continuar",
         modalStreakTitle: "Estadísticas de Racha", modalStreakSub: "Control diario e historial persistente", modalSeq: "Racha Actual", modalMissed: "Faltas del Mes", modalWeek: "Historial Semanal", modalNote: "Días sin práctica quedan en rojo.", btnUnderstood: "Entendido",
-        lblModalStudying: "Idioma que estudias", lblModalUi: "Idioma de la interfaz"
+        lblModalStudying: "Idioma que estudias", lblModalUi: "Idioma de la interfaz",
+        refazerPerguntas: "Reiniciar Onboarding", modalClose: "Cerrar"
     },
     fr: {
         learningLabel: "Apprentissage", uiLabel: "Interface",
@@ -167,7 +171,8 @@ const UI_TEXTS = {
         emptyVocabTitle: "Aucun mot", emptyVocabExample: "Ajoutez un mot depuis le menu.", emptyVocabList: "Aucun mot enregistré.", emptyMediaList: "Aucun titre enregistré.", emptyBookList: "Aucun livre enregistré.",
         popupStreakTitle: "Série Allumée ! 🔥", popupStreakDesc: "Excellent ! Série quotidienne validée.", btnContinue: "Continuer",
         modalStreakTitle: "Statistiques de Série", modalStreakSub: "Suivi quotidien et historique", modalSeq: "Série Actuelle", modalMissed: "Manqués ce mois", modalWeek: "Historique Semaine", modalNote: "Les jours sans pratique sont marqués en rouge.", btnUnderstood: "Compris",
-        lblModalStudying: "Langue étudiée", lblModalUi: "Langue de l'interface"
+        lblModalStudying: "Langue étudiée", lblModalUi: "Langue de l'interface",
+        refazerPerguntas: "Réinitialiser Onboarding", modalClose: "Fermer"
     },
     ja: {
         learningLabel: "学習モード", uiLabel: "インターフェース",
@@ -204,7 +209,8 @@ const UI_TEXTS = {
         emptyVocabTitle: "単語がありません", emptyVocabExample: "メニューから単語を追加してください。", emptyVocabList: "登録済みの単語はありません。", emptyMediaList: "登録済みの作品はありません。", emptyBookList: "登録済みの本はありません。",
         popupStreakTitle: "ストリーク達成！ 🔥", popupStreakDesc: "素晴らしいです！今日のストリークを記録しました。", btnContinue: "次へ",
         modalStreakTitle: "ストリーク統計", modalStreakSub: "毎日の管理と履歴", modalSeq: "現在のストリーク", modalMissed: "今月の欠席", modalWeek: "週間履歴", modalNote: "練習しなかった日は赤く表示されます。", btnUnderstood: "確認",
-        lblModalStudying: "学習中の言語", lblModalUi: " UIの言語"
+        lblModalStudying: "学習中の言語", lblModalUi: "UIの言語",
+        refazerPerguntas: "オンボーディングやり直し", modalClose: "閉じる"
     }
 };
 
@@ -341,6 +347,54 @@ function resetOnboardingData() {
     checkOnboardingStatus();
 }
 
+// UPLOAD DE FOTO DE PERFIL E SINCRONIZAÇÃO NO HEADER
+async function handleAvatarUpload(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            userAvatar = evt.target.result;
+            localStorage.setItem('luis_user_avatar', userAvatar);
+            updateUserAvatarUI();
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function updateUserAvatarUI() {
+    // Modal
+    const avatarImg = document.getElementById('user-avatar-img');
+    const avatarIcon = document.getElementById('user-avatar-icon');
+    
+    // Header Desktop
+    const headerImgDesk = document.getElementById('header-user-img-desktop');
+    const headerIconDesk = document.getElementById('header-user-icon-desktop');
+
+    // Header Mobile
+    const headerImgMob = document.getElementById('header-user-img-mobile');
+    const headerIconMob = document.getElementById('header-user-icon-mobile');
+
+    if (userAvatar) {
+        if (avatarImg) { avatarImg.src = userAvatar; avatarImg.classList.remove('hidden'); }
+        if (avatarIcon) avatarIcon.classList.add('hidden');
+
+        if (headerImgDesk) { headerImgDesk.src = userAvatar; headerImgDesk.classList.remove('hidden'); }
+        if (headerIconDesk) headerIconDesk.classList.add('hidden');
+
+        if (headerImgMob) { headerImgMob.src = userAvatar; headerImgMob.classList.remove('hidden'); }
+        if (headerIconMob) headerIconMob.classList.add('hidden');
+    } else {
+        if (avatarImg) avatarImg.classList.add('hidden');
+        if (avatarIcon) avatarIcon.classList.remove('hidden');
+
+        if (headerImgDesk) headerImgDesk.classList.add('hidden');
+        if (headerIconDesk) headerIconDesk.classList.remove('hidden');
+
+        if (headerImgMob) headerImgMob.classList.add('hidden');
+        if (headerIconMob) headerIconMob.classList.remove('hidden');
+    }
+}
+
 function openUserProfileModal() {
     const modal = document.getElementById('user-profile-modal');
     if (modal) {
@@ -353,6 +407,7 @@ function openUserProfileModal() {
         if (targetSel) targetSel.value = targetLang;
         if (uiSel) uiSel.value = uiLang;
 
+        updateUserAvatarUI();
         modal.classList.remove('hidden');
     }
 }
@@ -520,8 +575,6 @@ function applyUITranslations() {
     const setText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
     const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
 
-    setText('label-learning', txt.learningLabel);
-    setText('label-ui-lang', txt.uiLabel);
     setText('lbl-nav-hub', txt.navHub);
     setText('lbl-nav-dash', txt.navDash);
     setText('lbl-nav-cad', txt.navCad);
@@ -633,6 +686,8 @@ function applyUITranslations() {
 
     setText('lbl-modal-studying', txt.lblModalStudying);
     setText('lbl-modal-ui', txt.lblModalUi);
+    setText('btn-refazer-perguntas', txt.refazerPerguntas);
+    setText('btn-modal-close', txt.modalClose);
 }
 
 function openModule(moduleName) {
@@ -746,7 +801,10 @@ function renderListeningDashboard() {
                         <span class="text-[10px] font-black block">${labelMap[item.studyType]}</span>
                     </div>
                 </div>
-                <button onclick="deleteListeningItem('${item.id}', '${item.name}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2.5 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                <div class="flex items-center gap-1">
+                    <button onclick="editListeningItem('${item.id}')" class="opacity-60 hover:opacity-100 hover:text-amber-500 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
+                    <button onclick="deleteListeningItem('${item.id}', '${item.name}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2 transition-colors" title="Excluir"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                </div>
             `;
             container.appendChild(div);
         });
@@ -804,7 +862,10 @@ function renderReadingDashboard() {
                         <span class="text-[10px] font-black text-emerald-600 block">${book.pages} páginas</span>
                     </div>
                 </div>
-                <button onclick="deleteReadingItem('${book.id}', '${book.title}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2.5 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                <div class="flex items-center gap-1">
+                    <button onclick="editReadingItem('${book.id}')" class="opacity-60 hover:opacity-100 hover:text-amber-500 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
+                    <button onclick="deleteReadingItem('${book.id}', '${book.title}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2 transition-colors" title="Excluir"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                </div>
             `;
             container.appendChild(div);
         });
@@ -852,7 +913,8 @@ function renderVocabularyDashboard() {
                 </div>
                 <div class="flex items-center gap-1">
                     <button onclick="speakWord('${v.word}')" class="p-2 opacity-70 hover:opacity-100 text-amber-500 transition-colors" title="Ouvir"><i class="fa-solid fa-volume-high text-xs"></i></button>
-                    <button onclick="deleteVocabularyItem('${v.id}', '${v.word}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2.5 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                    <button onclick="editVocabularyItem('${v.id}')" class="opacity-60 hover:opacity-100 hover:text-amber-500 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
+                    <button onclick="deleteVocabularyItem('${v.id}', '${v.word}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2 transition-colors" title="Excluir"><i class="fa-solid fa-trash-can text-xs"></i></button>
                 </div>
             `;
             container.appendChild(div);
@@ -1134,8 +1196,42 @@ function gradeFlashcard(isCorrect) {
     nextFlashcardRandom();
 }
 
+function editListeningItem(id) {
+    const item = listeningList.find(i => i.id === id);
+    if (!item) return;
+    
+    switchTab('cadastro');
+    document.getElementById('editingMediaId').value = item.id;
+    document.getElementById('mediaName').value = item.name;
+
+    const radios = document.querySelectorAll('input[name="mediaType"]');
+    radios.forEach(r => {
+        if (r.value === item.type) { r.checked = true; toggleMediaType(item.type); }
+    });
+
+    const studyRadios = document.querySelectorAll('input[name="studyType"]');
+    studyRadios.forEach(r => { if (r.value === item.studyType) r.checked = true; });
+
+    if (item.type === 'filme') {
+        document.getElementById('filmHours').value = item.hours;
+        document.getElementById('filmMinutes').value = item.minutes;
+    } else {
+        document.getElementById('seriesSeason').value = item.season || '';
+        document.getElementById('filmHours').value = item.hours;
+        document.getElementById('filmMinutes').value = item.minutes;
+    }
+}
+
+function cancelMediaEdit() {
+    document.getElementById('editingMediaId').value = '';
+    const form = document.getElementById('media-form');
+    if (form) form.reset();
+    switchTab('dashboard');
+}
+
 async function handleListeningFormSubmit(e) {
     e.preventDefault();
+    const editingId = document.getElementById('editingMediaId').value;
     const mediaTypeRadio = document.querySelector('input[name="mediaType"]:checked');
     const mediaType = mediaTypeRadio ? mediaTypeRadio.value : 'filme';
     const nameEl = document.getElementById('mediaName');
@@ -1162,15 +1258,46 @@ async function handleListeningFormSubmit(e) {
         coverBase64 = await new Promise(r => { const reader = new FileReader(); reader.onload = (e) => r(e.target.result); reader.readAsDataURL(coverInput.files[0]); });
     }
 
-    listeningList.push({ id: Date.now().toString(), type: mediaType, name, season, cover: coverBase64, studyType, hours, minutes });
+    if (editingId) {
+        const index = listeningList.findIndex(i => i.id === editingId);
+        if (index !== -1) {
+            listeningList[index].type = mediaType;
+            listeningList[index].name = name;
+            listeningList[index].season = season;
+            listeningList[index].studyType = studyType;
+            listeningList[index].hours = hours;
+            listeningList[index].minutes = minutes;
+            if (coverBase64) listeningList[index].cover = coverBase64;
+        }
+    } else {
+        listeningList.push({ id: Date.now().toString(), type: mediaType, name, season, cover: coverBase64, studyType, hours, minutes });
+    }
+
     saveListeningData();
-    const form = document.getElementById('media-form');
+    cancelMediaEdit();
+}
+
+function editReadingItem(id) {
+    const book = readingList.find(b => b.id === id);
+    if (!book) return;
+
+    switchTab('cadastro');
+    document.getElementById('editingBookId').value = book.id;
+    document.getElementById('bookTitle').value = book.title;
+    document.getElementById('bookAuthor').value = book.author || '';
+    document.getElementById('bookPages').value = book.pages;
+}
+
+function cancelBookEdit() {
+    document.getElementById('editingBookId').value = '';
+    const form = document.getElementById('book-form');
     if (form) form.reset();
     switchTab('dashboard');
 }
 
 async function handleReadingFormSubmit(e) {
     e.preventDefault();
+    const editingId = document.getElementById('editingBookId').value;
     const title = document.getElementById('bookTitle')?.value.trim() || '';
     const author = document.getElementById('bookAuthor')?.value.trim() || '';
     const pages = parseInt(document.getElementById('bookPages')?.value) || 0;
@@ -1181,24 +1308,60 @@ async function handleReadingFormSubmit(e) {
         coverBase64 = await new Promise(r => { const reader = new FileReader(); reader.onload = (e) => r(e.target.result); reader.readAsDataURL(coverInput.files[0]); });
     }
 
-    readingList.push({ id: Date.now().toString(), title, author, pages, cover: coverBase64 });
+    if (editingId) {
+        const index = readingList.findIndex(b => b.id === editingId);
+        if (index !== -1) {
+            readingList[index].title = title;
+            readingList[index].author = author;
+            readingList[index].pages = pages;
+            if (coverBase64) readingList[index].cover = coverBase64;
+        }
+    } else {
+        readingList.push({ id: Date.now().toString(), title, author, pages, cover: coverBase64 });
+    }
+
     saveReadingData();
-    const form = document.getElementById('book-form');
+    cancelBookEdit();
+}
+
+function editVocabularyItem(id) {
+    const item = vocabularyList.find(v => v.id === id);
+    if (!item) return;
+
+    switchTab('cadastro');
+    document.getElementById('editingVocabId').value = item.id;
+    document.getElementById('vocabWord').value = item.word;
+    document.getElementById('vocabTranslation').value = item.translation;
+    document.getElementById('vocabExample').value = item.example || '';
+}
+
+function cancelVocabEdit() {
+    document.getElementById('editingVocabId').value = '';
+    const form = document.getElementById('vocab-form');
     if (form) form.reset();
     switchTab('dashboard');
 }
 
 function handleVocabularyFormSubmit(e) {
     e.preventDefault();
+    const editingId = document.getElementById('editingVocabId').value;
     const word = document.getElementById('vocabWord')?.value.trim() || '';
     const translation = document.getElementById('vocabTranslation')?.value.trim() || '';
     const example = document.getElementById('vocabExample')?.value.trim() || '';
 
-    vocabularyList.push({ id: Date.now().toString(), word, translation, example, correctCount: 0, wrongCount: 0 });
+    if (editingId) {
+        const index = vocabularyList.findIndex(v => v.id === editingId);
+        if (index !== -1) {
+            vocabularyList[index].word = word;
+            vocabularyList[index].translation = translation;
+            vocabularyList[index].example = example;
+        }
+    } else {
+        vocabularyList.push({ id: Date.now().toString(), word, translation, example, correctCount: 0, wrongCount: 0 });
+    }
+
     saveVocabularyData(); 
-    const form = document.getElementById('vocab-form');
-    if (form) form.reset();
-    switchTab('dashboard');
+    cancelVocabEdit();
 }
 
 function deleteListeningItem(id, name) {
@@ -1230,6 +1393,7 @@ window.onload = function() {
     loadLanguageData();
     updateThemeAndFlags();
     applyUITranslations();
+    updateUserAvatarUI();
     openModule('hub');
     updateHeaderStreakUI();
 };
