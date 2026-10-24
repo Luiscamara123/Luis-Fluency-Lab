@@ -6,6 +6,7 @@
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
@@ -18,16 +19,28 @@
   ],
   "icons": [
     {
-      "src": "img/icon-192.png",
+      "src": "./img/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "img/icon-512.png",
+      "src": "./img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./img/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "./img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "shortcuts": [
@@ -35,25 +48,30 @@
       "name": "Treinador de Vocabulário",
       "short_name": "Vocabulário",
       "description": "Pratique com seus flashcards salvos",
-      "url": "./index.html?module=vocabulary",
+      "url": "./index.html",
       "icons": [
         {
-          "src": "img/icon-192.png",
-          "sizes": "192x192"
+          "src": "./img/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
         }
       ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "./img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Tela Principal do Fluency Lab"
     },
     {
-      "name": "Rastreador de Leitura",
-      "short_name": "Leitura",
-      "description": "Verifique seus livros e páginas",
-      "url": "./index.html?module=reading",
-      "icons": [
-        {
-          "src": "img/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "src": "./img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Visão Geral do App"
     }
   ]
 }
