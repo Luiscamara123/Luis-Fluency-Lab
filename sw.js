@@ -1,8 +1,9 @@
-const CACHE_NAME = 'fluency-lab-v2';
+const CACHE_NAME = 'fluency-lab-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './script.js',
+  './style.css',
   './manifest.json',
   './img/icon-192.png',
   './img/icon-512.png'
