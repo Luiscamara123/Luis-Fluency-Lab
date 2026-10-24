@@ -1,13 +1,21 @@
 {
+  "id": "./index.html",
   "name": "Fluency Lab",
   "short_name": "FluencyLab",
   "description": "Plataforma de imersão e rastreador de estudos de idiomas",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#1c1917",
-  "theme_color": "#082c88",
   "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#1e40af",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "categories": [
+    "education",
+    "productivity"
+  ],
   "icons": [
     {
       "src": "img/icon-192.png",
@@ -20,6 +28,32 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Treinador de Vocabulário",
+      "short_name": "Vocabulário",
+      "description": "Pratique com seus flashcards salvos",
+      "url": "./index.html?module=vocabulary",
+      "icons": [
+        {
+          "src": "img/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Rastreador de Leitura",
+      "short_name": "Leitura",
+      "description": "Verifique seus livros e páginas",
+      "url": "./index.html?module=reading",
+      "icons": [
+        {
+          "src": "img/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }
