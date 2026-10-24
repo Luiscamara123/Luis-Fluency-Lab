@@ -517,7 +517,7 @@ function saveVocabStreakData() { localStorage.setItem(`luis_vocab_streak_${targe
 function updateStreakCountdown() {
     const now = new Date();
     const midnight = new Date();
-    midnight.setHours(24, 0, 0, 0); // Próxima meia-noite
+    midnight.setHours(24, 0, 0, 0);
 
     const diff = midnight - now;
 
@@ -610,7 +610,7 @@ function updateThemeAndFlags() {
     setText('hub-welcome', `${welcomeStr} ${meta.name.toUpperCase()}`);
     setText('footer-text', `Fluency Lab • ${meta.edition} • 2026`);
 
-    const iconClass = themeMode === 'dark' ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-stone-700';
+    const iconClass = themeMode === 'dark' ? 'fa-solid fa-sun text-blue-400' : 'fa-solid fa-moon text-stone-700';
     const iconDesk = document.getElementById('theme-icon-desktop');
     const iconMob = document.getElementById('theme-icon-mobile');
     if (iconDesk) iconDesk.className = iconClass;
@@ -797,11 +797,11 @@ function switchTab(tabId) {
     refreshAllDashboards();
 
     if (tabId === 'dashboard') {
-        if (btnDash) btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all shadow nav-btn-active";
-        if (btnCad) btnCad.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all opacity-70 hover:opacity-100";
+        if (btnDash) btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all shadow animated-nav-btn nav-btn-active";
+        if (btnCad) btnCad.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all animated-nav-btn opacity-70 hover:opacity-100";
     } else {
-        if (btnCad) btnCad.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all shadow nav-btn-active";
-        if (btnDash) btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all opacity-70 hover:opacity-100";
+        if (btnCad) btnCad.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all shadow animated-nav-btn nav-btn-active";
+        if (btnDash) btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all animated-nav-btn opacity-70 hover:opacity-100";
     }
 }
 
@@ -857,11 +857,11 @@ function renderListeningDashboard() {
                     <div class="space-y-0.5">
                         <span class="text-xs font-bold block">${item.name} ${item.season ? '('+item.season+')' : ''}</span>
                         <span class="text-[11px] opacity-70 block">${item.hours}h ${item.minutes}m • ${itemDec.toFixed(2)}h</span>
-                        <span class="text-[10px] font-black block">${labelMap[item.studyType]}</span>
+                        <span class="text-[10px] font-black block text-blue-900 dark:text-blue-400">${labelMap[item.studyType]}</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-1">
-                    <button onclick="editListeningItem('${item.id}')" class="opacity-60 hover:opacity-100 hover:text-amber-500 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
+                    <button onclick="editListeningItem('${item.id}')" class="opacity-60 hover:opacity-100 hover:text-blue-900 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
                     <button onclick="deleteListeningItem('${item.id}', '${item.name}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2 transition-colors" title="Excluir"><i class="fa-solid fa-trash-can text-xs"></i></button>
                 </div>
             `;
@@ -869,7 +869,7 @@ function renderListeningDashboard() {
         });
     }
 
-    const chartDonutColor = themeMode === 'dark' ? '#f8fafc' : '#1c1917';
+    const chartDonutColor = themeMode === 'dark' ? '#3b82f6' : '#1e3a8a';
     const chartRestColor = themeMode === 'dark' ? '#1e293b' : '#e2d9cd';
     const gridColor = themeMode === 'dark' ? 'rgba(255,255,255,0.06)' : '#e7dfd3';
 
@@ -890,7 +890,7 @@ function renderListeningDashboard() {
         if (listeningBarChart) listeningBarChart.destroy();
         listeningBarChart = new Chart(ctxBar, {
             type: 'bar',
-            data: { labels: ['💎 DIAMANTE', '🥇 OURO', '🥈 PRATA'], datasets: [{ data: [hoursByStudy['DIAMANTE']/60, hoursByStudy['OURO']/60, hoursByStudy['PRATA']/60], backgroundColor: ['#06b6d4', '#eab308', '#94a3b8'], borderRadius: 6, barThickness: 24 }] },
+            data: { labels: ['💎 DIAMANTE', '🥇 OURO', '🥈 PRATA'], datasets: [{ data: [hoursByStudy['DIAMANTE']/60, hoursByStudy['OURO']/60, hoursByStudy['PRATA']/60], backgroundColor: ['#1e3a8a', '#2563eb', '#60a5fa'], borderRadius: 6, barThickness: 24 }] },
             options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, grid: { color: gridColor }, ticks: { font: { size: 10 } } }, y: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ' ' + c.parsed.x.toFixed(2) + 'h' } } } }
         });
     }
@@ -918,11 +918,11 @@ function renderReadingDashboard() {
                     <div class="space-y-0.5">
                         <span class="text-xs font-bold block">${book.title}</span>
                         ${book.author ? `<span class="text-[11px] opacity-70 block">${book.author}</span>` : ''}
-                        <span class="text-[10px] font-black text-emerald-600 block">${book.pages} páginas</span>
+                        <span class="text-[10px] font-black text-blue-900 dark:text-blue-400 block">${book.pages} páginas</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-1">
-                    <button onclick="editReadingItem('${book.id}')" class="opacity-60 hover:opacity-100 hover:text-amber-500 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
+                    <button onclick="editReadingItem('${book.id}')" class="opacity-60 hover:opacity-100 hover:text-blue-900 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
                     <button onclick="deleteReadingItem('${book.id}', '${book.title}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2 transition-colors" title="Excluir"><i class="fa-solid fa-trash-can text-xs"></i></button>
                 </div>
             `;
@@ -937,7 +937,7 @@ function renderReadingDashboard() {
         if (readingBarChart) readingBarChart.destroy();
         readingBarChart = new Chart(ctxBar, {
             type: 'bar',
-            data: { labels: readingList.map(b => b.title.length > 15 ? b.title.substring(0, 15) + '...' : b.title), datasets: [{ data: readingList.map(b => Number(b.pages)), backgroundColor: '#10b981', borderRadius: 6, barThickness: 20 }] },
+            data: { labels: readingList.map(b => b.title.length > 15 ? b.title.substring(0, 15) + '...' : b.title), datasets: [{ data: readingList.map(b => Number(b.pages)), backgroundColor: '#1e3a8a', borderRadius: 6, barThickness: 20 }] },
             options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: gridColor }, ticks: { font: { size: 10 } } }, x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ' ' + c.parsed.y + ' páginas' } } } }
         });
     }
@@ -967,12 +967,12 @@ function renderVocabularyDashboard() {
                     <div class="space-y-0.5">
                         <span class="text-xs font-bold block">${v.word}</span>
                         <span class="text-[11px] opacity-70 block">${v.translation}</span>
-                        <span class="text-[10px] opacity-80 block">${txt.correctHits} <strong class="text-emerald-600 font-black">${v.correctCount || 0}</strong> | ${txt.wrongHits} <strong class="text-red-600 font-black">${v.wrongCount || 0}</strong></span>
+                        <span class="text-[10px] opacity-80 block">${txt.correctHits} <strong class="text-blue-900 dark:text-blue-400 font-black">${v.correctCount || 0}</strong> | ${txt.wrongHits} <strong class="text-red-600 font-black">${v.wrongCount || 0}</strong></span>
                     </div>
                 </div>
                 <div class="flex items-center gap-1">
-                    <button onclick="speakWord('${v.word}')" class="p-2 opacity-70 hover:opacity-100 text-amber-500 transition-colors" title="Ouvir"><i class="fa-solid fa-volume-high text-xs"></i></button>
-                    <button onclick="editVocabularyItem('${v.id}')" class="opacity-60 hover:opacity-100 hover:text-amber-500 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
+                    <button onclick="speakWord('${v.word}')" class="p-2 opacity-70 hover:opacity-100 text-blue-900 dark:text-blue-400 transition-colors" title="Ouvir"><i class="fa-solid fa-volume-high text-xs"></i></button>
+                    <button onclick="editVocabularyItem('${v.id}')" class="opacity-60 hover:opacity-100 hover:text-blue-900 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
                     <button onclick="deleteVocabularyItem('${v.id}', '${v.word}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2 transition-colors" title="Excluir"><i class="fa-solid fa-trash-can text-xs"></i></button>
                 </div>
             `;
@@ -1108,10 +1108,10 @@ function openStreakModal() {
         
         if (noticeEl) {
             if (isDoneToday) {
-                noticeEl.className = "p-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs font-medium leading-relaxed";
+                noticeEl.className = "p-3.5 rounded-xl border border-blue-500/30 bg-blue-500/10 text-blue-900 dark:text-blue-400 text-xs font-medium leading-relaxed";
                 noticeEl.innerHTML = "🔥 <strong>Ofensiva mantida!</strong> Você já praticou o vocabulário hoje e garantiu o seu fogo aceso.";
             } else {
-                noticeEl.className = "p-3.5 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400 text-xs font-medium leading-relaxed";
+                noticeEl.className = "p-3.5 rounded-xl border border-blue-900/30 bg-blue-900/10 text-blue-900 dark:text-blue-400 text-xs font-medium leading-relaxed";
                 noticeEl.innerHTML = "🔥 Para acender o fogo e manter sua ofensiva hoje, você precisa <strong>completar a tarefa de praticar vocabulário</strong>!";
             }
         }
@@ -1134,8 +1134,8 @@ function openStreakModal() {
                 let iconColor = 'text-stone-400 opacity-40';
 
                 if (isDone) {
-                    cardClass = 'bg-amber-500/10 border-amber-500 text-amber-600 font-bold';
-                    iconColor = 'text-amber-500 opacity-100 animate-pulse';
+                    cardClass = 'bg-blue-900/10 border-blue-900 text-blue-900 dark:text-blue-400 font-bold';
+                    iconColor = 'text-blue-900 dark:text-blue-400 opacity-100 animate-pulse';
                 } else if (isMissed) {
                     cardClass = 'bg-red-500/10 border-red-500 text-red-600 font-bold';
                     iconColor = 'text-red-500 opacity-100';
@@ -1213,9 +1213,9 @@ function renderAchievementsModule() {
         if (currentAchFilter !== 'all' && ach.category !== currentAchFilter) return;
 
         const div = document.createElement('div');
-        div.className = `p-4 rounded-2xl border-2 flex flex-col items-center text-center space-y-2 transition-all ${isUnlocked ? 'sub-card border-amber-500/50 shadow-md' : 'opacity-40 grayscale sub-card'}`;
+        div.className = `p-4 rounded-2xl border-2 flex flex-col items-center text-center space-y-2 transition-all ${isUnlocked ? 'sub-card border-blue-900/50 shadow-md' : 'opacity-40 grayscale sub-card'}`;
         div.innerHTML = `
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-amber-500 font-bold text-lg ${isUnlocked ? 'bg-amber-500/10' : 'bg-stone-500/10'}">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-blue-900 dark:text-blue-400 font-bold text-lg ${isUnlocked ? 'bg-blue-900/10' : 'bg-stone-500/10'}">
                 <i class="fa-solid ${ach.icon}"></i>
             </div>
             <span class="text-xs font-black block leading-tight">${ach.title}</span>
@@ -1249,8 +1249,8 @@ function updateHeaderStreakUI() {
     if (countDesk) countDesk.innerText = count;
 
     if (isAccessedToday) {
-        if (iconMobile) iconMobile.className = "fa-solid fa-fire text-amber-500 opacity-100 animate-pulse";
-        if (iconDesk) iconDesk.className = "fa-solid fa-fire text-amber-500 opacity-100 animate-pulse";
+        if (iconMobile) iconMobile.className = "fa-solid fa-fire text-blue-900 dark:text-blue-400 opacity-100 animate-pulse";
+        if (iconDesk) iconDesk.className = "fa-solid fa-fire text-blue-900 dark:text-blue-400 opacity-100 animate-pulse";
     } else {
         if (iconMobile) iconMobile.className = "fa-solid fa-fire text-stone-400 opacity-60";
         if (iconDesk) iconDesk.className = "fa-solid fa-fire text-stone-400 opacity-60";
@@ -1461,6 +1461,25 @@ async function deleteVocabularyItem(id, word) {
     }
 }
 
+/* --- CONTROLE DE VELOCIDADE DO CARROSSEL POR SETAS (DESKTOP) --- */
+function accelerateCarousel(direction) {
+    const track = document.getElementById('infinite-carousel-track');
+    if (!track) return;
+    track.classList.add('fast-mode');
+    if (direction === 'left') {
+        track.style.animationDirection = 'reverse';
+    } else {
+        track.style.animationDirection = 'normal';
+    }
+}
+
+function normalCarouselSpeed() {
+    const track = document.getElementById('infinite-carousel-track');
+    if (!track) return;
+    track.classList.remove('fast-mode');
+    track.style.animationDirection = 'normal';
+}
+
 window.onload = async function() {
     await initDB();
     checkOnboardingStatus();
@@ -1471,7 +1490,6 @@ window.onload = async function() {
     openModule('hub');
     updateHeaderStreakUI();
 
-    // Iniciar o relógio regressivo da ofensiva a cada segundo
     setInterval(updateStreakCountdown, 1000);
     updateStreakCountdown();
 };

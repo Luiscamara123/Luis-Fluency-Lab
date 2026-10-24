@@ -12,7 +12,7 @@
     --border-color: #e7dfd3;
     --card-bg: #f7f3ed;
     --sub-card-bg: #efe8de;
-    --accent-bar: linear-gradient(90deg, #1e3a8a, #b91c1c);
+    --accent-bar: linear-gradient(90deg, #1e3a8a, #1d4ed8);
     --btn-primary: #1e3a8a;
 }
 
@@ -23,8 +23,8 @@
     --border-color: #ebdcc9;
     --card-bg: #fcf5e8;
     --sub-card-bg: #f5e8d3;
-    --accent-bar: linear-gradient(90deg, #c2410c, #eab308, #c2410c);
-    --btn-primary: #c2410c;
+    --accent-bar: linear-gradient(90deg, #1e3a8a, #3b82f6, #1e3a8a);
+    --btn-primary: #1e3a8a;
 }
 
 /* TEMA FRANÇA */
@@ -34,7 +34,7 @@
     --border-color: #e5e7eb;
     --card-bg: #f3f4f6;
     --sub-card-bg: #e5e7eb;
-    --accent-bar: linear-gradient(90deg, #1d4ed8, #ffffff, #dc2626);
+    --accent-bar: linear-gradient(90deg, #1d4ed8, #ffffff, #1e3a8a);
     --btn-primary: #1d4ed8;
 }
 
@@ -45,8 +45,8 @@
     --border-color: #f3dcdb;
     --card-bg: #fbf0f0;
     --sub-card-bg: #f7e2e2;
-    --accent-bar: linear-gradient(90deg, #dc2626, #ffffff, #dc2626);
-    --btn-primary: #9f1239;
+    --accent-bar: linear-gradient(90deg, #1e3a8a, #ffffff, #1e3a8a);
+    --btn-primary: #1e3a8a;
 }
 
 /* TEMA BRASIL */
@@ -56,7 +56,7 @@
     --border-color: #d1e7d6;
     --card-bg: #eaf5ec;
     --sub-card-bg: #dbece0;
-    --accent-bar: linear-gradient(90deg, #15803d, #eab308, #1e40af);
+    --accent-bar: linear-gradient(90deg, #15803d, #1e3a8a, #1e40af);
     --btn-primary: #15803d;
 }
 
@@ -67,7 +67,7 @@
     --border-color: #262f3f;
     --card-bg: #111822;
     --sub-card-bg: #0d121b;
-    --btn-primary: #3b82f6;
+    --btn-primary: #1e3a8a;
 }
 
 body {
@@ -76,7 +76,7 @@ body {
     font-family: var(--font-sans);
 }
 
-.app-header, .panel-card, .vintage-card, .sub-card, .dropdown-box, .nav-container, .footer-box {
+.panel-card, .sub-card {
     background-color: var(--card-bg);
     border-color: var(--border-color);
 }
@@ -96,72 +96,71 @@ input, select, textarea {
     color: #f1f5f9;
 }
 
-.flag-accent-bar {
-    background: var(--accent-bar);
-}
-
-.btn-save, .btn-random {
-    background-color: var(--btn-primary);
-}
-
-.btn-save:hover, .btn-random:hover {
-    filter: brightness(1.15);
-}
-
-/* ANIMAÇÃO DINÂMICA DO FOGUINHO */
-@keyframes duolingoFlame {
-    0% { transform: scale(0.3) rotate(-15deg); filter: drop-shadow(0 0 0px rgba(245, 158, 11, 0)); opacity: 0; }
-    40% { transform: scale(1.25) rotate(10deg); filter: drop-shadow(0 0 30px rgba(245, 158, 11, 0.9)); opacity: 1; }
-    70% { transform: scale(0.95) rotate(-5deg); filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.6)); }
-    100% { transform: scale(1) rotate(0deg); filter: shadow(0 0 20px rgba(245, 158, 11, 0.7)); opacity: 1; }
-}
-
-.flame-duolingo-animation {
-    animation: duolingoFlame 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-/* FLASHCARD 3D */
-.perspective-1000 { perspective: 1000px; }
-.flip-card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    transform-style: preserve-3d;
-}
-.flip-card-inner.flipped { transform: rotateY(180deg); }
-.flip-card-front, .flip-card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    background-color: var(--card-bg);
-    border-color: var(--border-color);
-}
-.flip-card-back { transform: rotateY(180deg); }
-.decor-corner { color: var(--border-color); }
-
+/* ESTADOS ATIVOS DE FILTROS E OPÇÕES (AZUL ESCURO) */
 .ach-filter-active {
-    background-color: #f59e0b !important;
+    background-color: #1e3a8a !important;
     color: #ffffff !important;
-    border-color: #d97706 !important;
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    border-color: #172554 !important;
 }
 
 .ob-option-selected {
-    border-color: #f59e0b !important;
-    background-color: rgba(245, 158, 11, 0.15) !important;
+    border-color: #1e3a8a !important;
+    background-color: rgba(30, 58, 138, 0.15) !important;
 }
 
-/* FOTOS DE PERFIL - MOBILE & DESKTOP */
-#header-user-img-desktop,
-#header-user-img-mobile,
-#user-avatar-img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
+/* ANIMAÇÃO E ESTILO DOS BOTÕES NAV (DASHBOARD & CADASTRAR) */
+.animated-nav-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-btn-active {
+    background-color: #1e3a8a !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.35);
+}
+
+.animated-nav-btn:hover:not(.nav-btn-active) {
+    background-color: rgba(30, 58, 138, 0.12);
+    color: #1e3a8a;
+}
+
+.mode-dark .animated-nav-btn:hover:not(.nav-btn-active) {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+}
+
+/* PERSPECTIVA PARA O FLIP CARD */
+.perspective { perspective: 1000px; }
+.transform-style-3d { transform-style: preserve-3d; }
+.backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.rotate-y-180 { transform: rotateY(180deg); }
+
+.panel-card.flipped #flip-card-inner,
+#flip-card-inner.flipped {
+    transform: rotateY(180deg);
+}
+
+/* --- CARROSSEL INFINITO CONTÍNUO E RÁPIDO --- */
+@keyframes continuousScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+#infinite-carousel-track {
+    display: flex;
+    width: max-content;
+    animation: continuousScroll 14s linear infinite;
+}
+
+/* Pausa ao passar o mouse */
+#infinite-carousel-track:hover {
+    animation-play-state: paused;
+}
+
+/* Modo acelerado ativado pelas setas */
+#infinite-carousel-track.fast-mode {
+    animation: continuousScroll 4s linear infinite;
+    animation-play-state: running;
 }
