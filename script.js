@@ -25,8 +25,7 @@ const UI_TEXTS = {
     pt: {
         learningLabel: "Estudando", uiLabel: "Interface",
         navHub: "Início", navDash: "Dashboard", navCad: "Cadastrar",
-        welcome: "BEM-VINDO, {NAME} •",
-        headerAch: "Conquistas",
+        welcome: "BEM-VINDO, {NAME} •", headerAch: "Conquistas",
         hubTitle: "O que você deseja registrar ou praticar hoje?",
         hubDesc: "Selecione um módulo abaixo para acompanhar seu progresso.",
         cardListeningGoal: "META DE HORAS", cardListeningTitle: "Rastreador de Escuta", cardListeningDesc: "Filmes, séries e podcasts assistidos no idioma.",
@@ -63,8 +62,7 @@ const UI_TEXTS = {
     en: {
         learningLabel: "Studying", uiLabel: "Interface",
         navHub: "Home", navDash: "Dashboard", navCad: "Add New",
-        welcome: "WELCOME, {NAME} •",
-        headerAch: "Achievements",
+        welcome: "WELCOME, {NAME} •", headerAch: "Achievements",
         hubTitle: "What would you like to track or practice today?",
         hubDesc: "Select a module below to monitor your progress.",
         cardListeningGoal: "HOURS GOAL", cardListeningTitle: "LISTENING TRACKER", cardListeningDesc: "Podcasts & series watched in target language. Track listening time.",
@@ -101,8 +99,7 @@ const UI_TEXTS = {
     es: {
         learningLabel: "Estudando", uiLabel: "Interfaz",
         navHub: "Inicio", navDash: "Panel", navCad: "Añadir",
-        welcome: "BIENVENIDO, {NAME} •",
-        headerAch: "Logros",
+        welcome: "BIENVENIDO, {NAME} •", headerAch: "Logros",
         hubTitle: "¿Qué quieres registrar o practicar hoy?",
         hubDesc: "Selecciona un módulo a continuación para seguir tu progreso.",
         cardListeningGoal: "META DE HORAS", cardListeningTitle: "Seguimiento de Escucha", cardListeningDesc: "Podcasts, series y vídeos en el idioma.",
@@ -139,8 +136,7 @@ const UI_TEXTS = {
     fr: {
         learningLabel: "Apprentissage", uiLabel: "Interface",
         navHub: "Accueil", navDash: "Tableau", navCad: "Ajouter",
-        welcome: "BIENVENUE, {NAME} •",
-        headerAch: "Succès",
+        welcome: "BIENVENUE, {NAME} •", headerAch: "Succès",
         hubTitle: "Que souhaitez-vous enregistrer ou pratiquer aujourd'hui ?",
         hubDesc: "Sélectionnez un module ci-dessous pour suivre vos progrès.",
         cardListeningGoal: "OBJECTIF HEURES", cardListeningTitle: "Listening Tracker", cardListeningDesc: "Films et séries regardés dans la langue cible.",
@@ -177,8 +173,7 @@ const UI_TEXTS = {
     ja: {
         learningLabel: "学習モード", uiLabel: "インターフェース",
         navHub: "ホーム", navDash: "ダッシュボード", navCad: "新規登録",
-        welcome: "ようこそ、{NAME}さん •",
-        headerAch: "実績",
+        welcome: "ようこそ、{NAME}さん •", headerAch: "実績",
         hubTitle: "今日は何を記録・練習しますか？",
         hubDesc: "下のモジュールを選択して、進捗を記録しましょう。",
         cardListeningGoal: "目標時間", cardListeningTitle: "リスニングトラッカー", cardListeningDesc: "アニメ・ドラマ・ポッドキャストで聞き取り練習。",
@@ -213,6 +208,57 @@ const UI_TEXTS = {
         refazerPerguntas: "オンボーディングやり直し", modalClose: "閉じる"
     }
 };
+
+/* --- ESTRUTURA INDEXEDDB --- */
+const DB_NAME = 'FluencyLabDB';
+const DB_VERSION = 1;
+let db = null;
+
+function initDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onupgradeneeded = (e) => {
+            const database = e.target.result;
+            if (!database.objectStoreNames.contains('listening')) database.createObjectStore('listening', { keyPath: 'storeKey' });
+            if (!database.objectStoreNames.contains('reading')) database.createObjectStore('reading', { keyPath: 'storeKey' });
+            if (!database.objectStoreNames.contains('vocabulary')) database.createObjectStore('vocabulary', { keyPath: 'storeKey' });
+        };
+        request.onsuccess = (e) => {
+            db = e.target.result;
+            resolve(db);
+        };
+        request.onerror = (e) => reject(e.target.error);
+    });
+}
+
+function getFromDB(storeName, key) {
+    return new Promise((resolve) => {
+        if (!db) { resolve(null); return; }
+        const tx = db.transaction(storeName, 'readonly');
+        const store = tx.objectStore(storeName);
+        const req = store.get(key);
+        req.onsuccess = () => resolve(req.result ? req.result.data : null);
+        req.onerror = () => resolve(null);
+    });
+}
+
+function saveToDB(storeName, key, data) {
+    return new Promise((resolve) => {
+        if (!db) { resolve(); return; }
+        const tx = db.transaction(storeName, 'readwrite');
+        const store = tx.objectStore(storeName);
+        store.put({ storeKey: key, data });
+        tx.oncomplete = () => resolve();
+    });
+}
+
+/* --- LOGICA DE GERENCIAMENTO DE DADOS --- */
+let listeningList = [];
+let readingList = [];
+let vocabularyList = [];
+let vocabStreakData = {}; 
+let currentVocabularyIndex = 0;
+let isCardFlipped = false;
 
 function generate100Achievements() {
     const list = [];
@@ -257,14 +303,6 @@ function generate100Achievements() {
 
 const ACHIEVEMENTS_DATA = generate100Achievements();
 
-let listeningList = [];
-let readingList = [];
-let vocabularyList = [];
-let vocabStreakData = {}; 
-let currentVocabularyIndex = 0;
-let isCardFlipped = false;
-
-// ONBOARDING LOGIC
 function checkOnboardingStatus() {
     const isCompleted = localStorage.getItem('luis_onboarding_completed');
     const overlay = document.getElementById('onboarding-overlay');
@@ -321,7 +359,7 @@ function selectOnboardingOrigin(countryLang) {
     });
 }
 
-function finishOnboarding() {
+async function finishOnboarding() {
     targetLang = obTempTarget;
     userOrigin = obTempOrigin;
     uiLang = obTempOrigin; 
@@ -335,7 +373,7 @@ function finishOnboarding() {
     const overlay = document.getElementById('onboarding-overlay');
     if (overlay) overlay.classList.add('hidden');
 
-    loadLanguageData();
+    await loadLanguageData();
     updateThemeAndFlags();
     applyUITranslations();
     refreshAllDashboards();
@@ -347,7 +385,6 @@ function resetOnboardingData() {
     checkOnboardingStatus();
 }
 
-// UPLOAD DE FOTO DE PERFIL E SINCRONIZAÇÃO NO HEADER
 async function handleAvatarUpload(e) {
     const file = e.target.files[0];
     if (file) {
@@ -414,12 +451,12 @@ function closeUserProfileModal() {
     if (modal) modal.classList.add('hidden');
 }
 
-function loadLanguageData() {
-    // Carrega a meta específica do idioma ativo
+async function loadLanguageData() {
     targetListeningHours = Number(localStorage.getItem(`luis_target_listening_hours_${targetLang}`)) || 1000;
     
-    listeningList = JSON.parse(localStorage.getItem(`luis_listening_${targetLang}`)) || [];
-    readingList = JSON.parse(localStorage.getItem(`luis_reading_${targetLang}`)) || [];
+    listeningList = await getFromDB('listening', `luis_listening_${targetLang}`) || JSON.parse(localStorage.getItem(`luis_listening_${targetLang}`)) || [];
+    readingList = await getFromDB('reading', `luis_reading_${targetLang}`) || JSON.parse(localStorage.getItem(`luis_reading_${targetLang}`)) || [];
+    vocabularyList = await getFromDB('vocabulary', `luis_vocab_${targetLang}`) || JSON.parse(localStorage.getItem(`luis_vocab_${targetLang}`)) || [];
     
     vocabStreakData = JSON.parse(localStorage.getItem(`luis_vocab_streak_${targetLang}`)) || { 
         lastPracticeDate: '', 
@@ -431,7 +468,6 @@ function loadLanguageData() {
     };
 
     checkMidnightAndTolerance();
-    vocabularyList = JSON.parse(localStorage.getItem(`luis_vocab_${targetLang}`)) || [];
 }
 
 function checkMidnightAndTolerance() {
@@ -472,9 +508,9 @@ function checkMidnightAndTolerance() {
     }
 }
 
-function saveListeningData() { localStorage.setItem(`luis_listening_${targetLang}`, JSON.stringify(listeningList)); }
-function saveReadingData() { localStorage.setItem(`luis_reading_${targetLang}`, JSON.stringify(readingList)); }
-function saveVocabularyData() { localStorage.setItem(`luis_vocab_${targetLang}`, JSON.stringify(vocabularyList)); }
+async function saveListeningData() { await saveToDB('listening', `luis_listening_${targetLang}`, listeningList); }
+async function saveReadingData() { await saveToDB('reading', `luis_reading_${targetLang}`, readingList); }
+async function saveVocabularyData() { await saveToDB('vocabulary', `luis_vocab_${targetLang}`, vocabularyList); }
 function saveVocabStreakData() { localStorage.setItem(`luis_vocab_streak_${targetLang}`, JSON.stringify(vocabStreakData)); }
 
 function speakWord(wordText) {
@@ -493,7 +529,6 @@ function speakCurrentWord() {
     if (item && item.word) speakWord(item.word);
 }
 
-// Salva a meta de listening de forma isolada para cada idioma
 function updateListeningGoal(newVal) {
     const val = Number(newVal);
     if (val > 0) {
@@ -503,18 +538,18 @@ function updateListeningGoal(newVal) {
     }
 }
 
-function changeTargetLanguage(newLang) {
+async function changeTargetLanguage(newLang) {
     targetLang = newLang;
     localStorage.setItem('luis_target_language', targetLang);
-    loadLanguageData();
+    await loadLanguageData();
     updateThemeAndFlags();
     refreshAllDashboards();
 }
 
-function changeUILanguage(newUILang) {
+async function changeUILanguage(newUILang) {
     uiLang = newUILang;
     localStorage.setItem('luis_ui_language', uiLang);
-    loadLanguageData();
+    await loadLanguageData();
     applyUITranslations();
     refreshAllDashboards();
 }
@@ -1185,13 +1220,13 @@ function updateHeaderStreakUI() {
     }
 }
 
-function gradeFlashcard(isCorrect) {
+async function gradeFlashcard(isCorrect) {
     if (vocabularyList.length === 0) return;
     const item = vocabularyList[currentVocabularyIndex];
     if (isCorrect) item.correctCount = (item.correctCount || 0) + 1;
     else item.wrongCount = (item.wrongCount || 0) + 1;
     
-    saveVocabularyData();
+    await saveVocabularyData();
     recordVocabPracticeToday(); 
     renderVocabularyDashboard();
     nextFlashcardRandom();
@@ -1274,7 +1309,7 @@ async function handleListeningFormSubmit(e) {
         listeningList.push({ id: Date.now().toString(), type: mediaType, name, season, cover: coverBase64, studyType, hours, minutes });
     }
 
-    saveListeningData();
+    await saveListeningData();
     cancelMediaEdit();
 }
 
@@ -1321,7 +1356,7 @@ async function handleReadingFormSubmit(e) {
         readingList.push({ id: Date.now().toString(), title, author, pages, cover: coverBase64 });
     }
 
-    saveReadingData();
+    await saveReadingData();
     cancelBookEdit();
 }
 
@@ -1343,7 +1378,7 @@ function cancelVocabEdit() {
     switchTab('dashboard');
 }
 
-function handleVocabularyFormSubmit(e) {
+async function handleVocabularyFormSubmit(e) {
     e.preventDefault();
     const editingId = document.getElementById('editingVocabId').value;
     const word = document.getElementById('vocabWord')?.value.trim() || '';
@@ -1361,37 +1396,38 @@ function handleVocabularyFormSubmit(e) {
         vocabularyList.push({ id: Date.now().toString(), word, translation, example, correctCount: 0, wrongCount: 0 });
     }
 
-    saveVocabularyData(); 
+    await saveVocabularyData(); 
     cancelVocabEdit();
 }
 
-function deleteListeningItem(id, name) {
+async function deleteListeningItem(id, name) {
     if (confirm(`Tem certeza que quer excluir "${name}"?`)) {
         listeningList = listeningList.filter(i => i.id !== id);
-        saveListeningData();
+        await saveListeningData();
         renderListeningDashboard();
     }
 }
 
-function deleteReadingItem(id, title) {
+async function deleteReadingItem(id, title) {
     if (confirm(`Tem certeza que quer excluir o livro "${title}"?`)) {
         readingList = readingList.filter(i => i.id !== id);
-        saveReadingData();
+        await saveReadingData();
         renderReadingDashboard();
     }
 }
 
-function deleteVocabularyItem(id, word) {
+async function deleteVocabularyItem(id, word) {
     if (confirm(`Tem certeza que quer excluir a palavra "${word}"?`)) {
         vocabularyList = vocabularyList.filter(i => i.id !== id);
-        saveVocabularyData();
+        await saveVocabularyData();
         renderVocabularyDashboard();
     }
 }
 
-window.onload = function() {
+window.onload = async function() {
+    await initDB();
     checkOnboardingStatus();
-    loadLanguageData();
+    await loadLanguageData();
     updateThemeAndFlags();
     applyUITranslations();
     updateUserAvatarUI();
