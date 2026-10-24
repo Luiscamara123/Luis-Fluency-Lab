@@ -9,11 +9,6 @@
     <meta name="theme-color" content="#0f172a">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <!-- Configurações PWA -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#f59e0b">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <script>
       if ('serviceWorker' in navigator) {
@@ -204,10 +199,11 @@
         </div>
     </div>
 
-    <!-- MODAL DE DETALHES DA OFENSIVA -->
+    <!-- MODAL DE DETALHES DA OFENSIVA (COM TIMER REGRESSIVO E AVISO DE VOCABULÁRIO) -->
     <div id="streak-details-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden">
         <div class="max-w-md w-full mx-4 p-7 rounded-3xl border-2 shadow-2xl space-y-5 panel-card relative">
             <button onclick="closeStreakModal()" class="absolute top-4 right-4 opacity-70 hover:opacity-100 text-sm font-bold"><i class="fa-solid fa-xmark text-lg"></i></button>
+            
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 rounded-2xl border flex items-center justify-center text-2xl text-amber-500 card-icon-box">
                     <i class="fa-solid fa-fire"></i>
@@ -216,6 +212,17 @@
                     <h3 class="text-lg font-black font-serif" id="modal-streak-title">Estatísticas de Ofensiva</h3>
                     <p class="text-[11px] opacity-75" id="modal-streak-sub">Controlo diário e histórico persistente</p>
                 </div>
+            </div>
+
+            <!-- MENSAGEM SOBRE O VOCABULÁRIO -->
+            <div id="streak-vocab-notice" class="p-3.5 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400 text-xs font-medium leading-relaxed">
+                🔥 Para acender o fogo e manter sua ofensiva hoje, você precisa <strong>completar a tarefa de praticar vocabulário</strong>!
+            </div>
+
+            <!-- CONTADOR REGRESSIVO ATÉ AS 00:00 -->
+            <div class="p-3.5 bg-stone-950/80 rounded-xl border border-stone-800 text-center text-white">
+                <span class="text-[10px] uppercase tracking-wider text-stone-400 font-semibold block mb-1">Tempo restante para o reset (00:00):</span>
+                <span id="streak-countdown-timer" class="text-2xl font-mono font-bold text-amber-400">00:00:00</span>
             </div>
 
             <div class="grid grid-cols-2 gap-3 text-center">

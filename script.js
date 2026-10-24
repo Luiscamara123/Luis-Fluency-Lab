@@ -513,6 +513,29 @@ async function saveReadingData() { await saveToDB('reading', `luis_reading_${tar
 async function saveVocabularyData() { await saveToDB('vocabulary', `luis_vocab_${targetLang}`, vocabularyList); }
 function saveVocabStreakData() { localStorage.setItem(`luis_vocab_streak_${targetLang}`, JSON.stringify(vocabStreakData)); }
 
+/* --- CONTADOR REGRESSIVO ATÉ ÀS 00:00 --- */
+function updateStreakCountdown() {
+    const now = new Date();
+    const midnight = new Date();
+    midnight.setHours(24, 0, 0, 0); // Próxima meia-noite
+
+    const diff = midnight - now;
+
+    if (diff <= 0) {
+        checkMidnightAndTolerance();
+        return;
+    }
+
+    const hours = String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+    const minutes = String(Math.floor((diff / 1000 / 60) % 60)).padStart(2, '0');
+    const seconds = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+
+    const timerEl = document.getElementById('streak-countdown-timer');
+    if (timerEl) {
+        timerEl.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+}
+
 function speakWord(wordText) {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
@@ -1079,6 +1102,20 @@ function openStreakModal() {
         document.getElementById('modal-streak-count').innerText = `${vocabStreakData.streakCount || 0} dias`;
         document.getElementById('modal-missed-count').innerText = `${vocabStreakData.missedThisMonth || 0} / 3`;
         
+        const todayStr = new Date().toISOString().split('T')[0];
+        const isDoneToday = vocabStreakData.lastPracticeDate === todayStr;
+        const noticeEl = document.getElementById('streak-vocab-notice');
+        
+        if (noticeEl) {
+            if (isDoneToday) {
+                noticeEl.className = "p-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs font-medium leading-relaxed";
+                noticeEl.innerHTML = "🔥 <strong>Ofensiva mantida!</strong> Você já praticou o vocabulário hoje e garantiu o seu fogo aceso.";
+            } else {
+                noticeEl.className = "p-3.5 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400 text-xs font-medium leading-relaxed";
+                noticeEl.innerHTML = "🔥 Para acender o fogo e manter sua ofensiva hoje, você precisa <strong>completar a tarefa de praticar vocabulário</strong>!";
+            }
+        }
+
         const weekContainer = document.getElementById('week-days-container');
         if (weekContainer) {
             weekContainer.innerHTML = '';
@@ -1433,4 +1470,8 @@ window.onload = async function() {
     updateUserAvatarUI();
     openModule('hub');
     updateHeaderStreakUI();
+
+    // Iniciar o relógio regressivo da ofensiva a cada segundo
+    setInterval(updateStreakCountdown, 1000);
+    updateStreakCountdown();
 };
