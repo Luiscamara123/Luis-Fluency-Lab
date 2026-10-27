@@ -8,7 +8,7 @@ let userOrigin = localStorage.getItem('luis_user_origin') || 'pt';
 let userAvatar = localStorage.getItem('luis_user_avatar') || '';
 let targetLang = localStorage.getItem('luis_target_language') || 'en';
 let uiLang = localStorage.getItem('luis_ui_language') || 'pt';
-let themeMode = localStorage.getItem('luis_theme_mode') || 'light';
+let themeMode = localStorage.getItem('luis_theme_mode') || 'dark';
 
 let obTempTarget = targetLang;
 let obTempOrigin = userOrigin;
@@ -209,7 +209,6 @@ const UI_TEXTS = {
     }
 };
 
-/* --- ESTRUTURA INDEXEDDB --- */
 const DB_NAME = 'FluencyLabDB';
 const DB_VERSION = 1;
 let db = null;
@@ -252,7 +251,6 @@ function saveToDB(storeName, key, data) {
     });
 }
 
-/* --- LOGICA DE GERENCIAMENTO DE DADOS --- */
 let listeningList = [];
 let readingList = [];
 let vocabularyList = [];
@@ -513,7 +511,6 @@ async function saveReadingData() { await saveToDB('reading', `luis_reading_${tar
 async function saveVocabularyData() { await saveToDB('vocabulary', `luis_vocab_${targetLang}`, vocabularyList); }
 function saveVocabStreakData() { localStorage.setItem(`luis_vocab_streak_${targetLang}`, JSON.stringify(vocabStreakData)); }
 
-/* --- CONTADOR REGRESSIVO ATÉ ÀS 00:00 --- */
 function updateStreakCountdown() {
     const now = new Date();
     const midnight = new Date();
@@ -594,9 +591,6 @@ function updateThemeAndFlags() {
     setImgSrc('listening-flag-img', meta.flagImg);
     setImgSrc('reading-flag-img', meta.flagImg);
     setImgSrc('vocab-flag-img', meta.flagImg);
-    
-    const watermark = document.getElementById('bg-flag-watermark');
-    if (watermark) watermark.style.backgroundImage = `url('${meta.flagImg}')`;
 
     const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
     const welcomeStr = txt.welcome.replace('{NAME}', userName.toUpperCase());
@@ -610,7 +604,7 @@ function updateThemeAndFlags() {
     setText('hub-welcome', `${welcomeStr} ${meta.name.toUpperCase()}`);
     setText('footer-text', `Fluency Lab • ${meta.edition} • 2026`);
 
-    const iconClass = themeMode === 'dark' ? 'fa-solid fa-sun text-blue-400' : 'fa-solid fa-moon text-stone-700';
+    const iconClass = themeMode === 'dark' ? 'fa-solid fa-sun text-blue-400' : 'fa-solid fa-moon text-slate-700';
     const iconDesk = document.getElementById('theme-icon-desktop');
     const iconMob = document.getElementById('theme-icon-mobile');
     if (iconDesk) iconDesk.className = iconClass;
@@ -638,7 +632,6 @@ function applyUITranslations() {
     setText('lbl-nav-dash', txt.navDash);
     setText('lbl-nav-cad', txt.navCad);
     setText('lbl-header-achievements', txt.headerAch);
-    setText('hub-title', txt.hubTitle);
     setText('hub-desc', txt.hubDesc);
     setText('card-listening-goal', txt.cardListeningGoal);
     setText('card-listening-title', txt.cardListeningTitle);
@@ -797,11 +790,11 @@ function switchTab(tabId) {
     refreshAllDashboards();
 
     if (tabId === 'dashboard') {
-        if (btnDash) btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all shadow animated-nav-btn nav-btn-active";
-        if (btnCad) btnCad.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all animated-nav-btn opacity-70 hover:opacity-100";
+        if (btnDash) btnDash.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all shadow animated-nav-btn nav-btn-active";
+        if (btnCad) btnCad.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all animated-nav-btn opacity-80 hover:opacity-100";
     } else {
-        if (btnCad) btnCad.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all shadow animated-nav-btn nav-btn-active";
-        if (btnDash) btnDash.className = "px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition-all animated-nav-btn opacity-70 hover:opacity-100";
+        if (btnCad) btnCad.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all shadow animated-nav-btn nav-btn-active";
+        if (btnDash) btnDash.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all animated-nav-btn opacity-80 hover:opacity-100";
     }
 }
 
@@ -844,34 +837,35 @@ function renderListeningDashboard() {
     const container = document.getElementById('listening-details-list');
     if (container) {
         const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
-        container.innerHTML = listeningList.length === 0 ? `<p class="text-xs opacity-60 text-center py-6 font-medium">${txt.emptyMediaList}</p>` : '';
+        container.innerHTML = listeningList.length === 0 ? `<p class="text-xs opacity-70 text-center py-6 font-medium">${txt.emptyMediaList}</p>` : '';
         listeningList.forEach(item => {
             const itemDec = getDecimalHours(Number(item.hours), Number(item.minutes));
             const labelMap = { 'DIAMANTE': '💎 DIAMANTE', 'OURO': '🥇 OURO', 'PRATA': '🥈 PRATA' };
 
             const div = document.createElement('div');
-            div.className = "flex items-center justify-between p-3 rounded-xl border-2 transition-all sub-card";
+            div.className = "flex items-center justify-between p-3.5 rounded-2xl border transition-all sub-card shadow-sm";
             div.innerHTML = `
                 <div class="flex items-center gap-3">
-                    ${item.cover ? `<img src="${item.cover}" class="w-11 h-11 rounded-lg object-cover border-2 shadow-sm">` : `<div class="w-11 h-11 rounded-lg flex items-center justify-center text-sm font-bold card-icon-box"><i class="fa-solid fa-film"></i></div>`}
+                    ${item.cover ? `<img src="${item.cover}" class="w-11 h-11 rounded-xl object-cover border shadow-sm">` : `<div class="w-11 h-11 rounded-xl flex items-center justify-center text-sm font-bold sub-card border shadow-inner"><i class="fa-solid fa-film"></i></div>`}
                     <div class="space-y-0.5">
                         <span class="text-xs font-bold block">${item.name} ${item.season ? '('+item.season+')' : ''}</span>
-                        <span class="text-[11px] opacity-70 block">${item.hours}h ${item.minutes}m • ${itemDec.toFixed(2)}h</span>
-                        <span class="text-[10px] font-black block text-blue-900 dark:text-blue-400">${labelMap[item.studyType]}</span>
+                        <span class="text-[11px] opacity-80 block">${item.hours}h ${item.minutes}m • ${itemDec.toFixed(2)}h</span>
+                        <span class="text-[10px] font-black block text-blue-500">${labelMap[item.studyType]}</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-1">
-                    <button onclick="editListeningItem('${item.id}')" class="opacity-60 hover:opacity-100 hover:text-blue-900 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
-                    <button onclick="deleteListeningItem('${item.id}', '${item.name}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2 transition-colors" title="Excluir"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                    <button onclick="editListeningItem('${item.id}')" class="opacity-80 hover:opacity-100 hover:text-blue-500 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
+                    <button onclick="deleteListeningItem('${item.id}', '${item.name}')" class="opacity-80 hover:opacity-100 hover:text-red-500 p-2 transition-colors" title="Excluir"><i class="fa-solid fa-trash-can text-xs"></i></button>
                 </div>
             `;
             container.appendChild(div);
         });
     }
 
-    const chartDonutColor = themeMode === 'dark' ? '#3b82f6' : '#1e3a8a';
-    const chartRestColor = themeMode === 'dark' ? '#1e293b' : '#e2d9cd';
-    const gridColor = themeMode === 'dark' ? 'rgba(255,255,255,0.06)' : '#e7dfd3';
+    const chartDonutColor = '#3b82f6';
+    const chartRestColor = themeMode === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.15)';
+    const gridColor = themeMode === 'light' ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.12)';
+    const textColor = themeMode === 'light' ? '#1e293b' : '#f1f5f9';
 
     const canvasDonut = document.getElementById('progressDonutChart');
     if (canvasDonut) {
@@ -890,8 +884,8 @@ function renderListeningDashboard() {
         if (listeningBarChart) listeningBarChart.destroy();
         listeningBarChart = new Chart(ctxBar, {
             type: 'bar',
-            data: { labels: ['💎 DIAMANTE', '🥇 OURO', '🥈 PRATA'], datasets: [{ data: [hoursByStudy['DIAMANTE']/60, hoursByStudy['OURO']/60, hoursByStudy['PRATA']/60], backgroundColor: ['#1e3a8a', '#2563eb', '#60a5fa'], borderRadius: 6, barThickness: 24 }] },
-            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, grid: { color: gridColor }, ticks: { font: { size: 10 } } }, y: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ' ' + c.parsed.x.toFixed(2) + 'h' } } } }
+            data: { labels: ['💎 DIAMANTE', '🥇 OURO', '🥈 PRATA'], datasets: [{ data: [hoursByStudy['DIAMANTE']/60, hoursByStudy['OURO']/60, hoursByStudy['PRATA']/60], backgroundColor: ['#1d4ed8', '#2563eb', '#60a5fa'], borderRadius: 6, barThickness: 24 }] },
+            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, grid: { color: gridColor }, ticks: { font: { size: 10 }, color: textColor } }, y: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' }, color: textColor } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ' ' + c.parsed.x.toFixed(2) + 'h' } } } }
         });
     }
 }
@@ -908,37 +902,38 @@ function renderReadingDashboard() {
 
     const container = document.getElementById('reading-details-list');
     if (container) {
-        container.innerHTML = readingList.length === 0 ? `<p class="text-xs opacity-60 text-center py-6 font-medium">${txt.emptyBookList}</p>` : '';
+        container.innerHTML = readingList.length === 0 ? `<p class="text-xs opacity-70 text-center py-6 font-medium">${txt.emptyBookList}</p>` : '';
         readingList.forEach(book => {
             const div = document.createElement('div');
-            div.className = "flex items-center justify-between p-3 rounded-xl border-2 transition-all sub-card";
+            div.className = "flex items-center justify-between p-3.5 rounded-2xl border transition-all sub-card shadow-sm";
             div.innerHTML = `
                 <div class="flex items-center gap-3">
-                    ${book.cover ? `<img src="${book.cover}" class="w-10 h-12 rounded-lg object-cover border-2 shadow-sm">` : `<div class="w-10 h-12 rounded-lg flex items-center justify-center text-xs font-bold card-icon-box"><i class="fa-solid fa-book"></i></div>`}
+                    ${book.cover ? `<img src="${book.cover}" class="w-10 h-12 rounded-xl object-cover border shadow-sm">` : `<div class="w-10 h-12 rounded-xl flex items-center justify-center text-xs font-bold sub-card border shadow-inner"><i class="fa-solid fa-book"></i></div>`}
                     <div class="space-y-0.5">
                         <span class="text-xs font-bold block">${book.title}</span>
-                        ${book.author ? `<span class="text-[11px] opacity-70 block">${book.author}</span>` : ''}
-                        <span class="text-[10px] font-black text-blue-900 dark:text-blue-400 block">${book.pages} páginas</span>
+                        ${book.author ? `<span class="text-[11px] opacity-80 block">${book.author}</span>` : ''}
+                        <span class="text-[10px] font-black text-blue-500 block">${book.pages} páginas</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-1">
-                    <button onclick="editReadingItem('${book.id}')" class="opacity-60 hover:opacity-100 hover:text-blue-900 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
-                    <button onclick="deleteReadingItem('${book.id}', '${book.title}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2 transition-colors" title="Excluir"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                    <button onclick="editReadingItem('${book.id}')" class="opacity-80 hover:opacity-100 hover:text-blue-500 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
+                    <button onclick="deleteReadingItem('${book.id}', '${book.title}')" class="opacity-80 hover:opacity-100 hover:text-red-500 p-2 transition-colors" title="Excluir"><i class="fa-solid fa-trash-can text-xs"></i></button>
                 </div>
             `;
             container.appendChild(div);
         });
     }
 
-    const gridColor = themeMode === 'dark' ? 'rgba(255,255,255,0.06)' : '#e7dfd3';
+    const gridColor = themeMode === 'light' ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.12)';
+    const textColor = themeMode === 'light' ? '#1e293b' : '#f1f5f9';
     const canvasBar = document.getElementById('readingBarChart');
     if (canvasBar) {
         const ctxBar = canvasBar.getContext('2d');
         if (readingBarChart) readingBarChart.destroy();
         readingBarChart = new Chart(ctxBar, {
             type: 'bar',
-            data: { labels: readingList.map(b => b.title.length > 15 ? b.title.substring(0, 15) + '...' : b.title), datasets: [{ data: readingList.map(b => Number(b.pages)), backgroundColor: '#1e3a8a', borderRadius: 6, barThickness: 20 }] },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: gridColor }, ticks: { font: { size: 10 } } }, x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ' ' + c.parsed.y + ' páginas' } } } }
+            data: { labels: readingList.map(b => b.title.length > 15 ? b.title.substring(0, 15) + '...' : b.title), datasets: [{ data: readingList.map(b => Number(b.pages)), backgroundColor: '#2563eb', borderRadius: 6, barThickness: 20 }] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: gridColor }, ticks: { font: { size: 10 }, color: textColor } }, x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' }, color: textColor } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ' ' + c.parsed.y + ' páginas' } } } }
         });
     }
 }
@@ -956,24 +951,24 @@ function renderVocabularyDashboard() {
 
     const container = document.getElementById('vocabulary-details-list');
     if (container) {
-        container.innerHTML = vocabularyList.length === 0 ? `<p class="text-xs opacity-60 text-center py-6 font-medium">${txt.emptyVocabList}</p>` : '';
+        container.innerHTML = vocabularyList.length === 0 ? `<p class="text-xs opacity-70 text-center py-6 font-medium">${txt.emptyVocabList}</p>` : '';
         vocabularyList.forEach((v, idx) => {
             const seqNumber = idx + 1;
             const div = document.createElement('div');
-            div.className = "flex items-center justify-between p-3 rounded-xl border-2 transition-all sub-card";
+            div.className = "flex items-center justify-between p-3.5 rounded-2xl border transition-all sub-card shadow-sm";
             div.innerHTML = `
                 <div class="flex items-center gap-3">
-                    <span class="w-7 h-7 rounded-lg font-black text-xs flex items-center justify-center border-2 card-icon-box">#${seqNumber}</span>
+                    <span class="w-8 h-8 rounded-xl font-black text-xs flex items-center justify-center border sub-card shadow-inner">#${seqNumber}</span>
                     <div class="space-y-0.5">
                         <span class="text-xs font-bold block">${v.word}</span>
-                        <span class="text-[11px] opacity-70 block">${v.translation}</span>
-                        <span class="text-[10px] opacity-80 block">${txt.correctHits} <strong class="text-blue-900 dark:text-blue-400 font-black">${v.correctCount || 0}</strong> | ${txt.wrongHits} <strong class="text-red-600 font-black">${v.wrongCount || 0}</strong></span>
+                        <span class="text-[11px] opacity-80 block">${v.translation}</span>
+                        <span class="text-[10px] opacity-90 block">${txt.correctHits} <strong class="text-blue-500 font-black">${v.correctCount || 0}</strong> | ${txt.wrongHits} <strong class="text-red-500 font-black">${v.wrongCount || 0}</strong></span>
                     </div>
                 </div>
                 <div class="flex items-center gap-1">
-                    <button onclick="speakWord('${v.word}')" class="p-2 opacity-70 hover:opacity-100 text-blue-900 dark:text-blue-400 transition-colors" title="Ouvir"><i class="fa-solid fa-volume-high text-xs"></i></button>
-                    <button onclick="editVocabularyItem('${v.id}')" class="opacity-60 hover:opacity-100 hover:text-blue-900 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
-                    <button onclick="deleteVocabularyItem('${v.id}', '${v.word}')" class="opacity-60 hover:opacity-100 hover:text-red-600 p-2 transition-colors" title="Excluir"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                    <button onclick="speakWord('${v.word}')" class="p-2 opacity-80 hover:opacity-100 text-blue-500 transition-colors" title="Ouvir"><i class="fa-solid fa-volume-high text-xs"></i></button>
+                    <button onclick="editVocabularyItem('${v.id}')" class="opacity-80 hover:opacity-100 hover:text-blue-500 p-2 transition-colors" title="Editar"><i class="fa-solid fa-pencil text-xs"></i></button>
+                    <button onclick="deleteVocabularyItem('${v.id}', '${v.word}')" class="opacity-80 hover:opacity-100 hover:text-red-500 p-2 transition-colors" title="Excluir"><i class="fa-solid fa-trash-can text-xs"></i></button>
                 </div>
             `;
             container.appendChild(div);
@@ -1008,8 +1003,6 @@ function updateFlashcardUI() {
     setText('fc-word', item.word);
     setText('fc-translation', item.translation);
     setText('fc-example', item.example ? `"${item.example}"` : '-');
-    setText('fc-correct', item.correctCount || 0);
-    setText('fc-wrong', item.wrongCount || 0);
 
     isCardFlipped = false;
     if (cardInner) cardInner.classList.remove('flipped');
@@ -1108,10 +1101,10 @@ function openStreakModal() {
         
         if (noticeEl) {
             if (isDoneToday) {
-                noticeEl.className = "p-3.5 rounded-xl border border-blue-500/30 bg-blue-500/10 text-blue-900 dark:text-blue-400 text-xs font-medium leading-relaxed";
+                noticeEl.className = "p-3.5 rounded-xl border border-blue-500/30 bg-blue-500/10 text-blue-500 text-xs font-medium leading-relaxed";
                 noticeEl.innerHTML = "🔥 <strong>Ofensiva mantida!</strong> Você já praticou o vocabulário hoje e garantiu o seu fogo aceso.";
             } else {
-                noticeEl.className = "p-3.5 rounded-xl border border-blue-900/30 bg-blue-900/10 text-blue-900 dark:text-blue-400 text-xs font-medium leading-relaxed";
+                noticeEl.className = "p-3.5 rounded-xl border border-blue-500/30 bg-blue-500/10 text-blue-500 text-xs font-medium leading-relaxed";
                 noticeEl.innerHTML = "🔥 Para acender o fogo e manter sua ofensiva hoje, você precisa <strong>completar a tarefa de praticar vocabulário</strong>!";
             }
         }
@@ -1130,19 +1123,19 @@ function openStreakModal() {
                 const isDone = status === 'done';
                 const isMissed = status === 'missed';
 
-                let cardClass = 'sub-card opacity-60';
-                let iconColor = 'text-stone-400 opacity-40';
+                let cardClass = 'sub-card opacity-70';
+                let iconColor = 'text-slate-400 opacity-50';
 
                 if (isDone) {
-                    cardClass = 'bg-blue-900/10 border-blue-900 text-blue-900 dark:text-blue-400 font-bold';
-                    iconColor = 'text-blue-900 dark:text-blue-400 opacity-100 animate-pulse';
+                    cardClass = 'bg-blue-500/20 border-blue-500 text-blue-500 font-bold';
+                    iconColor = 'text-blue-500 opacity-100 animate-pulse';
                 } else if (isMissed) {
-                    cardClass = 'bg-red-500/10 border-red-500 text-red-600 font-bold';
+                    cardClass = 'bg-red-500/20 border-red-500 text-red-500 font-bold';
                     iconColor = 'text-red-500 opacity-100';
                 }
 
                 const div = document.createElement('div');
-                div.className = `p-2 rounded-xl border flex flex-col items-center justify-center gap-1 ${cardClass}`;
+                div.className = `p-2 rounded-xl border flex flex-col items-center justify-center gap-1 ${cardClass} shadow-sm`;
                 div.innerHTML = `
                     <span class="text-[9px] uppercase">${dayName}</span>
                     <i class="fa-solid fa-fire text-xs ${iconColor}"></i>
@@ -1168,9 +1161,9 @@ function renderAchievementsModule() {
         const btn = document.getElementById(`ach-filter-${cat}`);
         if (btn) {
             if (cat === currentAchFilter) {
-                btn.className = "px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border ach-filter-active";
+                btn.className = "px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border ach-filter-active shadow-sm";
             } else {
-                btn.className = "px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all border sub-card";
+                btn.className = "px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border sub-card shadow-sm";
             }
         }
     });
@@ -1213,13 +1206,13 @@ function renderAchievementsModule() {
         if (currentAchFilter !== 'all' && ach.category !== currentAchFilter) return;
 
         const div = document.createElement('div');
-        div.className = `p-4 rounded-2xl border-2 flex flex-col items-center text-center space-y-2 transition-all ${isUnlocked ? 'sub-card border-blue-900/50 shadow-md' : 'opacity-40 grayscale sub-card'}`;
+        div.className = `p-4 rounded-2xl border flex flex-col items-center text-center space-y-2 transition-all ${isUnlocked ? 'sub-card border-blue-500/50 shadow-xl backdrop-blur-md' : 'opacity-40 grayscale sub-card'}`;
         div.innerHTML = `
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-blue-900 dark:text-blue-400 font-bold text-lg ${isUnlocked ? 'bg-blue-900/10' : 'bg-stone-500/10'}">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-blue-500 font-bold text-lg ${isUnlocked ? 'bg-blue-500/20' : 'bg-slate-400/20'} shadow-inner">
                 <i class="fa-solid ${ach.icon}"></i>
             </div>
             <span class="text-xs font-black block leading-tight">${ach.title}</span>
-            <span class="text-[10px] opacity-75 font-medium leading-tight block">${ach.desc}</span>
+            <span class="text-[10px] opacity-80 font-medium leading-tight block">${ach.desc}</span>
         `;
         grid.appendChild(div);
     });
@@ -1249,11 +1242,11 @@ function updateHeaderStreakUI() {
     if (countDesk) countDesk.innerText = count;
 
     if (isAccessedToday) {
-        if (iconMobile) iconMobile.className = "fa-solid fa-fire text-blue-900 dark:text-blue-400 opacity-100 animate-pulse";
-        if (iconDesk) iconDesk.className = "fa-solid fa-fire text-blue-900 dark:text-blue-400 opacity-100 animate-pulse";
+        if (iconMobile) iconMobile.className = "fa-solid fa-fire text-blue-500 opacity-100 animate-pulse";
+        if (iconDesk) iconDesk.className = "fa-solid fa-fire text-blue-500 opacity-100 animate-pulse";
     } else {
-        if (iconMobile) iconMobile.className = "fa-solid fa-fire text-stone-400 opacity-60";
-        if (iconDesk) iconDesk.className = "fa-solid fa-fire text-stone-400 opacity-60";
+        if (iconMobile) iconMobile.className = "fa-solid fa-fire text-slate-400 opacity-70";
+        if (iconDesk) iconDesk.className = "fa-solid fa-fire text-slate-400 opacity-70";
     }
 }
 
@@ -1461,7 +1454,7 @@ async function deleteVocabularyItem(id, word) {
     }
 }
 
-/* --- CONTROLE DE VELOCIDADE DO CARROSSEL POR SETAS (DESKTOP) --- */
+/* --- CONTROLE DE VELOCIDADE E DRAG SCROLL (ARRASTAR COM O DEDO) DO CARROSSEL --- */
 function accelerateCarousel(direction) {
     const track = document.getElementById('infinite-carousel-track');
     if (!track) return;
@@ -1480,6 +1473,62 @@ function normalCarouselSpeed() {
     track.style.animationDirection = 'normal';
 }
 
+function initDraggableCarousel() {
+    const track = document.getElementById('infinite-carousel-track');
+    if (!track) return;
+
+    let isDown = false;
+    let startX;
+
+    track.addEventListener('mousedown', (e) => {
+        isDown = true;
+        track.classList.add('fast-mode');
+        startX = e.pageX;
+    });
+
+    window.addEventListener('mouseup', () => {
+        if (!isDown) return;
+        isDown = false;
+        track.classList.remove('fast-mode');
+    });
+
+    track.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX;
+        const walk = x - startX;
+        if (walk > 20) {
+            track.style.animationDirection = 'reverse';
+        } else if (walk < -20) {
+            track.style.animationDirection = 'normal';
+        }
+    });
+
+    // Toque em Dispositivos Móveis para acelerar / arrastar o carrossel
+    track.addEventListener('touchstart', (e) => {
+        isDown = true;
+        track.classList.add('fast-mode');
+        startX = e.touches[0].pageX;
+    });
+
+    window.addEventListener('touchend', () => {
+        if (!isDown) return;
+        isDown = false;
+        track.classList.remove('fast-mode');
+    });
+
+    track.addEventListener('touchmove', (e) => {
+        if (!isDown) return;
+        const x = e.touches[0].pageX;
+        const walk = x - startX;
+        if (walk > 20) {
+            track.style.animationDirection = 'reverse';
+        } else if (walk < -20) {
+            track.style.animationDirection = 'normal';
+        }
+    });
+}
+
 window.onload = async function() {
     await initDB();
     checkOnboardingStatus();
@@ -1489,6 +1538,7 @@ window.onload = async function() {
     updateUserAvatarUI();
     openModule('hub');
     updateHeaderStreakUI();
+    initDraggableCarousel();
 
     setInterval(updateStreakCountdown, 1000);
     updateStreakCountdown();

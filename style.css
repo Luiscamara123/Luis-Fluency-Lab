@@ -1,166 +1,192 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 
-:root {
-    --font-serif: 'Playfair Display', Georgia, serif;
-    --font-sans: 'Plus Jakarta Sans', sans-serif;
+* {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    box-sizing: border-box;
 }
 
-/* TEMA EUA */
-.theme-en {
-    --bg-main: #fcfbf9;
-    --text-main: #1c1917;
-    --border-color: #e7dfd3;
-    --card-bg: #f7f3ed;
-    --sub-card-bg: #efe8de;
-    --accent-bar: linear-gradient(90deg, #1e3a8a, #1d4ed8);
-    --btn-primary: #1e3a8a;
-}
-
-/* TEMA ESPANHA */
-.theme-es {
-    --bg-main: #fdfbf7;
-    --text-main: #1c1917;
-    --border-color: #ebdcc9;
-    --card-bg: #fcf5e8;
-    --sub-card-bg: #f5e8d3;
-    --accent-bar: linear-gradient(90deg, #1e3a8a, #3b82f6, #1e3a8a);
-    --btn-primary: #1e3a8a;
-}
-
-/* TEMA FRANÇA */
-.theme-fr {
-    --bg-main: #fafbfc;
-    --text-main: #111827;
-    --border-color: #e5e7eb;
-    --card-bg: #f3f4f6;
-    --sub-card-bg: #e5e7eb;
-    --accent-bar: linear-gradient(90deg, #1d4ed8, #ffffff, #1e3a8a);
-    --btn-primary: #1d4ed8;
-}
-
-/* TEMA JAPÃO */
-.theme-ja {
-    --bg-main: #fdfbfb;
-    --text-main: #1f1919;
-    --border-color: #f3dcdb;
-    --card-bg: #fbf0f0;
-    --sub-card-bg: #f7e2e2;
-    --accent-bar: linear-gradient(90deg, #1e3a8a, #ffffff, #1e3a8a);
-    --btn-primary: #1e3a8a;
-}
-
-/* TEMA BRASIL */
-.theme-pt {
-    --bg-main: #f8fbf8;
-    --text-main: #142217;
-    --border-color: #d1e7d6;
-    --card-bg: #eaf5ec;
-    --sub-card-bg: #dbece0;
-    --accent-bar: linear-gradient(90deg, #15803d, #1e3a8a, #1e40af);
-    --btn-primary: #15803d;
-}
-
-/* MODO ESCURO */
-.mode-dark {
-    --bg-main: #090d16;
-    --text-main: #f1f5f9;
-    --border-color: #262f3f;
-    --card-bg: #111822;
-    --sub-card-bg: #0d121b;
-    --btn-primary: #1e3a8a;
-}
-
-body {
-    background-color: var(--bg-main);
-    color: var(--text-main);
-    font-family: var(--font-sans);
-}
-
-.panel-card, .sub-card {
-    background-color: var(--card-bg);
-    border-color: var(--border-color);
-}
-
-.sub-card {
-    background-color: var(--sub-card-bg);
-}
-
-input, select, textarea {
-    background-color: var(--sub-card-bg);
-    color: var(--text-main);
-    border-color: var(--border-color);
-}
-
-.mode-dark input, .mode-dark select, .mode-dark textarea {
-    background-color: #0d121b;
+/* --- TEMA ESCURO E CLARO COM VIDRO MAIS CLARO E LUMINOSO --- */
+body.mode-dark {
     color: #f1f5f9;
 }
 
-/* ESTADOS ATIVOS DE FILTROS E OPÇÕES (AZUL ESCURO) */
-.ach-filter-active {
-    background-color: #1e3a8a !important;
-    color: #ffffff !important;
-    border-color: #172554 !important;
+body.mode-light {
+    color: #0f172a;
 }
 
-.ob-option-selected {
-    border-color: #1e3a8a !important;
-    background-color: rgba(30, 58, 138, 0.15) !important;
-}
-
-/* ANIMAÇÃO E ESTILO DOS BOTÕES NAV (DASHBOARD & CADASTRAR) */
-.animated-nav-btn {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
+/* Fundo Fixo com as Imagens 100% Nítidas (Sem filtro cinza) */
+#bg-image-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
     overflow: hidden;
 }
 
+body.mode-dark #bg-image-container .bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+body.mode-light #bg-image-container .bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- GLASSMORPHISM CLARO, LUMINOSO E REFINADO --- */
+body.mode-dark .panel-card {
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-radius: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.mode-light .panel-card {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    border-radius: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.panel-card:hover {
+    border-color: rgba(59, 130, 246, 0.7);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 0 25px rgba(37, 99, 235, 0.3);
+}
+
+body.mode-dark .sub-card {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+body.mode-light .sub-card {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* --- INPUTS E FORMULÁRIOS --- */
+body.mode-dark input, body.mode-dark select, body.mode-dark textarea {
+    background: rgba(15, 23, 42, 0.5) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #f1f5f9 !important;
+}
+
+body.mode-light input, body.mode-light select, body.mode-light textarea {
+    background: rgba(255, 255, 255, 0.7) !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
+    color: #0f172a !important;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+}
+
+/* OPÇÕES DE ONBOARDING SELECIONADAS */
+.ob-option-selected {
+    border-color: #3b82f6 !important;
+    background: rgba(37, 99, 235, 0.3) !important;
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+}
+
+/* BOTÃO DE NAVEGAÇÃO ATIVO */
 .nav-btn-active {
-    background-color: #1e3a8a !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.35);
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.6);
 }
 
-.animated-nav-btn:hover:not(.nav-btn-active) {
-    background-color: rgba(30, 58, 138, 0.12);
-    color: #1e3a8a;
+/* FILTRO DE CONQUISTAS ATIVO */
+.ach-filter-active {
+    background: rgba(37, 99, 235, 0.3);
+    border-color: #3b82f6;
+    color: #60a5fa;
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
 }
 
-.mode-dark .animated-nav-btn:hover:not(.nav-btn-active) {
-    background-color: rgba(59, 130, 246, 0.2);
-    color: #93c5fd;
+/* --- ANIMAÇÃO DE ONDAS NAS LETRAS DO TÍTULO PRINCIPAL --- */
+.wave-title span {
+    display: inline-block;
+    animation: waveLetter 2.5s ease-in-out infinite;
+    animation-delay: calc(0.05s * var(--i));
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-/* PERSPECTIVA PARA O FLIP CARD */
-.perspective { perspective: 1000px; }
-.transform-style-3d { transform-style: preserve-3d; }
-.backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.rotate-y-180 { transform: rotateY(180deg); }
-
-.panel-card.flipped #flip-card-inner,
-#flip-card-inner.flipped {
-    transform: rotateY(180deg);
+@keyframes waveLetter {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-6px);
+        color: #60a5fa;
+        text-shadow: 0 5px 15px rgba(59, 130, 246, 0.6);
+    }
 }
 
-/* --- CARROSSEL INFINITO CONTÍNUO E RÁPIDO --- */
-@keyframes continuousScroll {
+/* --- CARROSSEL INFINITO EM MOVIMENTO --- */
+@keyframes infiniteScroll {
     0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    100% { transform: translateX(calc(-320px * 4 - 24px * 4)); }
 }
 
 #infinite-carousel-track {
     display: flex;
+    gap: 1.5rem;
+    animation: infiniteScroll 35s linear infinite;
     width: max-content;
-    animation: continuousScroll 14s linear infinite;
 }
 
-/* Pausa ao passar o mouse */
 #infinite-carousel-track:hover {
     animation-play-state: paused;
 }
 
-/* Modo acelerado ativado pelas setas */
 #infinite-carousel-track.fast-mode {
-    animation: continuousScroll 4s linear infinite;
-    animation-play-state: running;
+    animation-duration: 5s !important;
+}
+
+/* PERSPECTIVA PARA OS FLASHCARDS 3D */
+.perspective {
+    perspective: 1000px;
+}
+
+.transform-style-3d {
+    transform-style: preserve-3d;
+}
+
+.backface-hidden {
+    backface-visibility: hidden;
+}
+
+.flipped {
+    transform: rotateY(180deg);
+}
+
+/* SCROLLBAR CUSTOMIZADA SUAVE */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+body.mode-dark ::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.3);
+}
+
+body.mode-light ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.5);
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(59, 130, 246, 0.8);
 }
