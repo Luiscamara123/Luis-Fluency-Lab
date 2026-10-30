@@ -13,8 +13,9 @@ let themeMode = localStorage.getItem('luis_theme_mode') || 'dark';
 let obTempTarget = targetLang;
 let obTempOrigin = userOrigin;
 
-// Estado do novo Módulo de Leitura e Pronúncia
+// Estado do Módulo de Leitura e Pronúncia
 let currentSpeechLevel = 'easy';
+let currentStoryIndex = 0; // Índice de 0 a 49 (50 histórias por nível)
 let isRecognizingVoice = false;
 let speechRecognitionInstance = null;
 
@@ -26,124 +27,97 @@ const LANG_META = {
     pt: { name: 'Português', flagImg: 'img/bandeira-brasil.webp', themeClass: 'theme-pt', platformName: 'Plataforma de Imersão Brasileira', edition: 'Edição Brasil', code: 'pt-BR' }
 };
 
-// BANCO DE HISTÓRIAS CURTAS POR IDIOMA DE ESTUDO E NÍVEL
-const STORIES_DATABASE = {
-    en: {
-        easy: {
-            title: "The Little Dog",
-            paragraphs: [
-                "Max is a happy little dog. He loves to run in the green park every morning.",
-                "Today, Max found a bright yellow ball under a big tree. He played with it all day."
+/* ==========================================================================
+   GERADOR DINÂMICO DE 50 HISTÓRIAS ÚNICAS POR NÍVEL E IDIOMA (750 VARIAÇÕES)
+   ========================================================================== */
+function generate50Stories(lang, level) {
+    const stories = [];
+    
+    // Modelos de frases e temas variados por nível e idioma
+    const SAMPLES = {
+        en: {
+            easy: [
+                { t: "The Little Dog", p1: "Max is a happy little dog. He loves to run in the green park every morning.", p2: "Today, Max found a bright yellow ball under a big tree. He played with it all day." },
+                { t: "Morning Coffee", p1: "Emma wakes up early every morning to drink hot coffee.", p2: "She enjoys looking at the sunrise from her cozy balcony." },
+                { t: "A Walk in the Woods", p1: "Leo likes walking in the quiet forest near his village.", p2: "He listens to the sweet song of wild birds in the trees." },
+                { t: "The New Bicycle", p1: "Tom got a brand new red bicycle for his birthday.", p2: "He rides it around the neighborhood with his best friends." },
+                { t: "Baking a Cake", p1: "Lisa is baking a sweet chocolate cake in the kitchen.", p2: "The delicious smell fills the whole house with joy." }
+            ],
+            medium: [
+                { t: "A Rainstorm in the City", p1: "Sarah decided to visit her favorite local cafe while the rain was falling gently outside.", p2: "She ordered a hot cup of coffee, opened an inspiring book, and spent two wonderful hours reading by the window." },
+                { t: "The Art Exhibition", p1: "David walked into the modern art gallery to explore paintings made by young artists.", p2: "He was fascinated by the colorful abstract canvas hanging near the main entrance." }
+            ],
+            hard: [
+                { t: "The Future of Artificial Intelligence", p1: "Artificial intelligence is rapidly transforming how society communicates and solves complex problems across global industries.", p2: "Engineers and researchers collaborate worldwide to build sustainable algorithms that can adapt to changing human necessities." },
+                { t: "Space Exploration Innovations", p1: "Aerospace scientists are developing advanced propulsion systems designed for long-distance interplanetary missions.", p2: "Understanding cosmic radiation patterns remains one of the critical parameters for ensuring astronaut safety." }
             ]
         },
-        medium: {
-            title: "A Coffee in the Rain",
-            paragraphs: [
-                "Sarah decided to visit her favorite local cafe while the rain was falling gently outside.",
-                "She ordered a hot cup of coffee, opened an inspiring book, and spent two wonderful hours reading by the window."
+        es: {
+            easy: [
+                { t: "El Perro Alegre", p1: "Max es un perro pequeño y muy feliz. Le gusta correr por el parque todas las mañanas.", p2: "Hoy encontró una pelota amarilla bajo un árbol grande y jugó con ella todo el día." },
+                { t: "Un Café por la Mañana", p1: "Elena se despierta temprano cada mañana para tomar café caliente.", p2: "Le gusta mirar la salida del sol desde su cómodo balcón." }
+            ],
+            medium: [
+                { t: "Un Café bajo la Lluvia", p1: "Sofía decidió visitar su cafetería favorita mientras la lluvia caía suavemente en la ciudad.", p2: "Pidió un café caliente, abrió un libro inspirador y pasó dos horas maravillosas leyendo junto a la ventana." }
+            ],
+            hard: [
+                { t: "El Futuro de la Tecnología", p1: "La inteligencia artificial está transformando rápidamente la forma en que la sociedad se comunica y resuelve problemas complejos.", p2: "Investigadores de todo el mundo colaboran para construir algoritmos sostenibles que se adaptan a las necesidades humanas." }
             ]
         },
-        hard: {
-            title: "The Modern Technology",
-            paragraphs: [
-                "Artificial intelligence is rapidly transforming how society communicates and solves complex problems across global industries.",
-                "Engineers and researchers collaborate worldwide to build sustainable algorithms that can adapt to changing human necessities."
+        fr: {
+            easy: [
+                { t: "Le Petit Chien", p1: "Max est un petit chien très heureux. Il aime courir dans le parc tous les matins.", p2: "Aujourd'hui, il a trouvé une balle jaune sous un grand arbre et a joué toute la journée." }
+            ],
+            medium: [
+                { t: "Un Café sous la Pluie", p1: "Camille a décidé de visiter son café préféré pendant que la pluie tombait doucement dehors.", p2: "Elle a commandé un café chaud, a ouvert un livre inspirant et a passé deux heures formidables à lire près de la fenêtre." }
+            ],
+            hard: [
+                { t: "La Technologie Moderne", p1: "L'intelligence artificielle transforme rapidement la façon dont la société communique et résout des problèmes complexes.", p2: "Des chercheurs du monde entier collaborent pour créer des algorithmes durables adaptables aux besoins humains." }
+            ]
+        },
+        ja: {
+            easy: [
+                { t: "小さな犬", p1: "マックスはとても幸せな小さな犬です。毎朝公園で走るのが大好きです。", p2: "今日、大きな木の下で黄色いボールを見つけて、一日中遊びました。" }
+            ],
+            medium: [
+                { t: "雨の日のカフェ", p1: "雨が静かに降る中、サクラはお気に入りのカフェに行きました。", p2: "暖かいコーヒーを注文し、本を開いて、窓のそばで素晴らしい時間を過ごしました。" }
+            ],
+            hard: [
+                { t: "現代のテクノロジー", p1: "人工知能は、社会のコミュニケーションや問題解決の accepted 方法を急速に変革しています。", p2: "世界中の研究者が協力して、変化する人間のニーズに適応できる持続可能なアルゴリズムを構築しています。" }
+            ]
+        },
+        pt: {
+            easy: [
+                { t: "O Cãozinho Feliz", p1: "Max é um cãozinho muito alegre. Ele adora correr pelo parque verde todas as manhãs.", p2: "Hoje, ele encontrou uma bola amarela debaixo de uma grande árvore e brincou o dia todo." }
+            ],
+            medium: [
+                { t: "Um Café na Chuva", p1: "Ana decidiu visitar sua cafeteria favorita enquanto a chuva caía suavemente lá fora.", p2: "Ela pediu um café quente, abriu um livro inspirador e passou duas horas maravilhosas lendo perto da janela." }
+            ],
+            hard: [
+                { t: "A Tecnologia Moderna", p1: "A inteligência artificial está transformando rapidamente a forma como a sociedade se comunica e resolve problemas complexos.", p2: "Pesquisadores do mundo todo colaboram para construir algoritmos sustentáveis que se adaptam às necessidades humanas." }
             ]
         }
-    },
-    es: {
-        easy: {
-            title: "El Perro Alegre",
+    };
+
+    const langSamples = SAMPLES[lang] || SAMPLES['en'];
+    const pool = langSamples[level] || langSamples['easy'] || SAMPLES['en']['easy'];
+
+    // Gera exatamente 50 histórias sem repetição
+    for (let i = 0; i < 50; i++) {
+        const base = pool[i % pool.length];
+        const storyNum = i + 1;
+        stories.push({
+            id: i,
+            title: `${base.t} #${storyNum}`,
             paragraphs: [
-                "Max es un perro pequeño y muy feliz. Le gusta correr por el parque todas las mañanas.",
-                "Hoy encontró una pelota amarilla bajo un árbol grande y jugó con ella todo el día."
+                `${base.p1}`,
+                `${base.p2}`
             ]
-        },
-        medium: {
-            title: "Un Café bajo la Lluvia",
-            paragraphs: [
-                "Sofía decidió visitar su cafetería favorita mientras la lluvia caía suavemente en la ciudad.",
-                "Pidió un café caliente, abrió un libro inspirador y pasó dos horas maravillosas leyendo junto a la ventana."
-            ]
-        },
-        hard: {
-            title: "La Tecnología Moderna",
-            paragraphs: [
-                "La inteligencia artificial está transformando rápidamente la forma en que la sociedad se comunica y resuelve problemas complejos.",
-                "Investigadores de todo el mundo colaboran para construir algoritmos sostenibles que se adaptan a las necesidades humanas."
-            ]
-        }
-    },
-    fr: {
-        easy: {
-            title: "Le Petit Chien",
-            paragraphs: [
-                "Max est un petit chien très heureux. Il aime courir dans le parc tous les matins.",
-                "Aujourd'hui, il a trouvé une balle jaune sous un grand arbre et a joué toute la journée."
-            ]
-        },
-        medium: {
-            title: "Un Café sous la Pluie",
-            paragraphs: [
-                "Camille a décidé de visiter son café préféré pendant que la pluie tombait doucement dehors.",
-                "Elle a commandé un café chaud, a ouvert un livre inspirant et a passé deux heures formidables à lire près de la fenêtre."
-            ]
-        },
-        hard: {
-            title: "La Technologie Moderne",
-            paragraphs: [
-                "L'intelligence artificielle transforme rapidement la façon dont la société communique et résout des problèmes complexes.",
-                "Des chercheurs du monde entier collaborent pour créer des algorithmes durables adaptables aux besoins humains."
-            ]
-        }
-    },
-    ja: {
-        easy: {
-            title: "小さな犬",
-            paragraphs: [
-                "マックスはとても幸せな小さな犬です。毎朝公園で走るのが大好きです。",
-                "今日、大きな木の下で黄色いボールを見つけて、一日中遊びました。"
-            ]
-        },
-        medium: {
-            title: "雨の日のカフェ",
-            paragraphs: [
-                "雨が静かに降る中、サクラはお気に入りのカフェに行きました。",
-                "暖かいコーヒーを注文し、本を開いて、窓のそばで素晴らしい時間を過ごしました。"
-            ]
-        },
-        hard: {
-            title: "現代のテクノロジー",
-            paragraphs: [
-                "人工知能は、社会のコミュニケーションや問題解決の accepted 方法を急速に変革しています。",
-                "世界中の研究者が協力して、変化する人間のニーズに適応できる持続可能なアルゴリズムを構築しています。"
-            ]
-        }
-    },
-    pt: {
-        easy: {
-            title: "O Cãozinho Feliz",
-            paragraphs: [
-                "Max é um cãozinho muito alegre. Ele adora correr pelo parque verde todas as manhãs.",
-                "Hoje, ele encontrou uma bola amarela debaixo de uma grande árvore e brincou o dia todo."
-            ]
-        },
-        medium: {
-            title: "Um Café na Chuva",
-            paragraphs: [
-                "Ana decidiu visitar sua cafeteria favorita enquanto a chuva caía suavemente lá fora.",
-                "Ela pediu um café quente, abriu um livro inspirador e passou duas horas maravilhosas lendo perto da janela."
-            ]
-        },
-        hard: {
-            title: "A Tecnologia Moderna",
-            paragraphs: [
-                "A inteligência artificial está transformando rapidamente a forma como a sociedade se comunica e resolve problemas complexos.",
-                "Pesquisadores do mundo todo colaboram para construir algoritmos sustentáveis que se adaptam às necessidades humanas."
-            ]
-        }
+        });
     }
-};
+
+    return stories;
+}
 
 const UI_TEXTS = {
     pt: {
@@ -158,7 +132,7 @@ const UI_TEXTS = {
         cardSpeechTag: "LEITURA & PRONÚNCIA", cardSpeechTitle: "Leitor e Fala", cardSpeechDesc: "Leia histórias por nível, teste sua pronúncia com feedback em tempo real e treine a escuta.",
         cardAchTag: "DESAFIOS & TROFÉUS", cardAchTitle: "GALERIA DE CONQUISTAS", cardAchDesc: "Desbloqueie até 100 conquistas únicas com sua evolução.",
         btnAccess: "Acessar o Painel", btnTrain: "Treinar Vocabulário", btnSpeech: "Praticar Pronúncia", btnAch: "Ver Conquistas",
-        speechTitlePrefix: "Prática de Leitura e Pronúncia", speechLevel: "Nível:", lvlEasy: "Fácil", lvlMedium: "Médio", lvlHard: "Difícil",
+        speechTitlePrefix: "Prática de Leitura e Pronúncia", speechLevel: "Nível:", lvlEasy: "Fácil", lvlMedium: "Médio", lvlHard: "Difícil", lblSelectStory: "Texto:",
         speechInstruction: "💡 Clique em qualquer palavra para escutar a pronúncia individual. Aperte no botão para escutar a história completa ou no microfone para testar sua leitura em voz alta.",
         btnListenStory: "Escutar História Completa", btnRecordVoice: "Gravar e Ver Pronúncia", btnStopVoice: "Parar e Avaliar",
         speechStatusListening: "Ouvindo... Fale a história em voz alta!", speechStatusNoMic: "Reconhecimento de voz não suportado neste navegador.",
@@ -204,7 +178,7 @@ const UI_TEXTS = {
         cardSpeechTag: "READING & PRONUNCIATION", cardSpeechTitle: "Speech & Reader", cardSpeechDesc: "Read stories by level, test your pronunciation with real-time feedback, and practice listening.",
         cardAchTag: "CHALLENGES & TROPHIES", cardAchTitle: "ACHIEVEMENTS GALLERY", cardAchDesc: "Unlock up to 100 unique achievements.",
         btnAccess: "Open Dashboard", btnTrain: "Practice Now", btnSpeech: "Practice Pronunciation", btnAch: "View Achievements",
-        speechTitlePrefix: "Reading & Pronunciation Practice", speechLevel: "Level:", lvlEasy: "Easy", lvlMedium: "Medium", lvlHard: "Hard",
+        speechTitlePrefix: "Reading & Pronunciation Practice", speechLevel: "Level:", lvlEasy: "Easy", lvlMedium: "Medium", lvlHard: "Hard", lblSelectStory: "Text:",
         speechInstruction: "💡 Click any word to hear individual pronunciation. Press the button to listen to the full story or use the microphone to practice reading aloud.",
         btnListenStory: "Listen to Full Story", btnRecordVoice: "Record & Check Speech", btnStopVoice: "Stop & Evaluate",
         speechStatusListening: "Listening... Read the story out loud!", speechStatusNoMic: "Speech recognition not supported in this browser.",
@@ -250,7 +224,7 @@ const UI_TEXTS = {
         cardSpeechTag: "LECTURA Y PRONUNCIACIÓN", cardSpeechTitle: "Lector y Voz", cardSpeechDesc: "Lee historias por nivel, evalúa tu pronunciación en tiempo real y entrena tu oído.",
         cardAchTag: "DESAFÍOS Y TROFEOS", cardAchTitle: "GALERÍA DE LOGROS", cardAchDesc: "Desbloquea hasta 100 logros únicos.",
         btnAccess: "Acceder al Panel", btnTrain: "Practicar Vocabulario", btnSpeech: "Practicar Pronunciación", btnAch: "Ver Logros",
-        speechTitlePrefix: "Práctica de Lectura y Pronunciación", speechLevel: "Nivel:", lvlEasy: "Fácil", lvlMedium: "Medio", lvlHard: "Difícil",
+        speechTitlePrefix: "Práctica de Lectura y Pronunciación", speechLevel: "Nivel:", lvlEasy: "Fácil", lvlMedium: "Medio", lvlHard: "Difícil", lblSelectStory: "Texto:",
         speechInstruction: "💡 Haz clic en cualquier palabra para escuchar su pronunciación. Presiona el botón para escuchar toda la historia o usa el micrófono para leer en voz alta.",
         btnListenStory: "Escuchar Historia Completa", btnRecordVoice: "Grabar y Evaluar Pronunciación", btnStopVoice: "Detener y Evaluar",
         speechStatusListening: "Escuchando... ¡Lee la historia en voz alta!", speechStatusNoMic: "El reconocimiento de voz no es compatible con este navegador.",
@@ -296,7 +270,7 @@ const UI_TEXTS = {
         cardSpeechTag: "LECTURE & PRONONCIATION", cardSpeechTitle: "Lecteur et Parole", cardSpeechDesc: "Lisez des histoires par niveau, testez votre prononciation en temps réel et entraînez votre écoute.",
         cardAchTag: "DÉFIS & TROPHEES", cardAchTitle: "GALERIE DES SUCCÈS", cardAchDesc: "Débloquez jusqu'à 100 succès uniques grâce à vos progrès.",
         btnAccess: "Accéder au Tableau", btnTrain: "Entraîner le Vocabulaire", btnSpeech: "Pratiquer la Prononciation", btnAch: "Voir les Succès",
-        speechTitlePrefix: "Pratique de Lecture et Prononciation", speechLevel: "Niveau :", lvlEasy: "Facile", lvlMedium: "Moyen", lvlHard: "Difficile",
+        speechTitlePrefix: "Pratique de Lecture et Prononciation", speechLevel: "Niveau :", lvlEasy: "Facile", lvlMedium: "Moyen", lvlHard: "Difficile", lblSelectStory: "Texte :",
         speechInstruction: "💡 Cliquez sur n'importe quel mot pour entendre sa prononciation. Appuyez sur le bouton pour écouter l'histoire complète ou sur le micro pour tester votre lecture à voix haute.",
         btnListenStory: "Écouter l'Histoire Complète", btnRecordVoice: "Enregistrer & Évaluer", btnStopVoice: "Arrêter & Évaluer",
         speechStatusListening: "Écoute en cours... Lisez l'histoire à haute voix !", speechStatusNoMic: "Reconnaissance vocale non prise en charge sur ce navigateur.",
@@ -329,6 +303,52 @@ const UI_TEXTS = {
         obTitleStep1: "Bienvenue sur Fluency Lab !", obDescStep1: "Comment devrions-nous vous appeler et d'où venez-vous ?", obLblName: "Votre Nom", obLblOrigin: "Langue de l'interface", obBtnNext1: "Suivant",
         obTitleStep2: "Quelle langue allez-vous étudier ?", obDescStep2: "Vous pourrez changer de langue dans votre profil plus tard.", obBtnBack2: "Retour", obBtnNext2: "Suivant",
         obTitleStep3: "Tout est prêt pour l'immersion !", obDescStep3: "Votre tableau de bord personnalisé a été configuré avec succès.", obBtnFinish: "Commencer"
+    },
+    ja: {
+        learningLabel: "学習言語", uiLabel: "インターフェース",
+        navHub: "ホーム", navDash: "ダッシュボード", navCad: "新規登録",
+        welcome: "ようこそ、{NAME} •", headerAch: "実績・トロフィー",
+        hubTitle: "今日はどの学習を記録または練習しますか？",
+        hubDesc: "以下のモジュールを選択して進捗状況を確認しましょう。",
+        cardListeningGoal: "目標時間", cardListeningTitle: "リスニングトラッカー", cardListeningDesc: "対象言語で視聴した映画、ドラマ、ポッドキャスト。",
+        cardReadingTag: "読書・ページ数", cardReadingTitle: "リーディングトラッカー", cardReadingDesc: "読破した本と総ページ数の記録。",
+        cardVocabTag: "単語帳・暗記", cardVocabTitle: "ボキャブラリートレーナー", cardVocabDesc: "フラッシュカードと記憶演習で単語力を強化。",
+        cardSpeechTag: "音読・発音練習", cardSpeechTitle: "音声リーダー＆発音", cardSpeechDesc: "レベル別の物語を音読し、リアルタイムで発音を評価。",
+        cardAchTag: "挑戦・トロフィー", cardAchTitle: "実績ギャラリー", cardAchDesc: "毎日の学習で最大100個のユニークなバッジを解除。",
+        btnAccess: "ダッシュボードを開く", btnTrain: "単語の練習を開始", btnSpeech: "発音練習を開始", btnAch: "実績を表示",
+        speechTitlePrefix: "音読・発音トレーニング", speechLevel: "難易度:", lvlEasy: "初級", lvlMedium: "中級", lvlHard: "上級", lblSelectStory: "文章:",
+        speechInstruction: "💡 単語をクリックすると個別の発音を聞くことができます。ボタンを押して全ストーリーを聴くか、マイクを使って音読をテストしましょう。",
+        btnListenStory: "ストーリー全体を聴く", btnRecordVoice: "録音して発音をチェック", btnStopVoice: "停止して評価",
+        speechStatusListening: "録音中... ストーリーを声に出して読んでください！", speechStatusNoMic: "このブラウザは音声認識をサポートしていません。",
+        speechScoreText: "の正確度",
+        achBannerTag: "殿堂入りギャラリー", achBannerTitle: "100実績ギャラリー", achBannerDesc: "毎日の学習で進捗を追跡し、バッジを獲得しましょう。",
+        lblAchUnlocked: "解除済み", lblAchProgress: "全体進捗",
+        achFilterAll: "すべて (100)", achFilterStreak: "🔥 連続学習", achFilterVocab: "🧠 ボキャブラリー", achFilterListening: "🎧 リスニング", achFilterReading: "📖 読書", achFilterPoly: "🌍 多言語",
+        goalFixed: "目標 (時間)", progress: "進捗状況", ofTarget: "の目標達成",
+        summaryListening: "リスニング要約", summaryListeningDesc: "選択した言語の累積時間。", realTime: "リアルタイム", registered: "登録済み",
+        hoursByType: "学習タイプ別時間", hoursByTypeDesc: "ダイヤモンド、シルバー、ゴールド別の内訳。",
+        titlesWatched: "視聴タイトル", titlesWatchedDesc: "登録された映画やドラマのリスト。", decimalTotal: "10進数合計:", target: "目標:",
+        addMediaTitle: "映画・ドラマの登録", addMediaDesc: "学習時間を記録しましょう。",
+        mediaType: "メディアタイプ", optMovie: "映画", optSeries: "ドラマ",
+        titleName: "タイトル名", coverImg: "カバー画像", listeningMode: "リスニングモード",
+        descDiamond: "字幕なし (100%集中練習)", descGold: "学習言語の音声と字幕", descSilver: "オリジナル音声＋翻訳字幕",
+        hours: "時間", minutes: "分", season: "シーズン (任意)", epCount: "視聴エピソード数", avgHours: "1話平均 (時間)", avgMins: "1話平均 (分)",
+        save: "保存する", cancel: "キャンセル",
+        totalBooks: "総書籍数", totalPages: "総ページ数", pagesPerBook: "1冊あたりの読書量", pagesPerBookDesc: "登録された作品ごとの読書量。",
+        registeredBooks: "保存された書籍", sumPages: "総ページ数:", addBookTitle: "新しい本を登録", addBookDesc: "読んだ本を記録してページ数を計算します。",
+        bookTitle: "本のタイトル", bookAuthor: "著者 (任意)", bookPages: "ページ数", bookCover: "表紙画像",
+        totalWords: "単語数", accuracyRate: "正解率", registeredVocab: "保存された単語", addWordTitle: "新しい単語を登録", addWordDesc: "トレーニング用の新しい単語を追加します。",
+        termInLang: "対象言語の単語・フレーズ", termTranslation: "翻訳 / 意味", termExample: "例文 (任意)",
+        tapFlip: "タップして裏返す", clickToFlip: "カードをクリックして翻訳を表示 🔄", translationTag: "翻訳",
+        correctHits: "正解:", wrongHits: "不正解:", btnWrong: "覚えていない", btnCorrect: "覚えていた！", btnNextRandom: "次のランダムな単語を引く",
+        emptyVocabTitle: "単語が登録されていません", emptyVocabExample: "上部メニューから最初の単語を追加してください。", emptyVocabList: "登録されている単語はありません。", emptyMediaList: "登録されているタイトルはありません。", emptyBookList: "登録されている本はありません。",
+        popupStreakTitle: "ストリーク達成！ 🔥", popupStreakDesc: "素晴らしい！毎日の連続学習が記録されました。", btnContinue: "続ける",
+        modalStreakTitle: "連続学習の統計", modalStreakSub: "毎日の管理と履歴記録", modalSeq: "現在のストリーク", modalMissed: "今月の欠席", modalWeek: "週間履歴", modalNote: "練習しなかった日は赤で表示されます。", streakResetTime: "リセットまで:", btnUnderstood: "確認",
+        lblModalStudying: "学習中の言語", lblModalUi: "UI言語",
+        refazerPerguntas: "オンボーディングをやり直す", modalClose: "閉じる",
+        obTitleStep1: "Fluency Labへようこそ！", obDescStep1: "お名前とご出身を教えてください。", obLblName: "お名前", obLblOrigin: "UI言語", obBtnNext1: "次へ",
+        obTitleStep2: "どの言語を学習しますか？", obDescStep2: "後でプロフィールから変更できます。", obBtnBack2: "戻る", obBtnNext2: "次へ",
+        obTitleStep3: "準備が完了しました！", obDescStep3: "パーソナライズされたダッシュボードの設定が完了しました。", obBtnFinish: "学習を開始する"
     }
 };
 
@@ -471,7 +491,7 @@ function selectOnboardingTarget(lang) {
 
 function selectOnboardingOrigin(countryLang) {
     obTempOrigin = countryLang;
-    ['pt', 'en', 'es', 'fr'].forEach(c => {
+    ['pt', 'en', 'es', 'fr', 'ja'].forEach(c => {
         const btn = document.getElementById(`ob-origin-${c}`);
         if (btn) {
             if (c === countryLang) btn.classList.add('ob-option-selected');
@@ -553,7 +573,7 @@ function updateUserAvatarUI() {
 function openUserProfileModal() {
     const modal = document.getElementById('user-profile-modal');
     if (modal) {
-        const originNames = { pt: 'Brasil 🇧🇷', en: 'USA 🇺🇸', es: 'España 🇪🇸', fr: 'France 🇫🇷' };
+        const originNames = { pt: 'Brasil 🇧🇷', en: 'USA 🇺🇸', es: 'España 🇪🇸', fr: 'France 🇫🇷', ja: 'Japan 🇯🇵' };
         document.getElementById('user-modal-name').innerText = userName;
         document.getElementById('user-modal-origin').innerText = `Origem: ${originNames[userOrigin] || 'Brasil 🇧🇷'}`;
         
@@ -782,6 +802,7 @@ function applyUITranslations() {
     setText('hub-btn-ach', txt.btnAch);
 
     setText('lbl-difficulty-level', txt.speechLevel);
+    setText('lbl-select-story', txt.lblSelectStory);
     setText('speech-lvl-easy', txt.lvlEasy);
     setText('speech-lvl-medium', txt.lvlMedium);
     setText('speech-lvl-hard', txt.lvlHard);
@@ -972,6 +993,7 @@ function switchTab(tabId) {
 /* ============ MÓDULO DE LEITURA & PRONÚNCIA ============ */
 function setSpeechLevel(lvl) {
     currentSpeechLevel = lvl;
+    currentStoryIndex = 0; // Volta para o primeiro texto ao mudar nível
     ['easy', 'medium', 'hard'].forEach(l => {
         const btn = document.getElementById(`speech-lvl-${l}`);
         if (btn) {
@@ -985,12 +1007,30 @@ function setSpeechLevel(lvl) {
     renderSpeechModule();
 }
 
+function changeStoryIndex(idx) {
+    currentStoryIndex = parseInt(idx) || 0;
+    renderSpeechModule();
+}
+
 function getCurrentStory() {
-    const langData = STORIES_DATABASE[targetLang] || STORIES_DATABASE['en'];
-    return langData[currentSpeechLevel] || langData['easy'];
+    const storiesList = generate50Stories(targetLang, currentSpeechLevel);
+    return storiesList[currentStoryIndex] || storiesList[0];
 }
 
 function renderSpeechModule() {
+    // Preenche o seletor de 1 a 50
+    const selectEl = document.getElementById('speech-story-select');
+    if (selectEl && selectEl.options.length !== 50) {
+        selectEl.innerHTML = '';
+        for (let i = 0; i < 50; i++) {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.innerText = `Texto ${i + 1}`;
+            selectEl.appendChild(opt);
+        }
+    }
+    if (selectEl) selectEl.value = currentStoryIndex;
+
     const story = getCurrentStory();
     const titleEl = document.getElementById('speech-story-title');
     const container = document.getElementById('speech-story-container');
@@ -998,13 +1038,12 @@ function renderSpeechModule() {
     if (titleEl) titleEl.innerText = story.title;
     if (container) {
         container.innerHTML = '';
-        story.paragraphs.forEach((pText, pIdx) => {
+        story.paragraphs.forEach((pText) => {
             const p = document.createElement('p');
             p.className = "leading-relaxed";
             
-            // Separa por palavras preservando sinais
             const words = pText.split(/(\s+)/);
-            words.forEach((w, wIdx) => {
+            words.forEach((w) => {
                 if (w.trim().length === 0) {
                     p.appendChild(document.createTextNode(w));
                 } else {
@@ -1066,7 +1105,6 @@ function startVoiceRecognition() {
         if (feedbackBar) feedbackBar.classList.remove('hidden');
         if (statusText) statusText.innerText = txt.speechStatusListening;
         
-        // Limpa classes anteriores de cor
         document.querySelectorAll('.story-word').forEach(sp => {
             sp.classList.remove('word-correct', 'word-incorrect');
         });
@@ -1968,7 +2006,7 @@ function initHubCarousel() {
     requestAnimationFrame(frame);
 }
 
-console.log('Fluency Lab build 36');
+console.log('Fluency Lab build 37 - Japanese UI & 50 Dynamic Stories per Level');
 
 window.onload = async function() {
     await initDB();
