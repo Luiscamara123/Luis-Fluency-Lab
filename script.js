@@ -757,11 +757,23 @@ function openModule(moduleName) {
     if (modAch) modAch.classList.add('hidden');
 
     const nav = document.getElementById('main-nav');
+    const subnavTabs = document.getElementById('subnav-tabs-container');
+
     if (moduleName === 'hub') {
         if (modHub) modHub.classList.remove('hidden');
         if (nav) nav.classList.add('hidden');
     } else {
         if (nav) nav.classList.remove('hidden');
+        
+        // Remove a opção de Dashboard/Cadastrar quando for para Conquistas
+        if (subnavTabs) {
+            if (moduleName === 'achievements') {
+                subnavTabs.classList.add('hidden');
+            } else {
+                subnavTabs.classList.remove('hidden');
+            }
+        }
+
         const activeEl = document.getElementById(`module-${moduleName}`);
         if (activeEl) {
             activeEl.classList.remove('hidden');
@@ -1454,80 +1466,179 @@ async function deleteVocabularyItem(id, word) {
     }
 }
 
-/* --- CONTROLE DE VELOCIDADE E DRAG SCROLL (ARRASTAR COM O DEDO) DO CARROSSEL --- */
-function accelerateCarousel(direction) {
+/* --- CARROSSEL DO HUB: loop infinito automático (pausa ao interagir) --- */
+function initHubCarousel() {
     const track = document.getElementById('infinite-carousel-track');
-    if (!track) return;
-    track.classList.add('fast-mode');
-    if (direction === 'left') {
-        track.style.animationDirection = 'reverse';
-    } else {
-        track.style.animationDirection = 'normal';
+    const wrap = track ? track.closest('.hub-carousel') : null;
+    if (!track || !wrap || track.dataset.ready) return;
+    track.dataset.ready = '1';
+
+    const SPEED = 36;           // px por segundo
+    const SETS = 5;             // 1 conjunto original + 4 cópias (loop sem emenda)
+    const RESUME_DELAY = 2500;  // ms de espera após o usuário mexer
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const originals = Array.from(track.querySelectorAll('.hub-card'));
+    const prev = document.getElementById('carousel-prev');
+    const next = document.getElementById('carousel-next');
+
+    let loopW = 0, pos = 0, last = 0, lastSet = 0;
+    let hover = false, focusKey = false, dragging = false, touching = false;
+    let resumeAt = 0, userScrollTs = 0, anim = null;
+
+    function buildClones() {
+        track.querySelectorAll('[data-clone]').forEach(n => n.remove());
+        for (let s = 1; s < SETS; s++) {
+            originals.forEach(card => {
+                const c = card.cloneNode(true);
+                c.setAttribute('data-clone', '1');
+                c.setAttribute('aria-hidden', 'true');
+                c.removeAttribute('id');
+                c.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+                c.querySelectorAll('button, a').forEach(el => el.setAttribute('tabindex', '-1'));
+                track.appendChild(c);
+            });
+        }
+        loopW = 0;
     }
-}
 
-function normalCarouselSpeed() {
-    const track = document.getElementById('infinite-carousel-track');
-    if (!track) return;
-    track.classList.remove('fast-mode');
-    track.style.animationDirection = 'normal';
-}
-
-function initDraggableCarousel() {
-    const track = document.getElementById('infinite-carousel-track');
-    if (!track) return;
-
-    let isDown = false;
-    let startX;
-
-    track.addEventListener('mousedown', (e) => {
-        isDown = true;
-        track.classList.add('fast-mode');
-        startX = e.pageX;
-    });
-
-    window.addEventListener('mouseup', () => {
-        if (!isDown) return;
-        isDown = false;
-        track.classList.remove('fast-mode');
-    });
-
-    track.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX;
-        const walk = x - startX;
-        if (walk > 20) {
-            track.style.animationDirection = 'reverse';
-        } else if (walk < -20) {
-            track.style.animationDirection = 'normal';
+    function measure() {
+        const n = originals.length;
+        if (track.clientWidth > 0 && track.children.length > n) {
+            loopW = track.children[n].offsetLeft - track.children[0].offsetLeft;
         }
-    });
+    }
 
-    // Toque em Dispositivos Móveis para acelerar / arrastar o carrossel
-    track.addEventListener('touchstart', (e) => {
-        isDown = true;
-        track.classList.add('fast-mode');
-        startX = e.touches[0].pageX;
-    });
+    function normalize() {
+        let shift = 0;
+        while (pos < loopW) { pos += loopW; shift += loopW; }
+        while (pos >= loopW * 3) { pos -= loopW; shift -= loopW; }
+        return shift;
+    }
 
-    window.addEventListener('touchend', () => {
-        if (!isDown) return;
-        isDown = false;
-        track.classList.remove('fast-mode');
-    });
-
-    track.addEventListener('touchmove', (e) => {
-        if (!isDown) return;
-        const x = e.touches[0].pageX;
-        const walk = x - startX;
-        if (walk > 20) {
-            track.style.animationDirection = 'reverse';
-        } else if (walk < -20) {
-            track.style.animationDirection = 'normal';
+    function tick(ts, dt) {
+        const paused = hover || focusKey || dragging || touching || ts < resumeAt || reduceMotion;
+        if (anim) {
+            const t = Math.min(1, (ts - anim.start) / anim.dur);
+            pos = anim.from + (anim.to - anim.from) * (1 - Math.pow(1 - t, 3));
+            const s = normalize();
+            if (s) { anim.from += s; anim.to += s; }
+            if (t >= 1) anim = null;
+        } else if (paused) {
+            pos = track.scrollLeft;
+            // só reposiciona o loop quando o usuário já parou de rolar
+            if (!touching && !dragging && ts - userScrollTs > 250) {
+                const before = pos;
+                normalize();
+                if (pos !== before) { track.scrollLeft = pos; lastSet = track.scrollLeft; }
+            }
+            return;
+        } else {
+            pos += SPEED * dt;
+            normalize();
         }
+        track.scrollLeft = pos;
+        lastSet = track.scrollLeft;
+    }
+
+    function frame(ts) {
+        const dt = Math.min(0.05, (ts - (last || ts)) / 1000);
+        last = ts;
+        if (focusKey && !wrap.contains(document.activeElement)) focusKey = false;
+        if (track.clientWidth > 0) {
+            if (!loopW) measure();
+            if (loopW) tick(ts, dt);
+        }
+        requestAnimationFrame(frame);
+    }
+
+    // --- interação do usuário ---
+    track.addEventListener('scroll', () => {
+        if (Math.abs(track.scrollLeft - lastSet) > 1.5) {
+            userScrollTs = performance.now();
+            resumeAt = userScrollTs + RESUME_DELAY;
+        }
+    }, { passive: true });
+
+    wrap.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hover = true; });
+    wrap.addEventListener('pointerleave', (e) => {
+        if (e.pointerType === 'mouse') { hover = false; resumeAt = performance.now() + 400; }
     });
+
+    track.addEventListener('touchstart', () => { touching = true; anim = null; }, { passive: true });
+    const endTouch = () => { touching = false; resumeAt = performance.now() + RESUME_DELAY; };
+    track.addEventListener('touchend', endTouch, { passive: true });
+    track.addEventListener('touchcancel', endTouch, { passive: true });
+
+    wrap.addEventListener('focusin', (e) => {
+        if (e.target.matches && e.target.matches(':focus-visible')) focusKey = true;
+    });
+    wrap.addEventListener('focusout', () => { focusKey = false; });
+
+    // arrastar com o mouse
+    let down = false, moved = false, startX = 0, startScroll = 0;
+    track.addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'mouse' || e.button !== 0) return;
+        down = true; moved = false; anim = null;
+        startX = e.clientX; startScroll = track.scrollLeft;
+    });
+    window.addEventListener('pointermove', (e) => {
+        if (!down) return;
+        const dx = e.clientX - startX;
+        if (!moved && Math.abs(dx) > 6) { moved = true; dragging = true; track.classList.add('is-dragging'); }
+        if (moved) track.scrollLeft = startScroll - dx;
+    });
+    const endDrag = () => {
+        if (!down) return;
+        down = false;
+        if (moved) {
+            dragging = false;
+            track.classList.remove('is-dragging');
+            userScrollTs = performance.now();
+            resumeAt = userScrollTs + RESUME_DELAY;
+        }
+    };
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
+    track.addEventListener('click', (e) => {
+        if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+    }, true);
+
+    // setas e teclado: andam um card por vez
+    function nudge(dir) {
+        const gap = parseFloat(getComputedStyle(track).columnGap) || 20;
+        const step = (originals[0].offsetWidth + gap) * dir;
+        const base = anim ? anim.to : track.scrollLeft;
+        anim = { from: track.scrollLeft, to: base + step, start: performance.now(), dur: 520 };
+        resumeAt = performance.now() + 3000;
+    }
+    if (prev) prev.addEventListener('click', () => nudge(-1));
+    if (next) next.addEventListener('click', () => nudge(1));
+    track.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); nudge(1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); nudge(-1); }
+    });
+
+    if ('ResizeObserver' in window) new ResizeObserver(() => { loopW = 0; }).observe(track);
+    else window.addEventListener('resize', () => { loopW = 0; });
+
+    // as cópias precisam acompanhar a tradução do idioma
+    window.refreshHubClones = buildClones;
+    if (typeof applyUITranslations === 'function' && !applyUITranslations.__hubWrapped) {
+        const orig = applyUITranslations;
+        applyUITranslations = function () {
+            const r = orig.apply(this, arguments);
+            if (window.refreshHubClones) window.refreshHubClones();
+            return r;
+        };
+        applyUITranslations.__hubWrapped = true;
+    }
+
+    buildClones();
+    requestAnimationFrame(frame);
 }
+
+console.log('Fluency Lab build 35');
 
 window.onload = async function() {
     await initDB();
@@ -1537,8 +1648,8 @@ window.onload = async function() {
     applyUITranslations();
     updateUserAvatarUI();
     openModule('hub');
+    initHubCarousel();
     updateHeaderStreakUI();
-    initDraggableCarousel();
 
     setInterval(updateStreakCountdown, 1000);
     updateStreakCountdown();

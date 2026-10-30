@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fluency-lab-v31';
+const CACHE_NAME = 'fluency-lab-v37';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -13,7 +13,7 @@ const ASSETS_TO_CACHE = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
+      return Promise.all(ASSETS_TO_CACHE.map((url) => cache.add(url).catch(() => null)));
     }).then(() => self.skipWaiting())
   );
 });

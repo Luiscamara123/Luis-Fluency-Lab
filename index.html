@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#060d24">
     <title>Fluency Lab - Plataforma de Imersão e Estudos</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,16 +12,14 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=35">
 </head>
 <body id="app-body" class="theme-en mode-dark min-h-screen transition-all duration-500 flex flex-col relative overflow-x-hidden">
 
-    <!-- FUNDO COM AS IMAGENS NÍTIDAS (SEM FILTRO CINZA ESCURO) -->
+    <!-- FUNDO AZUL -->
     <div id="bg-image-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <img src="img/backgroundIMG.jpg" class="block md:hidden absolute inset-0 w-full h-full object-cover">
-        <img src="img/backgroundIMG-desktop.jpg" class="hidden md:block absolute inset-0 w-full h-full object-cover">
-        <!-- Overlay leve apenas para legibilidade, sem tom cinza/escuro pesado -->
-        <div class="absolute inset-0 bg-white/10 backdrop-blur-[0.5px]"></div>
+        <img src="img/backgroundIMG.jpeg" alt="" class="absolute inset-0 w-full h-full object-cover">
+    </div>
     </div>
 
     <!-- ONBOARDING OVERLAY -->
@@ -154,7 +153,7 @@
                 <button onclick="openModule('hub')" class="px-3.5 py-2 rounded-xl border flex items-center gap-2 opacity-90 hover:opacity-100 transition-all sub-card shadow-sm">
                     <i class="fa-solid fa-house"></i> <span id="lbl-nav-hub">Início</span>
                 </button>
-                <div class="flex items-center gap-1 bg-black/10 dark:bg-white/10 p-1 rounded-2xl border border-white/20 shadow-inner">
+                <div id="subnav-tabs-container" class="flex items-center gap-1 bg-black/10 dark:bg-white/10 p-1 rounded-2xl border border-white/20 shadow-inner">
                     <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all shadow animated-nav-btn nav-btn-active">Dashboard</button>
                     <button onclick="switchTab('cadastro')" id="btn-cadastro" class="px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all animated-nav-btn opacity-80 hover:opacity-100">Cadastrar</button>
                 </div>
@@ -181,103 +180,70 @@
                 <p id="hub-desc" class="text-xs md:text-sm font-semibold opacity-90 pt-1 drop-shadow">Selecione um módulo abaixo para acompanhar seu progresso e evoluir no idioma.</p>
             </div>
 
-            <!-- CARROSSEL INFINITO EM MOVIMENTO COM ARRASTAR E VELOCIDADE VARIÁVEL POR TOQUE -->
-            <div class="relative w-full overflow-hidden py-4 group select-none">
-                
-                <!-- Seta Esquerda -->
-                <button onmousedown="accelerateCarousel('left')" onmouseup="normalCarouselSpeed()" onmouseleave="normalCarouselSpeed()" 
-                    class="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full border items-center justify-center shadow-2xl panel-card opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+            <!-- CARROSSEL DO HUB (loop infinito; pausa ao passar o mouse / tocar) -->
+            <div class="hub-carousel group select-none" role="region" aria-label="Módulos do Fluency Lab">
+
+                <button id="carousel-prev" type="button" aria-label="Anterior"
+                    class="carousel-arrow carousel-arrow-left hidden md:flex">
                     <i class="fa-solid fa-chevron-left text-xs"></i>
                 </button>
 
-                <!-- Track do Carrossel animado e arrastável -->
-                <div id="infinite-carousel-track" class="flex gap-6 w-max cursor-grab active:cursor-grabbing">
-                    
+                <div id="infinite-carousel-track" class="hub-track" tabindex="0">
+
                     <!-- CARD 1: LISTENING -->
-                    <div class="w-72 md:w-80 panel-card p-6 border shadow-2xl flex flex-col justify-between space-y-4 pointer-events-auto">
+                    <article class="hub-card panel-card">
+                        <span class="hub-index">01</span>
                         <div class="space-y-3">
-                            <span id="card-listening-goal" class="text-[10px] font-black tracking-widest px-3 py-1 rounded-xl border sub-card">META DE HORAS</span>
+                            <div class="hub-icon"><i class="fa-solid fa-headphones"></i></div>
+                            <span id="card-listening-goal" class="hub-eyebrow">META DE HORAS</span>
                             <h3 id="card-listening-title" class="text-base font-black">Rastreador de Escuta</h3>
                             <p id="card-listening-desc" class="text-xs opacity-90 leading-relaxed font-medium">Filmes, séries e podcasts assistidos no idioma com controle de horas e categorias.</p>
                         </div>
-                        <button onclick="openModule('listening')" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all hub-btn-access z-20 relative">Acessar o Painel</button>
-                    </div>
+                        <button type="button" onclick="openModule('listening')" class="hub-cta hub-btn-access">Acessar o Painel</button>
+                    </article>
 
                     <!-- CARD 2: READING -->
-                    <div class="w-72 md:w-80 panel-card p-6 border shadow-2xl flex flex-col justify-between space-y-4 pointer-events-auto">
+                    <article class="hub-card panel-card">
+                        <span class="hub-index">02</span>
                         <div class="space-y-3">
-                            <span id="card-reading-tag" class="text-[10px] font-black tracking-widest px-3 py-1 rounded-xl border sub-card">LEITURA DE LIVROS</span>
+                            <div class="hub-icon"><i class="fa-solid fa-book-open"></i></div>
+                            <span id="card-reading-tag" class="hub-eyebrow">LEITURA DE LIVROS</span>
                             <h3 id="card-reading-title" class="text-base font-black">Rastreador de Leitura</h3>
                             <p id="card-reading-desc" class="text-xs opacity-90 leading-relaxed font-medium">Livros lidos, contagem de páginas e total de obras concluídas para construir seu hábito.</p>
                         </div>
-                        <button onclick="openModule('reading')" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all hub-btn-access z-20 relative">Acessar o Painel</button>
-                    </div>
+                        <button type="button" onclick="openModule('reading')" class="hub-cta hub-btn-access">Acessar o Painel</button>
+                    </article>
 
                     <!-- CARD 3: VOCABULARY -->
-                    <div class="w-72 md:w-80 panel-card p-6 border shadow-2xl flex flex-col justify-between space-y-4 pointer-events-auto">
+                    <article class="hub-card panel-card">
+                        <span class="hub-index">03</span>
                         <div class="space-y-3">
-                            <span id="card-vocab-tag" class="text-[10px] font-black tracking-widest px-3 py-1 rounded-xl border sub-card">FLASHCARDS</span>
+                            <div class="hub-icon"><i class="fa-solid fa-clone"></i></div>
+                            <span id="card-vocab-tag" class="hub-eyebrow">FLASHCARDS</span>
                             <h3 id="card-vocab-title" class="text-base font-black">Treinador de Vocabulário</h3>
                             <p id="card-vocab-desc" class="text-xs opacity-90 leading-relaxed font-medium">Pratique com exercícios de memória, flashcards interativos e áudio nativo.</p>
                         </div>
-                        <button onclick="openModule('vocabulary')" id="hub-btn-train" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all z-20 relative">Treinar Vocabulário</button>
-                    </div>
+                        <button type="button" onclick="openModule('vocabulary')" id="hub-btn-train" class="hub-cta">Treinar Vocabulário</button>
+                    </article>
 
                     <!-- CARD 4: ACHIEVEMENTS -->
-                    <div class="w-72 md:w-80 panel-card p-6 border shadow-2xl flex flex-col justify-between space-y-4 pointer-events-auto">
+                    <article class="hub-card panel-card">
+                        <span class="hub-index">04</span>
                         <div class="space-y-3">
-                            <span id="card-ach-tag" class="text-[10px] font-black tracking-widest px-3 py-1 rounded-xl border sub-card">DESAFIOS & TROFÉUS</span>
+                            <div class="hub-icon"><i class="fa-solid fa-trophy"></i></div>
+                            <span id="card-ach-tag" class="hub-eyebrow">DESAFIOS & TROFÉUS</span>
                             <h3 id="card-ach-title" class="text-base font-black">GALERIA DE CONQUISTAS</h3>
                             <p id="card-ach-desc" class="text-xs opacity-90 leading-relaxed font-medium">Desbloqueie até 100 conquistas únicas com sua evolução diária nos estudos.</p>
                         </div>
-                        <button onclick="openModule('achievements')" id="hub-btn-ach" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all z-20 relative">Ver Conquistas</button>
-                    </div>
-
-                    <!-- DUPLICAÇÃO PARA LOOPING INFINITO PERFEITO -->
-                    <div class="w-72 md:w-80 panel-card p-6 border shadow-2xl flex flex-col justify-between space-y-4 pointer-events-auto">
-                        <div class="space-y-3">
-                            <span class="text-[10px] font-black tracking-widest px-3 py-1 rounded-xl border sub-card">META DE HORAS</span>
-                            <h3 class="text-base font-black">Rastreador de Escuta</h3>
-                            <p class="text-xs opacity-90 leading-relaxed font-medium">Filmes, séries e podcasts assistidos no idioma com controle de horas e categorias.</p>
-                        </div>
-                        <button onclick="openModule('listening')" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all hub-btn-access z-20 relative">Acessar o Painel</button>
-                    </div>
-
-                    <div class="w-72 md:w-80 panel-card p-6 border shadow-2xl flex flex-col justify-between space-y-4 pointer-events-auto">
-                        <div class="space-y-3">
-                            <span class="text-[10px] font-black tracking-widest px-3 py-1 rounded-xl border sub-card">LEITURA DE LIVROS</span>
-                            <h3 class="text-base font-black">Rastreador de Leitura</h3>
-                            <p class="text-xs opacity-90 leading-relaxed font-medium">Livros lidos, contagem de páginas e total de obras concluídas para construir seu hábito.</p>
-                        </div>
-                        <button onclick="openModule('reading')" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all hub-btn-access z-20 relative">Acessar o Painel</button>
-                    </div>
-
-                    <div class="w-72 md:w-80 panel-card p-6 border shadow-2xl flex flex-col justify-between space-y-4 pointer-events-auto">
-                        <div class="space-y-3">
-                            <span class="text-[10px] font-black tracking-widest px-3 py-1 rounded-xl border sub-card">FLASHCARDS</span>
-                            <h3 class="text-base font-black">Treinador de Vocabulário</h3>
-                            <p class="text-xs opacity-90 leading-relaxed font-medium">Pratique com exercícios de memória, flashcards interativos e áudio nativo.</p>
-                        </div>
-                        <button onclick="openModule('vocabulary')" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all z-20 relative">Treinar Vocabulário</button>
-                    </div>
-
-                    <div class="w-72 md:w-80 panel-card p-6 border shadow-2xl flex flex-col justify-between space-y-4 pointer-events-auto">
-                        <div class="space-y-3">
-                            <span class="text-[10px] font-black tracking-widest px-3 py-1 rounded-xl border sub-card">DESAFIOS & TROFÉUS</span>
-                            <h3 class="text-base font-black">GALERIA DE CONQUISTAS</h3>
-                            <p class="text-xs opacity-90 leading-relaxed font-medium">Desbloqueie até 100 conquistas únicas com sua evolução diária nos estudos.</p>
-                        </div>
-                        <button onclick="openModule('achievements')" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all z-20 relative">Ver Conquistas</button>
-                    </div>
+                        <button type="button" onclick="openModule('achievements')" id="hub-btn-ach" class="hub-cta">Ver Conquistas</button>
+                    </article>
 
                 </div>
 
-                <!-- Seta Direita -->
-                <button onmousedown="accelerateCarousel('right')" onmouseup="normalCarouselSpeed()" onmouseleave="normalCarouselSpeed()" 
-                    class="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full border items-center justify-center shadow-2xl panel-card opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                <button id="carousel-next" type="button" aria-label="Próximo"
+                    class="carousel-arrow carousel-arrow-right hidden md:flex">
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </button>
-
             </div>
         </section>
 
@@ -557,13 +523,13 @@
                         <div class="py-8 cursor-pointer perspective" onclick="flipFlashcard()">
                             <div id="flip-card-inner" class="relative w-full h-48 transition-transform duration-500 transform-style-3d">
                                 <!-- Frente -->
-                                <div class="absolute inset-0 backface-hidden panel-card border rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-2 shadow-2xl">
+                                <div class="absolute inset-0 backface-hidden panel-card border rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-2 shadow-2xl flip-face">
                                     <span id="card-front-lang-label" class="text-[10px] font-black uppercase tracking-widest opacity-70">English</span>
                                     <h3 id="fc-word" class="text-2xl md:text-3xl font-black">Nenhuma palavra</h3>
                                     <span id="lbl-click-to-flip" class="text-[11px] opacity-70 font-medium">Clique no cartão para revelar a tradução 🔄</span>
                                 </div>
                                 <!-- Verso -->
-                                <div class="absolute inset-0 backface-hidden panel-card border rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-2 rotate-y-180 shadow-2xl bg-blue-500/10 backdrop-blur-md">
+                                <div class="absolute inset-0 backface-hidden panel-card border rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-2 rotate-y-180 shadow-2xl flip-face flip-back">
                                     <span id="lbl-translation-tag" class="text-[10px] font-black uppercase tracking-widest text-blue-500">Tradução</span>
                                     <h3 id="fc-translation" class="text-2xl md:text-3xl font-black text-blue-500">-</h3>
                                     <p id="fc-example" class="text-xs opacity-90 italic">"-"</p>
@@ -779,6 +745,6 @@
     </div>
 
     <!-- Script Principal -->
-    <script src="script.js"></script>
+    <script src="script.js?v=35"></script>
 </body>
 </html>
