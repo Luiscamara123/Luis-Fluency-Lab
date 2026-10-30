@@ -12,14 +12,13 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css?v=35">
+    <link rel="stylesheet" href="style.css?v=36">
 </head>
 <body id="app-body" class="theme-en mode-dark min-h-screen transition-all duration-500 flex flex-col relative overflow-x-hidden">
 
     <!-- FUNDO AZUL -->
     <div id="bg-image-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <img src="img/backgroundIMG.jpeg" alt="" class="absolute inset-0 w-full h-full object-cover">
-    </div>
     </div>
 
     <!-- ONBOARDING OVERLAY -->
@@ -32,30 +31,30 @@
             <!-- Passo 1: Nome e Origem -->
             <div id="onboarding-step-1" class="space-y-4">
                 <div class="text-center space-y-1">
-                    <h2 class="text-xl font-black tracking-tight">Bem-vindo ao Fluency Lab!</h2>
-                    <p class="text-xs opacity-80">Como devemos te chamar e de onde você é?</p>
+                    <h2 id="ob-title-step1" class="text-xl font-black tracking-tight">Bem-vindo ao Fluency Lab!</h2>
+                    <p id="ob-desc-step1" class="text-xs opacity-80">Como devemos te chamar e de onde você é?</p>
                 </div>
                 <div class="space-y-3">
                     <div>
-                        <label class="block text-xs font-bold mb-1 opacity-90">Seu Nome</label>
+                        <label id="ob-lbl-name" class="block text-xs font-bold mb-1 opacity-90">Seu Nome</label>
                         <input type="text" id="onboarding-input-name" placeholder="Ex: Luis" class="w-full p-3 rounded-xl border bg-transparent text-sm font-bold focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold mb-1 opacity-90">Idioma de Origem (Interface)</label>
+                        <label id="ob-lbl-origin" class="block text-xs font-bold mb-1 opacity-90">Idioma de Origem (Interface)</label>
                         <div class="grid grid-cols-2 gap-2">
                             <button onclick="selectOnboardingOrigin('pt')" id="ob-origin-pt" class="p-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 ob-option-selected">🇧🇷 Português</button>
                             <button onclick="selectOnboardingOrigin('en')" id="ob-origin-en" class="p-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2">🇺🇸 English</button>
                         </div>
                     </div>
                 </div>
-                <button onclick="nextOnboardingStep(2)" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">Avançar</button>
+                <button onclick="nextOnboardingStep(2)" id="ob-btn-next1" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">Avançar</button>
             </div>
 
             <!-- Passo 2: Idioma Alvo -->
             <div id="onboarding-step-2" class="space-y-4 hidden">
                 <div class="text-center space-y-1">
-                    <h2 class="text-xl font-black tracking-tight">Qual idioma você vai estudar?</h2>
-                    <p class="text-xs opacity-80">Você poderá alternar entre idiomas no seu perfil depois.</p>
+                    <h2 id="ob-title-step2" class="text-xl font-black tracking-tight">Qual idioma você vai estudar?</h2>
+                    <p id="ob-desc-step2" class="text-xs opacity-80">Você poderá alternar entre idiomas no seu perfil depois.</p>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="selectOnboardingTarget('en')" id="ob-target-en" class="p-4 rounded-2xl border flex flex-col items-center gap-2 font-bold text-xs ob-option-selected">
@@ -76,8 +75,8 @@
                     </button>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="nextOnboardingStep(1)" class="w-1/3 py-3 rounded-xl border font-bold text-xs uppercase sub-card">Voltar</button>
-                    <button onclick="nextOnboardingStep(3)" class="w-2/3 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">Avançar</button>
+                    <button onclick="nextOnboardingStep(1)" id="ob-btn-back2" class="w-1/3 py-3 rounded-xl border font-bold text-xs uppercase sub-card">Voltar</button>
+                    <button onclick="nextOnboardingStep(3)" id="ob-btn-next2" class="w-2/3 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">Avançar</button>
                 </div>
             </div>
 
@@ -87,10 +86,10 @@
                     <i class="fa-solid fa-flag-checkered"></i>
                 </div>
                 <div class="space-y-1">
-                    <h2 class="text-xl font-black tracking-tight">Tudo pronto para a imersão!</h2>
-                    <p class="text-xs opacity-80">Seu painel personalizado foi configurado com sucesso.</p>
+                    <h2 id="ob-title-step3" class="text-xl font-black tracking-tight">Tudo pronto para a imersão!</h2>
+                    <p id="ob-desc-step3" class="text-xs opacity-80">Seu painel personalizado foi configurado com sucesso.</p>
                 </div>
-                <button onclick="finishOnboarding()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-xl hover:brightness-110 transition-all">Começar Jornada</button>
+                <button onclick="finishOnboarding()" id="ob-btn-finish" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-xl hover:brightness-110 transition-all">Começar Jornada</button>
             </div>
         </div>
     </div>
@@ -172,19 +171,18 @@
                     <span id="hub-welcome">BEM-VINDO, LUIS • AMERICAN</span>
                 </div>
                 
-                <!-- TÍTULO DINÂMICO COM ONDAS -->
-                <h2 id="hub-title" class="text-2xl md:text-4xl font-black tracking-tight wave-title flex flex-wrap justify-center gap-x-1.5 gap-y-1 drop-shadow-md">
-                    <span style="--i:1">O</span><span style="--i:2">q</span><span style="--i:3">u</span><span style="--i:4">e</span><span style="--i:5">&nbsp;</span><span style="--i:6">v</span><span style="--i:7">o</span><span style="--i:8">c</span><span style="--i:9">ê</span><span style="--i:10">&nbsp;</span><span style="--i:11">d</span><span style="--i:12">e</span><span style="--i:13">s</span><span style="--i:14">e</span><span style="--i:15">j</span><span style="--i:16">a</span><span style="--i:17">&nbsp;</span><span style="--i:18">r</span><span style="--i:19">e</span><span style="--i:20">g</span><span style="--i:21">i</span><span style="--i:22">s</span><span style="--i:23">t</span><span style="--i:24">r</span><span style="--i:25">a</span><span style="--i:26">r</span><span style="--i:27">&nbsp;</span><span style="--i:28">o</span><span style="--i:29">u</span><span style="--i:30">&nbsp;</span><span style="--i:31">p</span><span style="--i:32">r</span><span style="--i:33">a</span><span style="--i:34">t</span><span style="--i:35">i</span><span style="--i:36">c</span><span style="--i:37">a</span><span style="--i:38">r</span><span style="--i:39">&nbsp;</span><span style="--i:40">h</span><span style="--i:41">o</span><span style="--i:42">j</span><span style="--i:43">e</span><span style="--i:44">?</span>
+                <!-- TÍTULO DINÂMICO TOTALMENTE RESPONSIVO -->
+                <h2 id="hub-title" class="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight wave-title flex flex-wrap justify-center gap-x-2 gap-y-1 drop-shadow-md text-balance leading-tight">
+                    <span id="hub-title-text">O que você deseja registrar ou praticar hoje?</span>
                 </h2>
                 
                 <p id="hub-desc" class="text-xs md:text-sm font-semibold opacity-90 pt-1 drop-shadow">Selecione um módulo abaixo para acompanhar seu progresso e evoluir no idioma.</p>
             </div>
 
-            <!-- CARROSSEL DO HUB (loop infinito; pausa ao passar o mouse / tocar) -->
+            <!-- CARROSSEL DO HUB (loop infinito) -->
             <div class="hub-carousel group select-none" role="region" aria-label="Módulos do Fluency Lab">
 
-                <button id="carousel-prev" type="button" aria-label="Anterior"
-                    class="carousel-arrow carousel-arrow-left hidden md:flex">
+                <button id="carousel-prev" type="button" aria-label="Anterior" class="carousel-arrow carousel-arrow-left hidden md:flex">
                     <i class="fa-solid fa-chevron-left text-xs"></i>
                 </button>
 
@@ -202,7 +200,7 @@
                         <button type="button" onclick="openModule('listening')" class="hub-cta hub-btn-access">Acessar o Painel</button>
                     </article>
 
-                    <!-- CARD 2: READING -->
+                    <!-- CARD 2: READING TRACKER -->
                     <article class="hub-card panel-card">
                         <span class="hub-index">02</span>
                         <div class="space-y-3">
@@ -226,9 +224,21 @@
                         <button type="button" onclick="openModule('vocabulary')" id="hub-btn-train" class="hub-cta">Treinar Vocabulário</button>
                     </article>
 
-                    <!-- CARD 4: ACHIEVEMENTS -->
+                    <!-- CARD 4: NOVO - PRÁTICA DE LEITURA & PRONÚNCIA -->
                     <article class="hub-card panel-card">
                         <span class="hub-index">04</span>
+                        <div class="space-y-3">
+                            <div class="hub-icon"><i class="fa-solid fa-microphone-lines"></i></div>
+                            <span id="card-speech-tag" class="hub-eyebrow">LEITURA & PRONÚNCIA</span>
+                            <h3 id="card-speech-title" class="text-base font-black">Leitor e Fala</h3>
+                            <p id="card-speech-desc" class="text-xs opacity-90 leading-relaxed font-medium">Leia histórias por nível, teste sua pronúncia com feedback em tempo real e treine a escuta.</p>
+                        </div>
+                        <button type="button" onclick="openModule('speech')" id="hub-btn-speech" class="hub-cta">Praticar Pronúncia</button>
+                    </article>
+
+                    <!-- CARD 5: ACHIEVEMENTS -->
+                    <article class="hub-card panel-card">
+                        <span class="hub-index">05</span>
                         <div class="space-y-3">
                             <div class="hub-icon"><i class="fa-solid fa-trophy"></i></div>
                             <span id="card-ach-tag" class="hub-eyebrow">DESAFIOS & TROFÉUS</span>
@@ -240,8 +250,7 @@
 
                 </div>
 
-                <button id="carousel-next" type="button" aria-label="Próximo"
-                    class="carousel-arrow carousel-arrow-right hidden md:flex">
+                <button id="carousel-next" type="button" aria-label="Próximo" class="carousel-arrow carousel-arrow-right hidden md:flex">
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </button>
             </div>
@@ -249,9 +258,7 @@
 
         <!-- MÓDULO LISTENING -->
         <section id="module-listening" class="space-y-6 hidden">
-            <!-- Dashboard View -->
             <div id="listening-tab-dashboard" class="space-y-6">
-                <!-- Top Banner Progresso -->
                 <div class="panel-card p-6 md:p-8 border shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
                     <div class="flex items-center gap-4">
                         <div class="w-14 h-14 rounded-2xl border overflow-hidden flex items-center justify-center p-1 sub-card shadow-inner">
@@ -274,12 +281,11 @@
                     </div>
                 </div>
 
-                <!-- Gráficos e Estatísticas -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="panel-card p-6 border shadow-2xl flex flex-col justify-between">
                         <div class="space-y-1">
                             <h3 id="lbl-summary-listening" class="text-xs font-black uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-chart-line"></i> Resumo de Escuta</h3>
-                            <p class="text-[11px] opacity-80">Volume acumulado no idioma selecionado.</p>
+                            <p id="lbl-summary-listening-desc" class="text-[11px] opacity-80">Volume acumulado no idioma selecionado.</p>
                         </div>
                         <div class="py-6 flex items-center justify-center relative">
                             <div class="w-40 h-40 relative flex items-center justify-center">
@@ -315,11 +321,9 @@
                     <div class="panel-card p-6 border shadow-2xl flex flex-col justify-between">
                         <div class="space-y-1">
                             <h3 id="lbl-titles-watched" class="text-xs font-black uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-list"></i> Títulos Assistidos</h3>
-                            <p class="text-[11px] opacity-80">Lista de filmes e séries registrados.</p>
+                            <p id="lbl-titles-watched-desc" class="text-[11px] opacity-80">Lista de filmes e séries registrados.</p>
                         </div>
-                        <div id="listening-details-list" class="space-y-2.5 max-h-52 overflow-y-auto pr-1 my-3">
-                            <!-- Preenchido via JS -->
-                        </div>
+                        <div id="listening-details-list" class="space-y-2.5 max-h-52 overflow-y-auto pr-1 my-3"></div>
                         <div class="pt-3 border-t border-white/20 flex items-center justify-between text-xs">
                             <span id="lbl-decimal-total" class="font-bold opacity-80">TOTAL DECIMAL:</span>
                             <span id="summary-total" class="font-black text-blue-500">0.00h</span>
@@ -328,7 +332,6 @@
                 </div>
             </div>
 
-            <!-- Cadastro View -->
             <div id="listening-tab-cadastro" class="panel-card p-6 md:p-8 border shadow-2xl max-w-2xl mx-auto hidden">
                 <input type="hidden" id="editingMediaId" value="">
                 <form id="media-form" onsubmit="handleListeningFormSubmit(event)" class="space-y-6">
@@ -387,7 +390,6 @@
                         </div>
                     </div>
 
-                    <!-- Campos de Filme -->
                     <div id="movie-time-fields" class="grid grid-cols-2 gap-4">
                         <div class="space-y-1">
                             <label id="lbl-hours" class="block text-xs font-bold opacity-90">Horas</label>
@@ -399,7 +401,6 @@
                         </div>
                     </div>
 
-                    <!-- Campos de Série -->
                     <div id="series-time-fields" class="grid grid-cols-2 md:grid-cols-4 gap-4 hidden">
                         <div class="space-y-1">
                             <label id="lbl-season" class="block text-xs font-bold opacity-90">Temporada</label>
@@ -429,7 +430,6 @@
 
         <!-- MÓDULO READING -->
         <section id="module-reading" class="space-y-6 hidden">
-            <!-- Dashboard View -->
             <div id="reading-tab-dashboard" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="panel-card p-6 border shadow-2xl flex flex-col justify-between">
@@ -454,9 +454,7 @@
                         <div class="space-y-1">
                             <h3 id="lbl-registered-books" class="text-xs font-black uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-bookmark"></i> Livros Cadastrados</h3>
                         </div>
-                        <div id="reading-details-list" class="space-y-2.5 max-h-48 overflow-y-auto pr-1 my-3">
-                            <!-- Preenchido via JS -->
-                        </div>
+                        <div id="reading-details-list" class="space-y-2.5 max-h-48 overflow-y-auto pr-1 my-3"></div>
                         <div class="pt-3 border-t border-white/20 flex items-center justify-between text-xs">
                             <span id="lbl-sum-pages" class="font-bold opacity-80">TOTAL DE PÁGINAS:</span>
                             <span id="summary-reading-pages" class="font-black text-blue-500">0</span>
@@ -472,7 +470,6 @@
                 </div>
             </div>
 
-            <!-- Cadastro View -->
             <div id="reading-tab-cadastro" class="panel-card p-6 md:p-8 border shadow-2xl max-w-xl mx-auto hidden">
                 <input type="hidden" id="editingBookId" value="">
                 <form id="book-form" onsubmit="handleReadingFormSubmit(event)" class="space-y-6">
@@ -506,9 +503,7 @@
 
         <!-- MÓDULO VOCABULARY -->
         <section id="module-vocabulary" class="space-y-6 hidden">
-            <!-- Dashboard View -->
             <div id="vocabulary-tab-dashboard" class="space-y-6">
-                <!-- Cards de Flashcard Interativo -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="md:col-span-2 panel-card p-6 md:p-8 border shadow-2xl flex flex-col justify-between">
                         <div class="flex items-center justify-between pb-4 border-b border-white/20">
@@ -522,13 +517,11 @@
                         <!-- FLIP CARD -->
                         <div class="py-8 cursor-pointer perspective" onclick="flipFlashcard()">
                             <div id="flip-card-inner" class="relative w-full h-48 transition-transform duration-500 transform-style-3d">
-                                <!-- Frente -->
                                 <div class="absolute inset-0 backface-hidden panel-card border rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-2 shadow-2xl flip-face">
                                     <span id="card-front-lang-label" class="text-[10px] font-black uppercase tracking-widest opacity-70">English</span>
                                     <h3 id="fc-word" class="text-2xl md:text-3xl font-black">Nenhuma palavra</h3>
                                     <span id="lbl-click-to-flip" class="text-[11px] opacity-70 font-medium">Clique no cartão para revelar a tradução 🔄</span>
                                 </div>
-                                <!-- Verso -->
                                 <div class="absolute inset-0 backface-hidden panel-card border rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-2 rotate-y-180 shadow-2xl flip-face flip-back">
                                     <span id="lbl-translation-tag" class="text-[10px] font-black uppercase tracking-widest text-blue-500">Tradução</span>
                                     <h3 id="fc-translation" class="text-2xl md:text-3xl font-black text-blue-500">-</h3>
@@ -537,7 +530,6 @@
                             </div>
                         </div>
 
-                        <!-- Botões de Ação Flashcard -->
                         <div class="space-y-4 pt-4 border-t border-white/20">
                             <div class="grid grid-cols-2 gap-4">
                                 <button onclick="gradeFlashcard(false)" id="btn-wrong-action" class="py-3.5 rounded-xl border border-red-500/40 text-red-500 font-black text-xs uppercase tracking-wider hover:bg-red-500/10 transition-all sub-card shadow-sm">Não Lembrei</button>
@@ -547,7 +539,6 @@
                         </div>
                     </div>
 
-                    <!-- Estatísticas Vocabulário -->
                     <div class="space-y-6 flex flex-col justify-between">
                         <div class="panel-card p-6 border shadow-2xl flex-1 flex flex-col justify-center text-center space-y-2">
                             <span id="lbl-total-words" class="text-xs font-bold opacity-70 uppercase">Palavras</span>
@@ -560,16 +551,12 @@
                     </div>
                 </div>
 
-                <!-- Lista de Vocabulários Cadastrados -->
                 <div class="panel-card p-6 border shadow-2xl">
                     <h3 id="lbl-registered-vocab" class="text-xs font-black uppercase tracking-wider mb-4 flex items-center gap-2"><i class="fa-solid fa-list-check"></i> Suas Palavras Cadastradas</h3>
-                    <div id="vocabulary-details-list" class="space-y-2.5 max-h-60 overflow-y-auto pr-1">
-                        <!-- Preenchido via JS -->
-                    </div>
+                    <div id="vocabulary-details-list" class="space-y-2.5 max-h-60 overflow-y-auto pr-1"></div>
                 </div>
             </div>
 
-            <!-- Cadastro View -->
             <div id="vocabulary-tab-cadastro" class="panel-card p-6 md:p-8 border shadow-2xl max-w-xl mx-auto hidden">
                 <input type="hidden" id="editingVocabId" value="">
                 <form id="vocab-form" onsubmit="handleVocabularyFormSubmit(event)" class="space-y-6">
@@ -594,6 +581,56 @@
                         <button type="button" onclick="cancelVocabEdit()" class="px-6 py-4 rounded-xl border font-bold text-xs uppercase sub-card btn-cancel">Cancelar</button>
                     </div>
                 </form>
+            </div>
+        </section>
+
+        <!-- NOVO MÓDULO: LEITOR E PRONÚNCIA -->
+        <section id="module-speech" class="space-y-6 hidden">
+            <div class="panel-card p-6 md:p-8 border shadow-2xl space-y-6">
+                <!-- Topo e Seletor de Nível -->
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 pb-4 border-b border-white/10">
+                    <div>
+                        <span id="speech-title-prefix" class="text-xs font-black tracking-wider uppercase opacity-80 block">Reading & Pronunciation Practice</span>
+                        <h2 id="speech-story-title" class="text-xl md:text-2xl font-black tracking-tight">História Curta</h2>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span id="lbl-difficulty-level" class="text-xs font-bold opacity-80">Nível:</span>
+                        <div class="flex bg-black/20 p-1 rounded-xl border border-white/10">
+                            <button onclick="setSpeechLevel('easy')" id="speech-lvl-easy" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow">Fácil</button>
+                            <button onclick="setSpeechLevel('medium')" id="speech-lvl-medium" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all opacity-70 hover:opacity-100">Médio</button>
+                            <button onclick="setSpeechLevel('hard')" id="speech-lvl-hard" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all opacity-70 hover:opacity-100">Difícil</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insttruções / Dica -->
+                <p id="speech-instruction" class="text-xs font-medium opacity-80">
+                    💡 Clique em qualquer palavra para escutar a pronúncia individual. Aperte no botão para escutar a história completa ou no microfone para testar sua leitura em voz alta.
+                </p>
+
+                <!-- Área de Exibição da História (Interativa com Palavras Clicáveis) -->
+                <div id="speech-story-container" class="p-6 rounded-2xl border sub-card space-y-4 text-base md:text-lg font-medium leading-relaxed tracking-wide min-h-[160px]">
+                    <!-- Parágrafos renderizados via JS -->
+                </div>
+
+                <!-- Painel de Ações: Ouvir Tudo & Testar Voz -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10">
+                    <button onclick="listenFullStory()" id="btn-listen-story" class="w-full sm:w-auto px-6 py-3.5 rounded-xl border sub-card font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-sm hover:border-blue-500 transition-all">
+                        <i class="fa-solid fa-volume-high text-blue-500"></i>
+                        <span id="lbl-btn-listen-story">Escutar História Completa</span>
+                    </button>
+
+                    <button onclick="toggleVoiceRecognition()" id="btn-record-voice" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg hover:brightness-110 transition-all">
+                        <i id="mic-icon" class="fa-solid fa-microphone"></i>
+                        <span id="lbl-btn-record-voice">Gravar e Ver Pronúncia</span>
+                    </button>
+                </div>
+
+                <!-- Feedback de Reconhecimento -->
+                <div id="speech-feedback-bar" class="hidden p-3.5 rounded-xl border text-xs font-semibold flex items-center justify-between sub-card">
+                    <span id="speech-status-text">Ouvindo... Fale a história em voz alta!</span>
+                    <span id="speech-score-text" class="font-black text-blue-400">0% de precisão</span>
+                </div>
             </div>
         </section>
 
@@ -628,9 +665,7 @@
             </div>
 
             <!-- Grid de 100 Conquistas -->
-            <div id="achievements-full-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <!-- Preenchido via JS -->
-            </div>
+            <div id="achievements-full-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
         </section>
 
     </main>
@@ -678,18 +713,14 @@
 
             <div class="space-y-2">
                 <span id="lbl-modal-week-hist" class="text-xs font-black uppercase tracking-wider block">Histórico da Semana</span>
-                <div id="week-days-container" class="grid grid-cols-7 gap-2">
-                    <!-- Preenchido via JS -->
-                </div>
+                <div id="week-days-container" class="grid grid-cols-7 gap-2"></div>
                 <p id="lbl-modal-red-note" class="text-[10px] opacity-70 italic pt-1">Dias sem realizar a tarefa ficam marcados a vermelho.</p>
             </div>
 
             <div class="space-y-2 pt-2 border-t border-white/20">
-                <div id="streak-vocab-notice" class="p-3.5 rounded-xl border text-xs font-medium leading-relaxed sub-card">
-                    <!-- Mensagem dinâmica via JS -->
-                </div>
+                <div id="streak-vocab-notice" class="p-3.5 rounded-xl border text-xs font-medium leading-relaxed sub-card"></div>
                 <div class="flex items-center justify-between pt-2">
-                    <span class="text-xs font-bold opacity-80">Reseta às 00:00:</span>
+                    <span id="lbl-streak-reset-time" class="text-xs font-bold opacity-80">Reseta às 00:00:</span>
                     <span id="streak-countdown-timer" class="text-xs font-black text-blue-500 font-mono">00:00:00</span>
                 </div>
             </div>
@@ -745,6 +776,6 @@
     </div>
 
     <!-- Script Principal -->
-    <script src="script.js?v=35"></script>
+    <script src="script.js?v=36"></script>
 </body>
 </html>

@@ -75,7 +75,6 @@ body.mode-light .panel-card {
 }
 .panel-card:hover { border-color: rgba(96, 165, 250, .42); }
 
-/* só vira "relative" quem não é absolute/fixed (senão quebra o flashcard e os modais) */
 .panel-card:not(.absolute):not(.fixed) { position: relative; }
 .panel-card::after {
     content: "";
@@ -185,16 +184,17 @@ button:focus-visible, [onclick]:focus-visible, .hub-track:focus-visible {
     border-radius: 1rem;
 }
 
-/* ============ HERO DO HUB ============ */
+/* ============ HERO DO HUB & TÍTULO RESPONSIVO ============ */
 #hub-welcome { letter-spacing: .16em; }
 #hub-title {
-    font-size: clamp(1.7rem, 4.2vw, 2.9rem) !important;
+    font-size: clamp(1.4rem, 4.5vw, 2.9rem) !important;
     font-weight: 800;
     letter-spacing: -0.03em;
-    line-height: 1.12;
+    line-height: 1.25;
     text-shadow: 0 2px 30px rgba(0, 0, 0, .35);
+    word-break: normal;
+    overflow-wrap: break-word;
 }
-.wave-title span { display: inline-block; animation: none; }
 #hub-desc { max-width: 34rem; margin-inline: auto; line-height: 1.65; opacity: .85; }
 
 /* ============ CARROSSEL INFINITO ============ */
@@ -207,7 +207,7 @@ button:focus-visible, [onclick]:focus-visible, .hub-track:focus-visible {
     overflow-x: auto;
     overflow-y: hidden;
     padding: 1.75rem 1rem 2rem;
-    scroll-behavior: auto;            /* o JS controla o movimento */
+    scroll-behavior: auto;
     scroll-snap-type: none;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
@@ -233,9 +233,10 @@ button:focus-visible, [onclick]:focus-visible, .hub-track:focus-visible {
     gap: 1.4rem;
     overflow: hidden;
 }
-.hub-card:nth-child(4n+2) { --a: 56, 189, 248; }
-.hub-card:nth-child(4n+3) { --a: 129, 140, 248; }
-.hub-card:nth-child(4n+4) { --a: 227, 191, 122; }
+.hub-card:nth-child(5n+2) { --a: 56, 189, 248; }
+.hub-card:nth-child(5n+3) { --a: 129, 140, 248; }
+.hub-card:nth-child(5n+4) { --a: 168, 85, 247; }
+.hub-card:nth-child(5n+5) { --a: 227, 191, 122; }
 @media (min-width: 768px) { .hub-card { width: 20rem; } }
 
 body.mode-dark .hub-card { border-color: rgba(var(--a), .22); }
@@ -327,6 +328,30 @@ body.mode-dark .hub-card { border-color: rgba(var(--a), .22); }
 .carousel-arrow:hover  { background: rgba(37, 99, 235, .85); transform: translateY(-50%) scale(1.08); }
 .carousel-arrow:active { transform: translateY(-50%) scale(.94); }
 
+/* ============ ESTILOS DO LEITOR DE HISTÓRIAS & PRONÚNCIA ============ */
+.story-word {
+    display: inline-block;
+    padding: 0.1rem 0.25rem;
+    margin: 0.1rem;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+.story-word:hover {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: var(--blue-400);
+}
+.word-correct {
+    background-color: rgba(16, 185, 129, 0.25) !important;
+    color: #34d399 !important;
+    border-bottom: 2px solid #10b981;
+}
+.word-incorrect {
+    background-color: rgba(239, 68, 68, 0.25) !important;
+    color: #f87171 !important;
+    border-bottom: 2px solid #ef4444;
+}
+
 /* ============ FLASHCARD (virar) ============ */
 .perspective { perspective: 1200px; }
 .transform-style-3d { transform-style: preserve-3d; }
@@ -337,7 +362,6 @@ body.mode-dark .hub-card { border-color: rgba(var(--a), .22); }
 .rotate-y-180 { transform: rotateY(180deg); }
 .flipped { transform: rotateY(180deg); }
 
-/* faces do cartão: sem backdrop-filter (ele quebra o backface-visibility) */
 body.mode-dark .panel-card.flip-face {
     background: linear-gradient(160deg, #13265a, #0a1740);
     backdrop-filter: none;

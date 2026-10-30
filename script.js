@@ -13,12 +13,136 @@ let themeMode = localStorage.getItem('luis_theme_mode') || 'dark';
 let obTempTarget = targetLang;
 let obTempOrigin = userOrigin;
 
+// Estado do novo Módulo de Leitura e Pronúncia
+let currentSpeechLevel = 'easy';
+let isRecognizingVoice = false;
+let speechRecognitionInstance = null;
+
 const LANG_META = {
-    en: { name: 'English', flagImg: 'img/bandeira-eua.webp', themeClass: 'theme-en', platformName: 'American Immersion Platform', edition: 'American Edition' },
-    es: { name: 'Español', flagImg: 'img/bandeira-espanha.webp', themeClass: 'theme-es', platformName: 'Plataforma de Inmersión Española', edition: 'Edición Española' },
-    fr: { name: 'Français', flagImg: 'img/bandeira-franca.jpg', themeClass: 'theme-fr', platformName: "Plateforme d'Immersion Française", edition: 'Édition Française' },
-    ja: { name: '日本語', flagImg: 'img/bandeira-japao.jpg', themeClass: 'theme-ja', platformName: '日本没入プラットフォーム・和の学習ダッシュボード', edition: '和風 Edition' },
-    pt: { name: 'Português', flagImg: 'img/bandeira-brasil.webp', themeClass: 'theme-pt', platformName: 'Plataforma de Imersão Brasileira', edition: 'Edición Brasil' }
+    en: { name: 'English', flagImg: 'img/bandeira-eua.webp', themeClass: 'theme-en', platformName: 'American Immersion Platform', edition: 'American Edition', code: 'en-US' },
+    es: { name: 'Español', flagImg: 'img/bandeira-espanha.webp', themeClass: 'theme-es', platformName: 'Plataforma de Inmersión Española', edition: 'Edición Española', code: 'es-ES' },
+    fr: { name: 'Français', flagImg: 'img/bandeira-franca.jpg', themeClass: 'theme-fr', platformName: "Plateforme d'Immersion Française", edition: 'Édition Française', code: 'fr-FR' },
+    ja: { name: '日本語', flagImg: 'img/bandeira-japao.jpg', themeClass: 'theme-ja', platformName: '日本没入プラットフォーム・和の学習ダッシュボード', edition: '和風 Edition', code: 'ja-JP' },
+    pt: { name: 'Português', flagImg: 'img/bandeira-brasil.webp', themeClass: 'theme-pt', platformName: 'Plataforma de Imersão Brasileira', edition: 'Edição Brasil', code: 'pt-BR' }
+};
+
+// BANCO DE HISTÓRIAS CURTAS POR IDIOMA DE ESTUDO E NÍVEL
+const STORIES_DATABASE = {
+    en: {
+        easy: {
+            title: "The Little Dog",
+            paragraphs: [
+                "Max is a happy little dog. He loves to run in the green park every morning.",
+                "Today, Max found a bright yellow ball under a big tree. He played with it all day."
+            ]
+        },
+        medium: {
+            title: "A Coffee in the Rain",
+            paragraphs: [
+                "Sarah decided to visit her favorite local cafe while the rain was falling gently outside.",
+                "She ordered a hot cup of coffee, opened an inspiring book, and spent two wonderful hours reading by the window."
+            ]
+        },
+        hard: {
+            title: "The Modern Technology",
+            paragraphs: [
+                "Artificial intelligence is rapidly transforming how society communicates and solves complex problems across global industries.",
+                "Engineers and researchers collaborate worldwide to build sustainable algorithms that can adapt to changing human necessities."
+            ]
+        }
+    },
+    es: {
+        easy: {
+            title: "El Perro Alegre",
+            paragraphs: [
+                "Max es un perro pequeño y muy feliz. Le gusta correr por el parque todas las mañanas.",
+                "Hoy encontró una pelota amarilla bajo un árbol grande y jugó con ella todo el día."
+            ]
+        },
+        medium: {
+            title: "Un Café bajo la Lluvia",
+            paragraphs: [
+                "Sofía decidió visitar su cafetería favorita mientras la lluvia caía suavemente en la ciudad.",
+                "Pidió un café caliente, abrió un libro inspirador y pasó dos horas maravillosas leyendo junto a la ventana."
+            ]
+        },
+        hard: {
+            title: "La Tecnología Moderna",
+            paragraphs: [
+                "La inteligencia artificial está transformando rápidamente la forma en que la sociedad se comunica y resuelve problemas complejos.",
+                "Investigadores de todo el mundo colaboran para construir algoritmos sostenibles que se adaptan a las necesidades humanas."
+            ]
+        }
+    },
+    fr: {
+        easy: {
+            title: "Le Petit Chien",
+            paragraphs: [
+                "Max est un petit chien très heureux. Il aime courir dans le parc tous les matins.",
+                "Aujourd'hui, il a trouvé une balle jaune sous un grand arbre et a joué toute la journée."
+            ]
+        },
+        medium: {
+            title: "Un Café sous la Pluie",
+            paragraphs: [
+                "Camille a décidé de visiter son café préféré pendant que la pluie tombait doucement dehors.",
+                "Elle a commandé un café chaud, a ouvert un livre inspirant et a passé deux heures formidables à lire près de la fenêtre."
+            ]
+        },
+        hard: {
+            title: "La Technologie Moderne",
+            paragraphs: [
+                "L'intelligence artificielle transforme rapidement la façon dont la société communique et résout des problèmes complexes.",
+                "Des chercheurs du monde entier collaborent pour créer des algorithmes durables adaptables aux besoins humains."
+            ]
+        }
+    },
+    ja: {
+        easy: {
+            title: "小さな犬",
+            paragraphs: [
+                "マックスはとても幸せな小さな犬です。毎朝公園で走るのが大好きです。",
+                "今日、大きな木の下で黄色いボールを見つけて、一日中遊びました。"
+            ]
+        },
+        medium: {
+            title: "雨の日のカフェ",
+            paragraphs: [
+                "雨が静かに降る中、サクラはお気に入りのカフェに行きました。",
+                "暖かいコーヒーを注文し、本を開いて、窓のそばで素晴らしい時間を過ごしました。"
+            ]
+        },
+        hard: {
+            title: "現代のテクノロジー",
+            paragraphs: [
+                "人工知能は、社会のコミュニケーションや問題解決の accepted 方法を急速に変革しています。",
+                "世界中の研究者が協力して、変化する人間のニーズに適応できる持続可能なアルゴリズムを構築しています。"
+            ]
+        }
+    },
+    pt: {
+        easy: {
+            title: "O Cãozinho Feliz",
+            paragraphs: [
+                "Max é um cãozinho muito alegre. Ele adora correr pelo parque verde todas as manhãs.",
+                "Hoje, ele encontrou uma bola amarela debaixo de uma grande árvore e brincou o dia todo."
+            ]
+        },
+        medium: {
+            title: "Um Café na Chuva",
+            paragraphs: [
+                "Ana decidiu visitar sua cafeteria favorita enquanto a chuva caía suavemente lá fora.",
+                "Ela pediu um café quente, abriu um livro inspirador e passou duas horas maravilhosas lendo perto da janela."
+            ]
+        },
+        hard: {
+            title: "A Tecnologia Moderna",
+            paragraphs: [
+                "A inteligência artificial está transformando rapidamente a forma como a sociedade se comunica e resolve problemas complexos.",
+                "Pesquisadores do mundo todo colaboram para construir algoritmos sustentáveis que se adaptam às necessidades humanas."
+            ]
+        }
+    }
 };
 
 const UI_TEXTS = {
@@ -31,15 +155,21 @@ const UI_TEXTS = {
         cardListeningGoal: "META DE HORAS", cardListeningTitle: "Rastreador de Escuta", cardListeningDesc: "Filmes, séries e podcasts assistidos no idioma.",
         cardReadingTag: "LEITURA DE LIVROS", cardReadingTitle: "Rastreador de Leitura", cardReadingDesc: "Livros lidos, páginas e total de obras.",
         cardVocabTag: "FLASHCARDS", cardVocabTitle: "Treinador de Vocabulário", cardVocabDesc: "Pratique com exercícios de memória e vocabulário.",
+        cardSpeechTag: "LEITURA & PRONÚNCIA", cardSpeechTitle: "Leitor e Fala", cardSpeechDesc: "Leia histórias por nível, teste sua pronúncia com feedback em tempo real e treine a escuta.",
         cardAchTag: "DESAFIOS & TROFÉUS", cardAchTitle: "GALERIA DE CONQUISTAS", cardAchDesc: "Desbloqueie até 100 conquistas únicas com sua evolução.",
-        btnAccess: "Acessar o Painel", btnTrain: "Treinar Vocabulário", btnAch: "Ver Conquistas",
+        btnAccess: "Acessar o Painel", btnTrain: "Treinar Vocabulário", btnSpeech: "Praticar Pronúncia", btnAch: "Ver Conquistas",
+        speechTitlePrefix: "Prática de Leitura e Pronúncia", speechLevel: "Nível:", lvlEasy: "Fácil", lvlMedium: "Médio", lvlHard: "Difícil",
+        speechInstruction: "💡 Clique em qualquer palavra para escutar a pronúncia individual. Aperte no botão para escutar a história completa ou no microfone para testar sua leitura em voz alta.",
+        btnListenStory: "Escutar História Completa", btnRecordVoice: "Gravar e Ver Pronúncia", btnStopVoice: "Parar e Avaliar",
+        speechStatusListening: "Ouvindo... Fale a história em voz alta!", speechStatusNoMic: "Reconhecimento de voz não suportado neste navegador.",
+        speechScoreText: "de precisão",
         achBannerTag: "Galería de Troféus", achBannerTitle: "Galeria de 100 Conquistas", achBannerDesc: "Acompanhe seu progresso e conquiste badges estudando diariamente.",
         lblAchUnlocked: "Desbloqueadas", lblAchProgress: "Progresso Geral",
         achFilterAll: "Todas (100)", achFilterStreak: "🔥 Ofensiva", achFilterVocab: "🧠 Vocabulário", achFilterListening: "🎧 Listening", achFilterReading: "📖 Leitura", achFilterPoly: "🌍 Poliglota",
         goalFixed: "Meta (Horas)", progress: "Progresso", ofTarget: "da meta",
-        summaryListening: "Resumo de Escuta", realTime: "Tempo Real", registered: "Cadastrados",
+        summaryListening: "Resumo de Escuta", summaryListeningDesc: "Volume acumulado no idioma selecionado.", realTime: "Tempo Real", registered: "Cadastrados",
         hoursByType: "Horas por Tipo de Estudo", hoursByTypeDesc: "Separação por Diamante, Prata e Ouro.",
-        titlesWatched: "Títulos Assistidos", decimalTotal: "TOTAL DECIMAL:", target: "ALVO:",
+        titlesWatched: "Títulos Assistidos", titlesWatchedDesc: "Lista de filmes e séries registrados.", decimalTotal: "TOTAL DECIMAL:", target: "ALVO:",
         addMediaTitle: "Cadastrar Filme ou Série", addMediaDesc: "Adicione suas horas de imersão.",
         mediaType: "Tipo de Mídia", optMovie: "Filme", optSeries: "Série",
         titleName: "Nome do Título", coverImg: "Capa (Arquivo de Imagem)", listeningMode: "Modo de Listening",
@@ -49,15 +179,18 @@ const UI_TEXTS = {
         totalBooks: "Total Livros", totalPages: "Total Páginas", pagesPerBook: "Páginas Lidas por Livro", pagesPerBookDesc: "Volume de leitura por obra.",
         registeredBooks: "Livros Cadastrados", sumPages: "TOTAL DE PÁGINAS:", addBookTitle: "Cadastrar Novo Livro", addBookDesc: "Adicione livros lidos para contabilizar páginas.",
         bookTitle: "Título do Livro", bookAuthor: "Autor(a) (Opcional)", bookPages: "Quantidade de Páginas", bookCover: "Capa do Livro",
-        totalWords: "Palavras", accuracyRate: "Taxa Acerto", registeredVocab: "Suas Palavras Cadastradas", addWordTitle: "Cadastrar Nova Palabra", addWordDesc: "Adicione termos para treinos.",
+        totalWords: "Palavras", accuracyRate: "Taxa Acerto", registeredVocab: "Suas Palavras Cadastradas", addWordTitle: "Cadastrar Nova Palavra", addWordDesc: "Adicione termos para treinos.",
         termInLang: "Palavra / Termo no Idioma", termTranslation: "Tradução / Significado", termExample: "Exemplo de Frase (Opcional)",
         tapFlip: "Toque para Virar", clickToFlip: "Clique no cartão para revelar a tradução 🔄", translationTag: "Tradução",
         correctHits: "Acertos:", wrongHits: "Erros:", btnWrong: "Não Lembrei", btnCorrect: "Lembrei (Certo!)", btnNextRandom: "Sortear Próxima Palavra Aleatória",
         emptyVocabTitle: "Nenhuma palavra cadastrada", emptyVocabExample: "Cadastre sua primeira palavra no menu superior.", emptyVocabList: "Nenhuma palavra cadastrada.", emptyMediaList: "Nenhum título cadastrado.", emptyBookList: "Nenhum livro cadastrado.",
         popupStreakTitle: "Foguinho Acendido! 🔥", popupStreakDesc: "Excelente! Ofensiva garantida e salva no histórico diário.", btnContinue: "Continuar",
-        modalStreakTitle: "Estatísticas de Ofensiva", modalStreakSub: "Controlo diário e histórico persistente", modalSeq: "Sequência Atual", modalMissed: "Faltas no Mês", modalWeek: "Histórico da Semana", modalNote: "Dias sem realizar a tarefa ficam marcados a vermelho.", btnUnderstood: "Entendido",
+        modalStreakTitle: "Estatísticas de Ofensiva", modalStreakSub: "Controlo diário e histórico persistente", modalSeq: "Sequência Atual", modalMissed: "Faltas no Mês", modalWeek: "Histórico da Semana", modalNote: "Dias sem realizar a tarefa ficam marcados a vermelho.", streakResetTime: "Reseta às 00:00:", btnUnderstood: "Entendido",
         lblModalStudying: "Idioma que está Estudando", lblModalUi: "Idioma da Interface",
-        refazerPerguntas: "Refazer Perguntas Iniciais", modalClose: "Fechar"
+        refazerPerguntas: "Refazer Perguntas Iniciais", modalClose: "Fechar",
+        obTitleStep1: "Bem-vindo ao Fluency Lab!", obDescStep1: "Como devemos te chamar e de onde você é?", obLblName: "Seu Nome", obLblOrigin: "Idioma de Origem (Interface)", obBtnNext1: "Avançar",
+        obTitleStep2: "Qual idioma você vai estudar?", obDescStep2: "Você poderá alternar entre idiomas no seu perfil depois.", obBtnBack2: "Voltar", obBtnNext2: "Avançar",
+        obTitleStep3: "Tudo pronto para a imersão!", obDescStep3: "Seu painel personalizado foi configurado com sucesso.", obBtnFinish: "Começar Jornada"
     },
     en: {
         learningLabel: "Studying", uiLabel: "Interface",
@@ -65,18 +198,24 @@ const UI_TEXTS = {
         welcome: "WELCOME, {NAME} •", headerAch: "Achievements",
         hubTitle: "What would you like to track or practice today?",
         hubDesc: "Select a module below to monitor your progress.",
-        cardListeningGoal: "HOURS GOAL", cardListeningTitle: "LISTENING TRACKER", cardListeningDesc: "Podcasts & series watched in target language. Track listening time.",
-        cardReadingTag: "BOOKS READ / PAGES", cardReadingTitle: "READING TRACKER", cardReadingDesc: "Books read, total pages completed. Build your reading habit.",
-        cardVocabTag: "FLASHCARDS & WORDS", cardVocabTitle: "VOCABULARY TRAINER", cardVocabDesc: "Practice vocabulary with flashcards. Review and strengthen recall.",
-        cardAchTag: "CHALLENGES & TROPHIES", cardAchTitle: "ACHIEVEMENTS GALLERY", cardAchDesc: "Unlock up to 100 unique achievements with your study progress.",
-        btnAccess: "Open Dashboard", btnTrain: "Practice Now", btnAch: "View Achievements",
+        cardListeningGoal: "HOURS GOAL", cardListeningTitle: "LISTENING TRACKER", cardListeningDesc: "Podcasts & series watched in target language.",
+        cardReadingTag: "BOOKS READ / PAGES", cardReadingTitle: "READING TRACKER", cardReadingDesc: "Books read, total pages completed.",
+        cardVocabTag: "FLASHCARDS & WORDS", cardVocabTitle: "VOCABULARY TRAINER", cardVocabDesc: "Practice vocabulary with flashcards.",
+        cardSpeechTag: "READING & PRONUNCIATION", cardSpeechTitle: "Speech & Reader", cardSpeechDesc: "Read stories by level, test your pronunciation with real-time feedback, and practice listening.",
+        cardAchTag: "CHALLENGES & TROPHIES", cardAchTitle: "ACHIEVEMENTS GALLERY", cardAchDesc: "Unlock up to 100 unique achievements.",
+        btnAccess: "Open Dashboard", btnTrain: "Practice Now", btnSpeech: "Practice Pronunciation", btnAch: "View Achievements",
+        speechTitlePrefix: "Reading & Pronunciation Practice", speechLevel: "Level:", lvlEasy: "Easy", lvlMedium: "Medium", lvlHard: "Hard",
+        speechInstruction: "💡 Click any word to hear individual pronunciation. Press the button to listen to the full story or use the microphone to practice reading aloud.",
+        btnListenStory: "Listen to Full Story", btnRecordVoice: "Record & Check Speech", btnStopVoice: "Stop & Evaluate",
+        speechStatusListening: "Listening... Read the story out loud!", speechStatusNoMic: "Speech recognition not supported in this browser.",
+        speechScoreText: "accuracy",
         achBannerTag: "Hall of Fame", achBannerTitle: "100 Achievements Gallery", achBannerDesc: "Track your progress and earn badges studying daily.",
         lblAchUnlocked: "Unlocked", lblAchProgress: "Overall Progress",
         achFilterAll: "All (100)", achFilterStreak: "🔥 Streak", achFilterVocab: "🧠 Vocabulary", achFilterListening: "🎧 Listening", achFilterReading: "📖 Reading", achFilterPoly: "🌍 Polyglot",
         goalFixed: "Goal (Hours)", progress: "Progress", ofTarget: "of goal",
-        summaryListening: "Listening Summary", realTime: "Real Time", registered: "Tracked Items",
+        summaryListening: "Listening Summary", summaryListeningDesc: "Accumulated volume in selected language.", realTime: "Real Time", registered: "Tracked Items",
         hoursByType: "Hours by Study Type", hoursByTypeDesc: "Breakdown by Diamond, Silver, and Gold categories.",
-        titlesWatched: "Titles Watched", decimalTotal: "DECIMAL TOTAL:", target: "TARGET:",
+        titlesWatched: "Titles Watched", titlesWatchedDesc: "List of movies and series recorded.", decimalTotal: "DECIMAL TOTAL:", target: "TARGET:",
         addMediaTitle: "Add Movie or Series", addMediaDesc: "Log your immersion hours.",
         mediaType: "Media Type", optMovie: "Movie", optSeries: "Series",
         titleName: "Title Name", coverImg: "Cover (Image File)", listeningMode: "Listening Mode",
@@ -92,28 +231,37 @@ const UI_TEXTS = {
         correctHits: "Correct:", wrongHits: "Wrong:", btnWrong: "Forgot", btnCorrect: "Remembered!", btnNextRandom: "Draw Next Random Word",
         emptyVocabTitle: "No words added", emptyVocabExample: "Add your first word using the top menu.", emptyVocabList: "No words registered.", emptyMediaList: "No titles registered.", emptyBookList: "No books registered.",
         popupStreakTitle: "Streak Lit! 🔥", popupStreakDesc: "Awesome! Daily streak secured and recorded.", btnContinue: "Continue",
-        modalStreakTitle: "Streak Statistics", modalStreakSub: "Daily control & persistent history", modalSeq: "Current Streak", modalMissed: "Missed This Month", modalWeek: "Weekly History", modalNote: "Days without practice are marked in red.", btnUnderstood: "Got It",
+        modalStreakTitle: "Streak Statistics", modalStreakSub: "Daily control & persistent history", modalSeq: "Current Streak", modalMissed: "Missed This Month", modalWeek: "Weekly History", modalNote: "Days without practice are marked in red.", streakResetTime: "Resets at 00:00:", btnUnderstood: "Got It",
         lblModalStudying: "Studying Language", lblModalUi: "Interface Language",
-        refazerPerguntas: "Reset Onboarding", modalClose: "Close"
+        refazerPerguntas: "Reset Onboarding", modalClose: "Close",
+        obTitleStep1: "Welcome to Fluency Lab!", obDescStep1: "What should we call you and where are you from?", obLblName: "Your Name", obLblOrigin: "Interface Language", obBtnNext1: "Next",
+        obTitleStep2: "Which language are you going to study?", obDescStep2: "You can switch languages in your profile later.", obBtnBack2: "Back", obBtnNext2: "Next",
+        obTitleStep3: "All set for immersion!", obDescStep3: "Your personalized dashboard was set up successfully.", obBtnFinish: "Start Journey"
     },
     es: {
-        learningLabel: "Estudando", uiLabel: "Interfaz",
+        learningLabel: "Estudiando", uiLabel: "Interfaz",
         navHub: "Inicio", navDash: "Panel", navCad: "Añadir",
         welcome: "BIENVENIDO, {NAME} •", headerAch: "Logros",
         hubTitle: "¿Qué quieres registrar o practicar hoy?",
         hubDesc: "Selecciona un módulo a continuación para seguir tu progreso.",
         cardListeningGoal: "META DE HORAS", cardListeningTitle: "Seguimiento de Escucha", cardListeningDesc: "Podcasts, series y vídeos en el idioma.",
-        cardReadingTag: "LECTURA DE LIBROS", cardReadingTitle: "Seguimiento de Lectura", cardReadingDesc: "Libros leídos, obras completadas y total de páginas.",
-        cardVocabTag: "TARJETAS", cardVocabTitle: "Entrenador de Vocabulario", cardVocabDesc: "Practica con tarjetas y ejercicios de memoria.",
-        cardAchTag: "DESAFÍOS Y TROFEOS", cardAchTitle: "GALERÍA DE LOGROS", cardAchDesc: "Desbloquea hasta 100 logros únicos con tu estudio.",
-        btnAccess: "Acceder al Panel", btnTrain: "Practicar Vocabulario", btnAch: "Ver Logros",
+        cardReadingTag: "LECTURA DE LIBROS", cardReadingTitle: "Seguimiento de Lectura", cardReadingDesc: "Libros leídos, obras completadas.",
+        cardVocabTag: "TARJETAS", cardVocabTitle: "Entrenador de Vocabulario", cardVocabDesc: "Practica con tarjetas y ejercicios.",
+        cardSpeechTag: "LECTURA Y PRONUNCIACIÓN", cardSpeechTitle: "Lector y Voz", cardSpeechDesc: "Lee historias por nivel, evalúa tu pronunciación en tiempo real y entrena tu oído.",
+        cardAchTag: "DESAFÍOS Y TROFEOS", cardAchTitle: "GALERÍA DE LOGROS", cardAchDesc: "Desbloquea hasta 100 logros únicos.",
+        btnAccess: "Acceder al Panel", btnTrain: "Practicar Vocabulario", btnSpeech: "Practicar Pronunciación", btnAch: "Ver Logros",
+        speechTitlePrefix: "Práctica de Lectura y Pronunciación", speechLevel: "Nivel:", lvlEasy: "Fácil", lvlMedium: "Medio", lvlHard: "Difícil",
+        speechInstruction: "💡 Haz clic en cualquier palabra para escuchar su pronunciación. Presiona el botón para escuchar toda la historia o usa el micrófono para leer en voz alta.",
+        btnListenStory: "Escuchar Historia Completa", btnRecordVoice: "Grabar y Evaluar Pronunciación", btnStopVoice: "Detener y Evaluar",
+        speechStatusListening: "Escuchando... ¡Lee la historia en voz alta!", speechStatusNoMic: "El reconocimiento de voz no es compatible con este navegador.",
+        speechScoreText: "de precisión",
         achBannerTag: "Galería de Trofeos", achBannerTitle: "Galería de 100 Logros", achBannerDesc: "Sigue tu progreso y gana medallas estudiando a diario.",
         lblAchUnlocked: "Desbloqueados", lblAchProgress: "Progreso General",
         achFilterAll: "Todos (100)", achFilterStreak: "🔥 Racha", achFilterVocab: "🧠 Vocabulario", achFilterListening: "🎧 Listening", achFilterReading: "📖 Lectura", achFilterPoly: "🌍 Políglota",
         goalFixed: "Meta (Horas)", progress: "Progreso", ofTarget: "de la meta",
-        summaryListening: "Resumen de Escucha", realTime: "Tiempo Real", registered: "Registrados",
+        summaryListening: "Resumen de Escucha", summaryListeningDesc: "Volumen acumulado en el idioma.", realTime: "Tiempo Real", registered: "Registrados",
         hoursByType: "Horas por Tipo de Estudio", hoursByTypeDesc: "Separación por Diamante, Plata y Oro.",
-        titlesWatched: "Títulos Vistos", decimalTotal: "TOTAL DECIMAL:", target: "OBJETIVO:",
+        titlesWatched: "Títulos Vistos", titlesWatchedDesc: "Lista de películas y series.", decimalTotal: "TOTAL DECIMAL:", target: "OBJETIVO:",
         addMediaTitle: "Añadir Película o Serie", addMediaDesc: "Registra tus horas de inmersión.",
         mediaType: "Tipo de Medio", optMovie: "Película", optSeries: "Serie",
         titleName: "Nombre del Título", coverImg: "Portada (Imagen)", listeningMode: "Modo de Escucha",
@@ -129,9 +277,12 @@ const UI_TEXTS = {
         correctHits: "Aciertos:", wrongHits: "Errores:", btnWrong: "Olvidé", btnCorrect: "¡Recordé!", btnNextRandom: "Siguiente Palabra Aleatoria",
         emptyVocabTitle: "Sin palabras", emptyVocabExample: "Añade tu primera palabra desde el menú.", emptyVocabList: "No hay palabras registradas.", emptyMediaList: "No hay títulos registrados.", emptyBookList: "No hay libros registrados.",
         popupStreakTitle: "¡Fuego Encendido! 🔥", popupStreakDesc: "¡Excelente! Racha diaria garantizada.", btnContinue: "Continuar",
-        modalStreakTitle: "Estadísticas de Racha", modalStreakSub: "Control diario e historial persistente", modalSeq: "Racha Actual", modalMissed: "Faltas del Mes", modalWeek: "Historial Semanal", modalNote: "Días sin práctica quedan en rojo.", btnUnderstood: "Entendido",
+        modalStreakTitle: "Estadísticas de Racha", modalStreakSub: "Control diario e historial persistente", modalSeq: "Racha Actual", modalMissed: "Faltas del Mes", modalWeek: "Historial Semanal", modalNote: "Días sin práctica quedan en rojo.", streakResetTime: "Reinicia a las 00:00:", btnUnderstood: "Entendido",
         lblModalStudying: "Idioma que estudias", lblModalUi: "Idioma de la interfaz",
-        refazerPerguntas: "Reiniciar Onboarding", modalClose: "Cerrar"
+        refazerPerguntas: "Reiniciar Onboarding", modalClose: "Cerrar",
+        obTitleStep1: "¡Bienvenido a Fluency Lab!", obDescStep1: "¿Cómo te llamamos y de dónde eres?", obLblName: "Tu Nombre", obLblOrigin: "Idioma de la Interfaz", obBtnNext1: "Avanzar",
+        obTitleStep2: "¿Qué idioma vas a estudiar?", obDescStep2: "Podrás cambiar de idioma en tu perfil después.", obBtnBack2: "Volver", obBtnNext2: "Avançar",
+        obTitleStep3: "¡Todo listo para la inmersión!", obDescStep3: "Tu panel personalizado ha sido configurado con éxito.", obBtnFinish: "Iniciar Viaje"
     },
     fr: {
         learningLabel: "Apprentissage", uiLabel: "Interface",
@@ -142,15 +293,21 @@ const UI_TEXTS = {
         cardListeningGoal: "OBJECTIF HEURES", cardListeningTitle: "Listening Tracker", cardListeningDesc: "Films et séries regardés dans la langue cible.",
         cardReadingTag: "LECTURE DE LIVRES", cardReadingTitle: "Reading Tracker", cardReadingDesc: "Livres lus, nombre d'ouvrages et total de pages.",
         cardVocabTag: "FLASHCARDS", cardVocabTitle: "Vocabulary Trainer", cardVocabDesc: "Entraînez-vous avec des tests de mémoire.",
+        cardSpeechTag: "LECTURE & PRONONCIATION", cardSpeechTitle: "Lecteur et Parole", cardSpeechDesc: "Lisez des histoires par niveau, testez votre prononciation en temps réel et entraînez votre écoute.",
         cardAchTag: "DÉFIS & TROPHEES", cardAchTitle: "GALERIE DES SUCCÈS", cardAchDesc: "Débloquez jusqu'à 100 succès uniques grâce à vos progrès.",
-        btnAccess: "Accéder au Tableau", btnTrain: "Entraîner le Vocabulaire", btnAch: "Voir les Succès",
+        btnAccess: "Accéder au Tableau", btnTrain: "Entraîner le Vocabulaire", btnSpeech: "Pratiquer la Prononciation", btnAch: "Voir les Succès",
+        speechTitlePrefix: "Pratique de Lecture et Prononciation", speechLevel: "Niveau :", lvlEasy: "Facile", lvlMedium: "Moyen", lvlHard: "Difficile",
+        speechInstruction: "💡 Cliquez sur n'importe quel mot pour entendre sa prononciation. Appuyez sur le bouton pour écouter l'histoire complète ou sur le micro pour tester votre lecture à voix haute.",
+        btnListenStory: "Écouter l'Histoire Complète", btnRecordVoice: "Enregistrer & Évaluer", btnStopVoice: "Arrêter & Évaluer",
+        speechStatusListening: "Écoute en cours... Lisez l'histoire à haute voix !", speechStatusNoMic: "Reconnaissance vocale non prise en charge sur ce navigateur.",
+        speechScoreText: "de précision",
         achBannerTag: "Galerie des Trophées", achBannerTitle: "Galerie des 100 Succès", achBannerDesc: "Suivez vos progrès et gagnez des badges en étudiant chaque jour.",
         lblAchUnlocked: "Débloqués", lblAchProgress: "Progrès Global",
         achFilterAll: "Tous (100)", achFilterStreak: "🔥 Série", achFilterVocab: "🧠 Vocabulaire", achFilterListening: "🎧 Listening", achFilterReading: "📖 Lecture", achFilterPoly: "🌍 Polyglotte",
         goalFixed: "Objectif (Heures)", progress: "Progrès", ofTarget: "de l'objectif",
-        summaryListening: "Résumé d'Écoute", realTime: "Temps Réel", registered: "Enregistrés",
+        summaryListening: "Résumé d'Écoute", summaryListeningDesc: "Volume accumulé dans la langue sélectionnée.", realTime: "Temps Réel", registered: "Enregistrés",
         hoursByType: "Heures par Type d'Étude", hoursByTypeDesc: "Répartition Diamant, Argent et Or.",
-        titlesWatched: "Titres Visionnés", decimalTotal: "TOTAL DÉCIMAL :", target: "CIBLE :",
+        titlesWatched: "Titres Visionnés", titlesWatchedDesc: "Liste des films et séries enregistrés.", decimalTotal: "TOTAL DÉCIMAL :", target: "CIBLE :",
         addMediaTitle: "Ajouter Film ou Série", addMediaDesc: "Enregistrez vos heures d'immersion.",
         mediaType: "Type de Média", optMovie: "Film", optSeries: "Série",
         titleName: "Titre", coverImg: "Pochette (Image)", listeningMode: "Mode d'Écoute",
@@ -166,46 +323,12 @@ const UI_TEXTS = {
         correctHits: "Correct :", wrongHits: "Erreurs :", btnWrong: "Oublié", btnCorrect: "Rappelé !", btnNextRandom: "Tirer un Mot au Hasard",
         emptyVocabTitle: "Aucun mot", emptyVocabExample: "Ajoutez un mot depuis le menu.", emptyVocabList: "Aucun mot enregistré.", emptyMediaList: "Aucun titre enregistré.", emptyBookList: "Aucun livre enregistré.",
         popupStreakTitle: "Série Allumée ! 🔥", popupStreakDesc: "Excellent ! Série quotidienne validée.", btnContinue: "Continuer",
-        modalStreakTitle: "Statistiques de Série", modalStreakSub: "Suivi quotidien et historique", modalSeq: "Série Actuelle", modalMissed: "Manqués ce mois", modalWeek: "Historique Semanal", modalNote: "Les jours sans pratique sont marqués en rouge.", btnUnderstood: "Compris",
+        modalStreakTitle: "Statistiques de Série", modalStreakSub: "Suivi quotidien et historique", modalSeq: "Série Actuelle", modalMissed: "Manqués ce mois", modalWeek: "Historique Semanal", modalNote: "Les jours sans pratique sont marqués en rouge.", streakResetTime: "Réinitialise à 00:00 :", btnUnderstood: "Compris",
         lblModalStudying: "Langue étudiée", lblModalUi: "Langue de l'interface",
-        refazerPerguntas: "Réinitialiser Onboarding", modalClose: "Fermer"
-    },
-    ja: {
-        learningLabel: "学習モード", uiLabel: "インターフェース",
-        navHub: "ホーム", navDash: "ダッシュボード", navCad: "新規登録",
-        welcome: "ようこそ、{NAME}さん •", headerAch: "実績",
-        hubTitle: "今日は何を記録・練習しますか？",
-        hubDesc: "下のモジュールを選択して、進捗を記録しましょう。",
-        cardListeningGoal: "目標時間", cardListeningTitle: "リスニングトラッカー", cardListeningDesc: "アニメ・ドラマ・ポッドキャストで聞き取り練習。",
-        cardReadingTag: "読書・テキスト学習", cardReadingTitle: "リーディングトラッカー", cardReadingDesc: "本・漫画・記事を読んで、ページ数と作品数を記録。",
-        cardVocabTag: "語彙学習", cardVocabTitle: "語彙トレーナー", cardVocabDesc: "単語を復習し、記憶を定着させるフラッシュカード。",
-        cardAchTag: "実績とトロフィー", cardAchTitle: "実績ギャラリー", cardAchDesc: "学習の進捗に応じて最大100の実績を解除。",
-        btnAccess: "ダッシュボードへ", btnTrain: "学習を開始", btnAch: "実績を見る",
-        achBannerTag: "トロフィーギャラリー", achBannerTitle: "100の実績ギャラリー", achBannerDesc: "毎日勉強してバッジを獲得し、進捗を追跡しましょう。",
-        lblAchUnlocked: "解除済み", lblAchProgress: "全体進捗",
-        achFilterAll: "すべて (100)", achFilterStreak: "🔥 連続記録", achFilterVocab: "🧠 単語", achFilterListening: "🎧 リスニング", achFilterReading: "📖 読書", achFilterPoly: "🌍 マルチリンガル",
-        goalFixed: "目標時間 (時間)", progress: "進捗率", ofTarget: "の目標",
-        summaryListening: "リスニング概要", realTime: "実時間", registered: "登録数",
-        hoursByType: "学習タイプ別時間", hoursByTypeDesc: "ダイヤモンド、シルバー、ゴールド分類。",
-        titlesWatched: "視聴タイトル一覧", decimalTotal: "合計時間:", target: "目標:",
-        addMediaTitle: "作品の登録", addMediaDesc: "学習時間を追加します。",
-        mediaType: "メディア形式", optMovie: "映画", optSeries: "ドラマ・アニメ",
-        titleName: "作品名", coverImg: "カバー画像", listeningMode: "リスニングモード",
-        descDiamond: "字幕なし（集中トレーニング）", descGold: "学習言語の音声＋字幕", descSilver: "原語音声＋翻訳字幕",
-        hours: "時間", minutes: "分", season: "シーズン（任意）", epCount: "視聴話数", avgHours: "1話の平均（時間）", avgMins: "1話の平均（分）",
-        save: "保存する", cancel: "キャンセル",
-        totalBooks: "総本数", totalPages: "総ページ数", pagesPerBook: "本ごとのページ数", pagesPerBookDesc: "各作品の読書量。",
-        registeredBooks: "登録済みの本", sumPages: "合計ページ数:", addBookTitle: "新しい本を登録", addBookDesc: "読了した本を追加します。",
-        bookTitle: "本のタイトル", bookAuthor: "著者（任意）", bookPages: "ページ数", bookCover: "表紙画像",
-        totalWords: "単語数", accuracyRate: "正解率", registeredVocab: "登録済みの単語", addWordTitle: "新しい単語を追加", addWordDesc: "練習用の単語を追加します。",
-        termInLang: "学習言語の単語", termTranslation: "翻訳・意味", termExample: "例文（任意）",
-        tapFlip: "タップして裏返す", clickToFlip: "カードをクリックして意味を表示 🔄", translationTag: "翻訳・意味",
-        correctHits: "正解:", wrongHits: "不正解:", btnWrong: "覚えていない", btnCorrect: "覚えていた！", btnNextRandom: "次の単語をランダム抽出",
-        emptyVocabTitle: "単語がありません", emptyVocabExample: "メニューから単語を追加してください。", emptyVocabList: "登録済みの単語はありません。", emptyMediaList: "登録済みの作品はありません。", emptyBookList: "登録済みの本はありません。",
-        popupStreakTitle: "ストリーク達成！ 🔥", popupStreakDesc: "素晴らしいです！今日のストリークを記録しました。", btnContinue: "次へ",
-        modalStreakTitle: "ストリーク統計", modalStreakSub: "毎日の管理と履歴", modalSeq: "現在のストリーク", modalMissed: "今月の欠席", modalWeek: "週間履歴", modalNote: "練習しなかった日は赤く表示されます。", btnUnderstood: "確認",
-        lblModalStudying: "学習中の言語", lblModalUi: "UIの言語",
-        refazerPerguntas: "オンボーディングやり直し", modalClose: "閉じる"
+        refazerPerguntas: "Réinitialiser Onboarding", modalClose: "Fermer",
+        obTitleStep1: "Bienvenue sur Fluency Lab !", obDescStep1: "Comment devrions-nous vous appeler et d'où venez-vous ?", obLblName: "Votre Nom", obLblOrigin: "Langue de l'interface", obBtnNext1: "Suivant",
+        obTitleStep2: "Quelle langue allez-vous étudier ?", obDescStep2: "Vous pourrez changer de langue dans votre profil plus tard.", obBtnBack2: "Retour", obBtnNext2: "Suivant",
+        obTitleStep3: "Tout est prêt pour l'immersion !", obDescStep3: "Votre tableau de bord personnalisé a été configuré avec succès.", obBtnFinish: "Commencer"
     }
 };
 
@@ -537,8 +660,8 @@ function speakWord(wordText) {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(wordText);
-    const langMap = { en: 'en-US', es: 'es-ES', fr: 'fr-FR', ja: 'ja-JP', pt: 'pt-BR' };
-    utterance.lang = langMap[targetLang] || 'en-US';
+    const meta = LANG_META[targetLang] || LANG_META['en'];
+    utterance.lang = meta.code || 'en-US';
     utterance.rate = 0.9;
     window.speechSynthesis.speak(utterance);
 }
@@ -600,6 +723,7 @@ function updateThemeAndFlags() {
     setText('listening-welcome-prefix', `Listening (${meta.name})`);
     setText('reading-title-prefix', `Reading (${meta.name})`);
     setText('vocab-title-prefix', `Vocabulary (${meta.name})`);
+    setText('speech-title-prefix', `${txt.speechTitlePrefix} (${meta.name})`);
     setText('card-front-lang-label', meta.name);
     setText('hub-welcome', `${welcomeStr} ${meta.name.toUpperCase()}`);
     setText('footer-text', `Fluency Lab • ${meta.edition} • 2026`);
@@ -620,6 +744,7 @@ function refreshAllDashboards() {
     if (currentModule === 'listening') renderListeningDashboard();
     if (currentModule === 'reading') renderReadingDashboard();
     if (currentModule === 'vocabulary') renderVocabularyDashboard();
+    if (currentModule === 'speech') renderSpeechModule();
     if (currentModule === 'achievements') renderAchievementsModule();
 }
 
@@ -632,6 +757,8 @@ function applyUITranslations() {
     setText('lbl-nav-dash', txt.navDash);
     setText('lbl-nav-cad', txt.navCad);
     setText('lbl-header-achievements', txt.headerAch);
+    
+    setText('hub-title-text', txt.hubTitle);
     setText('hub-desc', txt.hubDesc);
     setText('card-listening-goal', txt.cardListeningGoal);
     setText('card-listening-title', txt.cardListeningTitle);
@@ -642,13 +769,25 @@ function applyUITranslations() {
     setText('card-vocab-tag', txt.cardVocabTag);
     setText('card-vocab-title', txt.cardVocabTitle);
     setText('card-vocab-desc', txt.cardVocabDesc);
+    setText('card-speech-tag', txt.cardSpeechTag);
+    setText('card-speech-title', txt.cardSpeechTitle);
+    setText('card-speech-desc', txt.cardSpeechDesc);
     setText('card-ach-tag', txt.cardAchTag);
     setText('card-ach-title', txt.cardAchTitle);
     setText('card-ach-desc', txt.cardAchDesc);
 
     document.querySelectorAll('.hub-btn-access').forEach(el => el.innerText = txt.btnAccess);
     setText('hub-btn-train', txt.btnTrain);
+    setText('hub-btn-speech', txt.btnSpeech);
     setText('hub-btn-ach', txt.btnAch);
+
+    setText('lbl-difficulty-level', txt.speechLevel);
+    setText('speech-lvl-easy', txt.lvlEasy);
+    setText('speech-lvl-medium', txt.lvlMedium);
+    setText('speech-lvl-hard', txt.lvlHard);
+    setText('speech-instruction', txt.speechInstruction);
+    setText('lbl-btn-listen-story', txt.btnListenStory);
+    setText('lbl-btn-record-voice', isRecognizingVoice ? txt.btnStopVoice : txt.btnRecordVoice);
 
     setText('ach-banner-tag', txt.achBannerTag);
     setText('ach-banner-title', txt.achBannerTitle);
@@ -667,11 +806,13 @@ function applyUITranslations() {
     setText('lbl-progress', txt.progress);
     setText('lbl-of-target', txt.ofTarget);
     setHtml('lbl-summary-listening', `<i class="fa-solid fa-chart-line"></i> ${txt.summaryListening}`);
+    setText('lbl-summary-listening-desc', txt.summaryListeningDesc);
     setText('lbl-real-time', txt.realTime);
     setText('lbl-registered', txt.registered);
     setText('lbl-hours-by-type', txt.hoursByType);
     setText('lbl-hours-by-type-desc', txt.hoursByTypeDesc);
     setHtml('lbl-titles-watched', `<i class="fa-solid fa-list"></i> ${txt.titlesWatched}`);
+    setText('lbl-titles-watched-desc', txt.titlesWatchedDesc);
     setText('lbl-decimal-total', txt.decimalTotal);
     setText('lbl-target', txt.target);
     setText('lbl-add-media-title', txt.addMediaTitle);
@@ -734,12 +875,26 @@ function applyUITranslations() {
     setText('lbl-modal-missed-month', txt.modalMissed);
     setText('lbl-modal-week-hist', txt.modalWeek);
     setText('lbl-modal-red-note', txt.modalNote);
+    setText('lbl-streak-reset-time', txt.streakResetTime);
     setText('btn-modal-understood', txt.btnUnderstood);
 
     setText('lbl-modal-studying', txt.lblModalStudying);
     setText('lbl-modal-ui', txt.lblModalUi);
     setText('btn-refazer-perguntas', txt.refazerPerguntas);
     setText('btn-modal-close', txt.modalClose);
+
+    setText('ob-title-step1', txt.obTitleStep1);
+    setText('ob-desc-step1', txt.obDescStep1);
+    setText('ob-lbl-name', txt.obLblName);
+    setText('ob-lbl-origin', txt.obLblOrigin);
+    setText('ob-btn-next1', txt.obBtnNext1);
+    setText('ob-title-step2', txt.obTitleStep2);
+    setText('ob-desc-step2', txt.obDescStep2);
+    setText('ob-btn-back2', txt.obBtnBack2);
+    setText('ob-btn-next2', txt.obBtnNext2);
+    setText('ob-title-step3', txt.obTitleStep3);
+    setText('ob-desc-step3', txt.obDescStep3);
+    setText('ob-btn-finish', txt.obBtnFinish);
 }
 
 function openModule(moduleName) {
@@ -748,12 +903,14 @@ function openModule(moduleName) {
     const modListening = document.getElementById('module-listening');
     const modReading = document.getElementById('module-reading');
     const modVocab = document.getElementById('module-vocabulary');
+    const modSpeech = document.getElementById('module-speech');
     const modAch = document.getElementById('module-achievements');
 
     if (modHub) modHub.classList.add('hidden');
     if (modListening) modListening.classList.add('hidden');
     if (modReading) modReading.classList.add('hidden');
     if (modVocab) modVocab.classList.add('hidden');
+    if (modSpeech) modSpeech.classList.add('hidden');
     if (modAch) modAch.classList.add('hidden');
 
     const nav = document.getElementById('main-nav');
@@ -765,9 +922,8 @@ function openModule(moduleName) {
     } else {
         if (nav) nav.classList.remove('hidden');
         
-        // Remove a opção de Dashboard/Cadastrar quando for para Conquistas
         if (subnavTabs) {
-            if (moduleName === 'achievements') {
+            if (moduleName === 'achievements' || moduleName === 'speech') {
                 subnavTabs.classList.add('hidden');
             } else {
                 subnavTabs.classList.remove('hidden');
@@ -779,7 +935,10 @@ function openModule(moduleName) {
             activeEl.classList.remove('hidden');
             activeEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-        if (moduleName === 'achievements') {
+
+        if (moduleName === 'speech') {
+            renderSpeechModule();
+        } else if (moduleName === 'achievements') {
             renderAchievementsModule();
         } else {
             switchTab('dashboard');
@@ -810,6 +969,182 @@ function switchTab(tabId) {
     }
 }
 
+/* ============ MÓDULO DE LEITURA & PRONÚNCIA ============ */
+function setSpeechLevel(lvl) {
+    currentSpeechLevel = lvl;
+    ['easy', 'medium', 'hard'].forEach(l => {
+        const btn = document.getElementById(`speech-lvl-${l}`);
+        if (btn) {
+            if (l === lvl) {
+                btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow";
+            } else {
+                btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all opacity-70 hover:opacity-100";
+            }
+        }
+    });
+    renderSpeechModule();
+}
+
+function getCurrentStory() {
+    const langData = STORIES_DATABASE[targetLang] || STORIES_DATABASE['en'];
+    return langData[currentSpeechLevel] || langData['easy'];
+}
+
+function renderSpeechModule() {
+    const story = getCurrentStory();
+    const titleEl = document.getElementById('speech-story-title');
+    const container = document.getElementById('speech-story-container');
+
+    if (titleEl) titleEl.innerText = story.title;
+    if (container) {
+        container.innerHTML = '';
+        story.paragraphs.forEach((pText, pIdx) => {
+            const p = document.createElement('p');
+            p.className = "leading-relaxed";
+            
+            // Separa por palavras preservando sinais
+            const words = pText.split(/(\s+)/);
+            words.forEach((w, wIdx) => {
+                if (w.trim().length === 0) {
+                    p.appendChild(document.createTextNode(w));
+                } else {
+                    const span = document.createElement('span');
+                    span.className = "story-word";
+                    span.innerText = w;
+                    span.setAttribute('data-clean-word', cleanWordText(w));
+                    span.onclick = () => speakWord(cleanWordText(w));
+                    p.appendChild(span);
+                }
+            });
+
+            container.appendChild(p);
+        });
+    }
+
+    const feedbackBar = document.getElementById('speech-feedback-bar');
+    if (feedbackBar) feedbackBar.classList.add('hidden');
+}
+
+function cleanWordText(w) {
+    return w.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'«»]/g, "").toLowerCase().trim();
+}
+
+function listenFullStory() {
+    const story = getCurrentStory();
+    const fullText = story.paragraphs.join(' ');
+    speakWord(fullText);
+}
+
+function toggleVoiceRecognition() {
+    if (isRecognizingVoice) {
+        stopVoiceRecognition();
+    } else {
+        startVoiceRecognition();
+    }
+}
+
+function startVoiceRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
+
+    if (!SpeechRecognition) {
+        alert(txt.speechStatusNoMic);
+        return;
+    }
+
+    speechRecognitionInstance = new SpeechRecognition();
+    const meta = LANG_META[targetLang] || LANG_META['en'];
+    speechRecognitionInstance.lang = meta.code || 'en-US';
+    speechRecognitionInstance.continuous = true;
+    speechRecognitionInstance.interimResults = true;
+
+    speechRecognitionInstance.onstart = () => {
+        isRecognizingVoice = true;
+        updateVoiceButtonUI();
+        const feedbackBar = document.getElementById('speech-feedback-bar');
+        const statusText = document.getElementById('speech-status-text');
+        if (feedbackBar) feedbackBar.classList.remove('hidden');
+        if (statusText) statusText.innerText = txt.speechStatusListening;
+        
+        // Limpa classes anteriores de cor
+        document.querySelectorAll('.story-word').forEach(sp => {
+            sp.classList.remove('word-correct', 'word-incorrect');
+        });
+    };
+
+    speechRecognitionInstance.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            transcript += event.results[i][0].transcript + ' ';
+        }
+        evaluateSpeech(transcript);
+    };
+
+    speechRecognitionInstance.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        stopVoiceRecognition();
+    };
+
+    speechRecognitionInstance.onend = () => {
+        isRecognizingVoice = false;
+        updateVoiceButtonUI();
+    };
+
+    speechRecognitionInstance.start();
+}
+
+function stopVoiceRecognition() {
+    if (speechRecognitionInstance) {
+        speechRecognitionInstance.stop();
+        speechRecognitionInstance = null;
+    }
+    isRecognizingVoice = false;
+    updateVoiceButtonUI();
+}
+
+function updateVoiceButtonUI() {
+    const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
+    const lblBtn = document.getElementById('lbl-btn-record-voice');
+    const micIcon = document.getElementById('mic-icon');
+    const btn = document.getElementById('btn-record-voice');
+
+    if (isRecognizingVoice) {
+        if (lblBtn) lblBtn.innerText = txt.btnStopVoice;
+        if (micIcon) micIcon.className = "fa-solid fa-square text-red-400 animate-pulse";
+        if (btn) btn.className = "w-full sm:w-auto px-8 py-3.5 rounded-xl bg-red-600 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg hover:brightness-110 transition-all";
+    } else {
+        if (lblBtn) lblBtn.innerText = txt.btnRecordVoice;
+        if (micIcon) micIcon.className = "fa-solid fa-microphone";
+        if (btn) btn.className = "w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg hover:brightness-110 transition-all";
+    }
+}
+
+function evaluateSpeech(userTranscript) {
+    const spokenWords = userTranscript.toLowerCase().split(/\s+/).map(w => cleanWordText(w)).filter(Boolean);
+    const wordSpans = document.querySelectorAll('.story-word');
+    
+    let correctCount = 0;
+    let totalCount = wordSpans.length;
+
+    wordSpans.forEach(span => {
+        const targetWord = span.getAttribute('data-clean-word');
+        if (spokenWords.includes(targetWord)) {
+            span.classList.add('word-correct');
+            span.classList.remove('word-incorrect');
+            correctCount++;
+        } else {
+            span.classList.add('word-incorrect');
+            span.classList.remove('word-correct');
+        }
+    });
+
+    const scorePct = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
+    const scoreTextEl = document.getElementById('speech-score-text');
+    const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
+    if (scoreTextEl) scoreTextEl.innerText = `${scorePct}% ${txt.speechScoreText}`;
+}
+
+/* ============ DEMAIS FUNÇÕES DO SISTEMA ============ */
 function toggleMediaType(type) {
     const movieFields = document.getElementById('movie-time-fields');
     const seriesFields = document.getElementById('series-time-fields');
@@ -1473,9 +1808,9 @@ function initHubCarousel() {
     if (!track || !wrap || track.dataset.ready) return;
     track.dataset.ready = '1';
 
-    const SPEED = 36;           // px por segundo
-    const SETS = 5;             // 1 conjunto original + 4 cópias (loop sem emenda)
-    const RESUME_DELAY = 2500;  // ms de espera após o usuário mexer
+    const SPEED = 36;
+    const SETS = 5;
+    const RESUME_DELAY = 2500;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const originals = Array.from(track.querySelectorAll('.hub-card'));
@@ -1526,7 +1861,6 @@ function initHubCarousel() {
             if (t >= 1) anim = null;
         } else if (paused) {
             pos = track.scrollLeft;
-            // só reposiciona o loop quando o usuário já parou de rolar
             if (!touching && !dragging && ts - userScrollTs > 250) {
                 const before = pos;
                 normalize();
@@ -1552,7 +1886,6 @@ function initHubCarousel() {
         requestAnimationFrame(frame);
     }
 
-    // --- interação do usuário ---
     track.addEventListener('scroll', () => {
         if (Math.abs(track.scrollLeft - lastSet) > 1.5) {
             userScrollTs = performance.now();
@@ -1575,7 +1908,6 @@ function initHubCarousel() {
     });
     wrap.addEventListener('focusout', () => { focusKey = false; });
 
-    // arrastar com o mouse
     let down = false, moved = false, startX = 0, startScroll = 0;
     track.addEventListener('pointerdown', (e) => {
         if (e.pointerType !== 'mouse' || e.button !== 0) return;
@@ -1604,7 +1936,6 @@ function initHubCarousel() {
         if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
     }, true);
 
-    // setas e teclado: andam um card por vez
     function nudge(dir) {
         const gap = parseFloat(getComputedStyle(track).columnGap) || 20;
         const step = (originals[0].offsetWidth + gap) * dir;
@@ -1622,7 +1953,6 @@ function initHubCarousel() {
     if ('ResizeObserver' in window) new ResizeObserver(() => { loopW = 0; }).observe(track);
     else window.addEventListener('resize', () => { loopW = 0; });
 
-    // as cópias precisam acompanhar a tradução do idioma
     window.refreshHubClones = buildClones;
     if (typeof applyUITranslations === 'function' && !applyUITranslations.__hubWrapped) {
         const orig = applyUITranslations;
@@ -1638,7 +1968,7 @@ function initHubCarousel() {
     requestAnimationFrame(frame);
 }
 
-console.log('Fluency Lab build 35');
+console.log('Fluency Lab build 36');
 
 window.onload = async function() {
     await initDB();

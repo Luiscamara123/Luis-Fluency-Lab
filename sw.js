@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fluency-lab-v37';
+const CACHE_NAME = 'fluency-lab-v38';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
