@@ -2022,3 +2022,16 @@ window.onload = async function() {
     setInterval(updateStreakCountdown, 1000);
     updateStreakCountdown();
 };
+// Registrador do Service Worker para PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then((registration) => {
+        console.log('Service Worker registado com sucesso:', registration.scope);
+        registration.update();
+      })
+      .catch((error) => {
+        console.error('Falha ao registar o Service Worker:', error);
+      });
+  });
+}
