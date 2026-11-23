@@ -127,7 +127,9 @@ header h1 {
     color: transparent;
 }
 body.mode-light header h1 { background: linear-gradient(90deg, #0b1530, #1d4ed8); -webkit-background-clip: text; background-clip: text; }
-#main-nav { background: rgba(5, 12, 33, .4); }
+#main-nav { background: rgba(5, 12, 33, .4); border-bottom: 1px solid rgba(148, 163, 184, .12); }
+body.mode-light #main-nav { background: rgba(255, 255, 255, .55); border-bottom-color: rgba(15, 23, 42, .08); }
+#btn-dashboard, #btn-cadastro { display: inline-flex; align-items: center; gap: .45rem; }
 
 /* ============ INPUTS ============ */
 body.mode-dark input, body.mode-dark select, body.mode-dark textarea {
@@ -398,4 +400,91 @@ body.mode-light ::-webkit-scrollbar-track { background: rgba(255, 255, 255, .4);
         animation-iteration-count: 1 !important;
         transition-duration: .001ms !important;
     }
+}
+
+/* ============ DOCK ESTILO iOS (somente mobile) ============ */
+@media (max-width: 767px) {
+    body.dock-visible main { padding-bottom: calc(7rem + env(safe-area-inset-bottom)); }
+
+    #main-nav {
+        position: fixed;
+        left: 0; right: 0;
+        bottom: calc(env(safe-area-inset-bottom) + 14px);
+        margin: 0 auto;
+        width: max-content;
+        max-width: calc(100% - 24px);
+        z-index: 45;
+        padding: .45rem;
+        overflow: visible;
+        border: 1px solid rgba(255, 255, 255, .2);
+        border-radius: 2.1rem;
+        background: linear-gradient(160deg, rgba(40, 62, 120, .42), rgba(10, 20, 50, .5));
+        backdrop-filter: blur(30px) saturate(190%);
+        -webkit-backdrop-filter: blur(30px) saturate(190%);
+        box-shadow:
+            0 24px 48px -14px rgba(0, 0, 0, .65),
+            0 0 0 .5px rgba(255, 255, 255, .08),
+            inset 0 1px 0 rgba(255, 255, 255, .3),
+            inset 0 -1px 0 rgba(255, 255, 255, .05);
+    }
+    #main-nav:not(.hidden) { animation: dockIn .5s var(--ease) backwards; }
+    @keyframes dockIn { from { opacity: 0; transform: translateY(26px) scale(.94); } to { opacity: 1; transform: none; } }
+
+    body.mode-light #main-nav {
+        background: linear-gradient(160deg, rgba(255, 255, 255, .72), rgba(235, 242, 255, .55));
+        border-color: rgba(255, 255, 255, .85);
+        box-shadow: 0 22px 44px -16px rgba(15, 30, 80, .4), inset 0 1px 0 rgba(255, 255, 255, .95);
+    }
+
+    #main-nav > div,
+    #main-nav #subnav-tabs-container {
+        display: flex;
+        align-items: center;
+        gap: .2rem;
+    }
+    #main-nav #subnav-tabs-container {
+        background: none !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+    }
+
+    /* cada botão vira um "ícone de app" com rótulo embaixo */
+    #main-nav button,
+    #main-nav #btn-dashboard,
+    #main-nav #btn-cadastro {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: .22rem;
+        min-width: 4.6rem;
+        min-height: 3.5rem;
+        padding: .5rem .85rem !important;
+        border-radius: 1.5rem !important;
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        backdrop-filter: none;
+        opacity: .78 !important;
+        font-size: .625rem !important;
+        font-weight: 700;
+        letter-spacing: .02em !important;
+        text-transform: none !important;
+        white-space: nowrap;
+        color: inherit;
+    }
+    #main-nav button i { font-size: 1.3rem; line-height: 1; }
+    #main-nav button:active { transform: scale(.9); }
+
+    /* item ativo: "pílula" de vidro com brilho azul */
+    #main-nav button.nav-btn-active {
+        opacity: 1 !important;
+        color: #fff;
+        background: linear-gradient(180deg, rgba(96, 165, 250, .42), rgba(37, 99, 235, .3)) !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4), 0 0 0 1px rgba(96, 165, 250, .4), 0 8px 18px -8px rgba(37, 99, 235, .8) !important;
+    }
+    body.mode-light #main-nav button.nav-btn-active { color: #0b1530; }
+    #main-nav button.nav-btn-active i { color: #93c5fd; }
+    body.mode-light #main-nav button.nav-btn-active i { color: #1d4ed8; }
 }

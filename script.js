@@ -18,6 +18,8 @@ let currentSpeechLevel = 'easy';
 let currentStoryIndex = 0; // Índice de 0 a 49 (50 histórias por nível)
 let isRecognizingVoice = false;
 let speechRecognitionInstance = null;
+let isSpeakingStory = false;   // true enquanto a história completa está sendo lida
+let storyUtterance = null;
 
 const LANG_META = {
     en: { name: 'English', flagImg: 'img/bandeira-eua.webp', themeClass: 'theme-en', platformName: 'American Immersion Platform', edition: 'American Edition', code: 'en-US' },
@@ -31,92 +33,14 @@ const LANG_META = {
    GERADOR DINÂMICO DE 50 HISTÓRIAS ÚNICAS POR NÍVEL E IDIOMA (750 VARIAÇÕES)
    ========================================================================== */
 function generate50Stories(lang, level) {
-    const stories = [];
-    
-    // Modelos de frases e temas variados por nível e idioma
-    const SAMPLES = {
-        en: {
-            easy: [
-                { t: "The Little Dog", p1: "Max is a happy little dog. He loves to run in the green park every morning.", p2: "Today, Max found a bright yellow ball under a big tree. He played with it all day." },
-                { t: "Morning Coffee", p1: "Emma wakes up early every morning to drink hot coffee.", p2: "She enjoys looking at the sunrise from her cozy balcony." },
-                { t: "A Walk in the Woods", p1: "Leo likes walking in the quiet forest near his village.", p2: "He listens to the sweet song of wild birds in the trees." },
-                { t: "The New Bicycle", p1: "Tom got a brand new red bicycle for his birthday.", p2: "He rides it around the neighborhood with his best friends." },
-                { t: "Baking a Cake", p1: "Lisa is baking a sweet chocolate cake in the kitchen.", p2: "The delicious smell fills the whole house with joy." }
-            ],
-            medium: [
-                { t: "A Rainstorm in the City", p1: "Sarah decided to visit her favorite local cafe while the rain was falling gently outside.", p2: "She ordered a hot cup of coffee, opened an inspiring book, and spent two wonderful hours reading by the window." },
-                { t: "The Art Exhibition", p1: "David walked into the modern art gallery to explore paintings made by young artists.", p2: "He was fascinated by the colorful abstract canvas hanging near the main entrance." }
-            ],
-            hard: [
-                { t: "The Future of Artificial Intelligence", p1: "Artificial intelligence is rapidly transforming how society communicates and solves complex problems across global industries.", p2: "Engineers and researchers collaborate worldwide to build sustainable algorithms that can adapt to changing human necessities." },
-                { t: "Space Exploration Innovations", p1: "Aerospace scientists are developing advanced propulsion systems designed for long-distance interplanetary missions.", p2: "Understanding cosmic radiation patterns remains one of the critical parameters for ensuring astronaut safety." }
-            ]
-        },
-        es: {
-            easy: [
-                { t: "El Perro Alegre", p1: "Max es un perro pequeño y muy feliz. Le gusta correr por el parque todas las mañanas.", p2: "Hoy encontró una pelota amarilla bajo un árbol grande y jugó con ella todo el día." },
-                { t: "Un Café por la Mañana", p1: "Elena se despierta temprano cada mañana para tomar café caliente.", p2: "Le gusta mirar la salida del sol desde su cómodo balcón." }
-            ],
-            medium: [
-                { t: "Un Café bajo la Lluvia", p1: "Sofía decidió visitar su cafetería favorita mientras la lluvia caía suavemente en la ciudad.", p2: "Pidió un café caliente, abrió un libro inspirador y pasó dos horas maravillosas leyendo junto a la ventana." }
-            ],
-            hard: [
-                { t: "El Futuro de la Tecnología", p1: "La inteligencia artificial está transformando rápidamente la forma en que la sociedad se comunica y resuelve problemas complejos.", p2: "Investigadores de todo el mundo colaboran para construir algoritmos sostenibles que se adaptan a las necesidades humanas." }
-            ]
-        },
-        fr: {
-            easy: [
-                { t: "Le Petit Chien", p1: "Max est un petit chien très heureux. Il aime courir dans le parc tous les matins.", p2: "Aujourd'hui, il a trouvé une balle jaune sous un grand arbre et a joué toute la journée." }
-            ],
-            medium: [
-                { t: "Un Café sous la Pluie", p1: "Camille a décidé de visiter son café préféré pendant que la pluie tombait doucement dehors.", p2: "Elle a commandé un café chaud, a ouvert un livre inspirant et a passé deux heures formidables à lire près de la fenêtre." }
-            ],
-            hard: [
-                { t: "La Technologie Moderne", p1: "L'intelligence artificielle transforme rapidement la façon dont la société communique et résout des problèmes complexes.", p2: "Des chercheurs du monde entier collaborent pour créer des algorithmes durables adaptables aux besoins humains." }
-            ]
-        },
-        ja: {
-            easy: [
-                { t: "小さな犬", p1: "マックスはとても幸せな小さな犬です。毎朝公園で走るのが大好きです。", p2: "今日、大きな木の下で黄色いボールを見つけて、一日中遊びました。" }
-            ],
-            medium: [
-                { t: "雨の日のカフェ", p1: "雨が静かに降る中、サクラはお気に入りのカフェに行きました。", p2: "暖かいコーヒーを注文し、本を開いて、窓のそばで素晴らしい時間を過ごしました。" }
-            ],
-            hard: [
-                { t: "現代のテクノロジー", p1: "人工知能は、社会のコミュニケーションや問題解決の accepted 方法を急速に変革しています。", p2: "世界中の研究者が協力して、変化する人間のニーズに適応できる持続可能なアルゴリズムを構築しています。" }
-            ]
-        },
-        pt: {
-            easy: [
-                { t: "O Cãozinho Feliz", p1: "Max é um cãozinho muito alegre. Ele adora correr pelo parque verde todas as manhãs.", p2: "Hoje, ele encontrou uma bola amarela debaixo de uma grande árvore e brincou o dia todo." }
-            ],
-            medium: [
-                { t: "Um Café na Chuva", p1: "Ana decidiu visitar sua cafeteria favorita enquanto a chuva caía suavemente lá fora.", p2: "Ela pediu um café quente, abriu um livro inspirador e passou duas horas maravilhosas lendo perto da janela." }
-            ],
-            hard: [
-                { t: "A Tecnologia Moderna", p1: "A inteligência artificial está transformando rapidamente a forma como a sociedade se comunica e resolve problemas complexos.", p2: "Pesquisadores do mundo todo colaboram para construir algoritmos sustentáveis que se adaptam às necessidades humanas." }
-            ]
-        }
-    };
-
-    const langSamples = SAMPLES[lang] || SAMPLES['en'];
-    const pool = langSamples[level] || langSamples['easy'] || SAMPLES['en']['easy'];
-
-    // Gera exatamente 50 histórias sem repetição
-    for (let i = 0; i < 50; i++) {
-        const base = pool[i % pool.length];
-        const storyNum = i + 1;
-        stories.push({
-            id: i,
-            title: `${base.t} #${storyNum}`,
-            paragraphs: [
-                `${base.p1}`,
-                `${base.p2}`
-            ]
-        });
-    }
-
-    return stories;
+    // Os textos vêm de stories.js (STORIES_RAW): 50 textos únicos por nível e idioma.
+    const raw = (typeof STORIES_RAW !== 'undefined' && (STORIES_RAW[lang] || STORIES_RAW['en'])) || [];
+    const offset = { easy: 1, medium: 3, hard: 5 }[level] || 1;
+    return raw.map((row, i) => ({
+        id: i,
+        title: row[0],
+        paragraphs: [row[offset], row[offset + 1]]
+    }));
 }
 
 const UI_TEXTS = {
@@ -134,7 +58,7 @@ const UI_TEXTS = {
         btnAccess: "Acessar o Painel", btnTrain: "Treinar Vocabulário", btnSpeech: "Praticar Pronúncia", btnAch: "Ver Conquistas",
         speechTitlePrefix: "Prática de Leitura e Pronúncia", speechLevel: "Nível:", lvlEasy: "Fácil", lvlMedium: "Médio", lvlHard: "Difícil", lblSelectStory: "Texto:",
         speechInstruction: "💡 Clique em qualquer palavra para escutar a pronúncia individual. Aperte no botão para escutar a história completa ou no microfone para testar sua leitura em voz alta.",
-        btnListenStory: "Escutar História Completa", btnRecordVoice: "Gravar e Ver Pronúncia", btnStopVoice: "Parar e Avaliar",
+        btnListenStory: "Escutar História Completa", btnStopListen: "Parar Escuta", btnRecordVoice: "Gravar e Ver Pronúncia", btnStopVoice: "Parar e Avaliar",
         speechStatusListening: "Ouvindo... Fale a história em voz alta!", speechStatusNoMic: "Reconhecimento de voz não suportado neste navegador.",
         speechScoreText: "de precisão",
         achBannerTag: "Galería de Troféus", achBannerTitle: "Galeria de 100 Conquistas", achBannerDesc: "Acompanhe seu progresso e conquiste badges estudando diariamente.",
@@ -180,7 +104,7 @@ const UI_TEXTS = {
         btnAccess: "Open Dashboard", btnTrain: "Practice Now", btnSpeech: "Practice Pronunciation", btnAch: "View Achievements",
         speechTitlePrefix: "Reading & Pronunciation Practice", speechLevel: "Level:", lvlEasy: "Easy", lvlMedium: "Medium", lvlHard: "Hard", lblSelectStory: "Text:",
         speechInstruction: "💡 Click any word to hear individual pronunciation. Press the button to listen to the full story or use the microphone to practice reading aloud.",
-        btnListenStory: "Listen to Full Story", btnRecordVoice: "Record & Check Speech", btnStopVoice: "Stop & Evaluate",
+        btnListenStory: "Listen to Full Story", btnStopListen: "Stop Listening", btnRecordVoice: "Record & Check Speech", btnStopVoice: "Stop & Evaluate",
         speechStatusListening: "Listening... Read the story out loud!", speechStatusNoMic: "Speech recognition not supported in this browser.",
         speechScoreText: "accuracy",
         achBannerTag: "Hall of Fame", achBannerTitle: "100 Achievements Gallery", achBannerDesc: "Track your progress and earn badges studying daily.",
@@ -226,7 +150,7 @@ const UI_TEXTS = {
         btnAccess: "Acceder al Panel", btnTrain: "Practicar Vocabulario", btnSpeech: "Practicar Pronunciación", btnAch: "Ver Logros",
         speechTitlePrefix: "Práctica de Lectura y Pronunciación", speechLevel: "Nivel:", lvlEasy: "Fácil", lvlMedium: "Medio", lvlHard: "Difícil", lblSelectStory: "Texto:",
         speechInstruction: "💡 Haz clic en cualquier palabra para escuchar su pronunciación. Presiona el botón para escuchar toda la historia o usa el micrófono para leer en voz alta.",
-        btnListenStory: "Escuchar Historia Completa", btnRecordVoice: "Grabar y Evaluar Pronunciación", btnStopVoice: "Detener y Evaluar",
+        btnListenStory: "Escuchar Historia Completa", btnStopListen: "Detener Escucha", btnRecordVoice: "Grabar y Evaluar Pronunciación", btnStopVoice: "Detener y Evaluar",
         speechStatusListening: "Escuchando... ¡Lee la historia en voz alta!", speechStatusNoMic: "El reconocimiento de voz no es compatible con este navegador.",
         speechScoreText: "de precisión",
         achBannerTag: "Galería de Trofeos", achBannerTitle: "Galería de 100 Logros", achBannerDesc: "Sigue tu progreso y gana medallas estudiando a diario.",
@@ -272,7 +196,7 @@ const UI_TEXTS = {
         btnAccess: "Accéder au Tableau", btnTrain: "Entraîner le Vocabulaire", btnSpeech: "Pratiquer la Prononciation", btnAch: "Voir les Succès",
         speechTitlePrefix: "Pratique de Lecture et Prononciation", speechLevel: "Niveau :", lvlEasy: "Facile", lvlMedium: "Moyen", lvlHard: "Difficile", lblSelectStory: "Texte :",
         speechInstruction: "💡 Cliquez sur n'importe quel mot pour entendre sa prononciation. Appuyez sur le bouton pour écouter l'histoire complète ou sur le micro pour tester votre lecture à voix haute.",
-        btnListenStory: "Écouter l'Histoire Complète", btnRecordVoice: "Enregistrer & Évaluer", btnStopVoice: "Arrêter & Évaluer",
+        btnListenStory: "Écouter l'Histoire Complète", btnStopListen: "Arrêter l'Écoute", btnRecordVoice: "Enregistrer & Évaluer", btnStopVoice: "Arrêter & Évaluer",
         speechStatusListening: "Écoute en cours... Lisez l'histoire à haute voix !", speechStatusNoMic: "Reconnaissance vocale non prise en charge sur ce navigateur.",
         speechScoreText: "de précision",
         achBannerTag: "Galerie des Trophées", achBannerTitle: "Galerie des 100 Succès", achBannerDesc: "Suivez vos progrès et gagnez des badges en étudiant chaque jour.",
@@ -318,7 +242,7 @@ const UI_TEXTS = {
         btnAccess: "ダッシュボードを開く", btnTrain: "単語の練習を開始", btnSpeech: "発音練習を開始", btnAch: "実績を表示",
         speechTitlePrefix: "音読・発音トレーニング", speechLevel: "難易度:", lvlEasy: "初級", lvlMedium: "中級", lvlHard: "上級", lblSelectStory: "文章:",
         speechInstruction: "💡 単語をクリックすると個別の発音を聞くことができます。ボタンを押して全ストーリーを聴くか、マイクを使って音読をテストしましょう。",
-        btnListenStory: "ストーリー全体を聴く", btnRecordVoice: "録音して発音をチェック", btnStopVoice: "停止して評価",
+        btnListenStory: "ストーリー全体を聴く", btnStopListen: "再生を停止", btnRecordVoice: "録音して発音をチェック", btnStopVoice: "停止して評価",
         speechStatusListening: "録音中... ストーリーを声に出して読んでください！", speechStatusNoMic: "このブラウザは音声認識をサポートしていません。",
         speechScoreText: "の正確度",
         achBannerTag: "殿堂入りギャラリー", achBannerTitle: "100実績ギャラリー", achBannerDesc: "毎日の学習で進捗を追跡し、バッジを獲得しましょう。",
@@ -678,6 +602,7 @@ function updateStreakCountdown() {
 
 function speakWord(wordText) {
     if (!('speechSynthesis' in window)) return;
+    if (isSpeakingStory) { storyUtterance = null; isSpeakingStory = false; updateListenButtonUI(); }
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(wordText);
     const meta = LANG_META[targetLang] || LANG_META['en'];
@@ -702,6 +627,7 @@ function updateListeningGoal(newVal) {
 }
 
 async function changeTargetLanguage(newLang) {
+    stopStorySpeech();
     targetLang = newLang;
     localStorage.setItem('luis_target_language', targetLang);
     await loadLanguageData();
@@ -807,7 +733,7 @@ function applyUITranslations() {
     setText('speech-lvl-medium', txt.lvlMedium);
     setText('speech-lvl-hard', txt.lvlHard);
     setText('speech-instruction', txt.speechInstruction);
-    setText('lbl-btn-listen-story', txt.btnListenStory);
+    updateListenButtonUI();
     setText('lbl-btn-record-voice', isRecognizingVoice ? txt.btnStopVoice : txt.btnRecordVoice);
 
     setText('ach-banner-tag', txt.achBannerTag);
@@ -919,6 +845,8 @@ function applyUITranslations() {
 }
 
 function openModule(moduleName) {
+    stopStorySpeech();
+    document.body.classList.toggle('dock-visible', moduleName !== 'hub');
     currentModule = moduleName;
     const modHub = document.getElementById('module-hub');
     const modListening = document.getElementById('module-listening');
@@ -992,6 +920,7 @@ function switchTab(tabId) {
 
 /* ============ MÓDULO DE LEITURA & PRONÚNCIA ============ */
 function setSpeechLevel(lvl) {
+    stopStorySpeech();
     currentSpeechLevel = lvl;
     currentStoryIndex = 0; // Volta para o primeiro texto ao mudar nível
     ['easy', 'medium', 'hard'].forEach(l => {
@@ -1008,6 +937,7 @@ function setSpeechLevel(lvl) {
 }
 
 function changeStoryIndex(idx) {
+    stopStorySpeech();
     currentStoryIndex = parseInt(idx) || 0;
     renderSpeechModule();
 }
@@ -1020,12 +950,14 @@ function getCurrentStory() {
 function renderSpeechModule() {
     // Preenche o seletor de 1 a 50
     const selectEl = document.getElementById('speech-story-select');
-    if (selectEl && selectEl.options.length !== 50) {
+    const optLabel = ((UI_TEXTS[uiLang] || UI_TEXTS['pt']).lblSelectStory || 'Texto').replace(/[:：]/g, '').trim();
+    if (selectEl && (selectEl.options.length !== 50 || selectEl.dataset.lbl !== optLabel)) {
         selectEl.innerHTML = '';
+        selectEl.dataset.lbl = optLabel;
         for (let i = 0; i < 50; i++) {
             const opt = document.createElement('option');
             opt.value = i;
-            opt.innerText = `Texto ${i + 1}`;
+            opt.innerText = `${optLabel} ${i + 1}`;
             selectEl.appendChild(opt);
         }
     }
@@ -1068,10 +1000,58 @@ function cleanWordText(w) {
     return w.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'«»]/g, "").toLowerCase().trim();
 }
 
+function updateListenButtonUI() {
+    const txt = UI_TEXTS[uiLang] || UI_TEXTS['pt'];
+    const lbl = document.getElementById('lbl-btn-listen-story');
+    const icon = document.getElementById('listen-icon');
+    const btn = document.getElementById('btn-listen-story');
+    if (lbl) lbl.innerText = isSpeakingStory ? txt.btnStopListen : txt.btnListenStory;
+    if (icon) icon.className = isSpeakingStory ? 'fa-solid fa-stop text-red-400 animate-pulse' : 'fa-solid fa-volume-high text-blue-500';
+    if (btn) btn.classList.toggle('border-red-400', isSpeakingStory);
+}
+
+function stopStorySpeech() {
+    const wasSpeaking = isSpeakingStory;
+    storyUtterance = null;
+    isSpeakingStory = false;
+    if (wasSpeaking && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+    updateListenButtonUI();
+}
+
 function listenFullStory() {
+    if (!('speechSynthesis' in window)) return;
+
+    // Segundo clique: para a leitura
+    if (isSpeakingStory) {
+        stopStorySpeech();
+        return;
+    }
+
+    if (isRecognizingVoice) stopVoiceRecognition();
+
     const story = getCurrentStory();
     const fullText = story.paragraphs.join(' ');
-    speakWord(fullText);
+    const meta = LANG_META[targetLang] || LANG_META['en'];
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(fullText);
+    utterance.lang = meta.code || 'en-US';
+    utterance.rate = 0.9;
+
+    const finish = () => {
+        if (storyUtterance === utterance) {
+            storyUtterance = null;
+            isSpeakingStory = false;
+            updateListenButtonUI();
+        }
+    };
+    utterance.onend = finish;
+    utterance.onerror = finish;
+
+    storyUtterance = utterance;
+    isSpeakingStory = true;
+    updateListenButtonUI();
+    window.speechSynthesis.speak(utterance);
 }
 
 function toggleVoiceRecognition() {
