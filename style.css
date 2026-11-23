@@ -130,6 +130,7 @@ body.mode-light header h1 { background: linear-gradient(90deg, #0b1530, #1d4ed8)
 #main-nav { background: rgba(5, 12, 33, .4); border-bottom: 1px solid rgba(148, 163, 184, .12); }
 body.mode-light #main-nav { background: rgba(255, 255, 255, .55); border-bottom-color: rgba(15, 23, 42, .08); }
 #btn-dashboard, #btn-cadastro { display: inline-flex; align-items: center; gap: .45rem; }
+#btn-dashboard.hidden, #btn-cadastro.hidden { display: none !important; }
 
 /* ============ INPUTS ============ */
 body.mode-dark input, body.mode-dark select, body.mode-dark textarea {
@@ -436,6 +437,8 @@ body.mode-light ::-webkit-scrollbar-track { background: rgba(255, 255, 255, .4);
         box-shadow: 0 22px 44px -16px rgba(15, 30, 80, .4), inset 0 1px 0 rgba(255, 255, 255, .95);
     }
 
+    #main-nav .hidden { display: none !important; }
+
     #main-nav > div,
     #main-nav #subnav-tabs-container {
         display: flex;
@@ -459,7 +462,7 @@ body.mode-light ::-webkit-scrollbar-track { background: rgba(255, 255, 255, .4);
         justify-content: center;
         gap: .22rem;
         min-width: 4.6rem;
-        min-height: 3.5rem;
+        min-height: 4.2rem;
         padding: .5rem .85rem !important;
         border-radius: 1.5rem !important;
         border: 0 !important;
@@ -474,17 +477,42 @@ body.mode-light ::-webkit-scrollbar-track { background: rgba(255, 255, 255, .4);
         white-space: nowrap;
         color: inherit;
     }
-    #main-nav button i { font-size: 1.3rem; line-height: 1; }
+    #main-nav button i {
+        width: 2.5rem; height: 2.5rem;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 50%;
+        font-size: 1.15rem; line-height: 1;
+        transition: background .3s var(--ease), box-shadow .3s var(--ease), transform .3s var(--ease), color .3s;
+    }
     #main-nav button:active { transform: scale(.9); }
 
-    /* item ativo: "pílula" de vidro com brilho azul */
+    /* item ativo: o ÍCONE ganha um círculo de vidro azul com brilho (fácil de ver onde você está) */
     #main-nav button.nav-btn-active {
         opacity: 1 !important;
         color: #fff;
-        background: linear-gradient(180deg, rgba(96, 165, 250, .42), rgba(37, 99, 235, .3)) !important;
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4), 0 0 0 1px rgba(96, 165, 250, .4), 0 8px 18px -8px rgba(37, 99, 235, .8) !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+    #main-nav button.nav-btn-active span { font-weight: 800; }
+    #main-nav button.nav-btn-active i {
+        color: #fff;
+        transform: scale(1.08);
+        background: radial-gradient(circle at 32% 24%, rgba(165, 205, 255, .62), rgba(59, 130, 246, .42) 58%, rgba(37, 99, 235, .3));
+        box-shadow:
+            0 0 0 1.5px rgba(147, 197, 253, .7),
+            0 0 22px rgba(96, 165, 250, .55),
+            inset 0 1px 0 rgba(255, 255, 255, .55);
+        animation: dockGlow 3.2s ease-in-out infinite;
+    }
+    @keyframes dockGlow {
+        0%, 100% { box-shadow: 0 0 0 1.5px rgba(147, 197, 253, .7), 0 0 18px rgba(96, 165, 250, .45), inset 0 1px 0 rgba(255, 255, 255, .55); }
+        50%      { box-shadow: 0 0 0 1.5px rgba(147, 197, 253, .9), 0 0 28px rgba(96, 165, 250, .75), inset 0 1px 0 rgba(255, 255, 255, .55); }
     }
     body.mode-light #main-nav button.nav-btn-active { color: #0b1530; }
-    #main-nav button.nav-btn-active i { color: #93c5fd; }
-    body.mode-light #main-nav button.nav-btn-active i { color: #1d4ed8; }
+    body.mode-light #main-nav button.nav-btn-active i {
+        color: #1d4ed8;
+        background: radial-gradient(circle at 32% 24%, rgba(255, 255, 255, .9), rgba(96, 165, 250, .4) 62%, rgba(59, 130, 246, .3));
+        box-shadow: 0 0 0 1.5px rgba(59, 130, 246, .6), 0 6px 18px -4px rgba(37, 99, 235, .55), inset 0 1px 0 rgba(255, 255, 255, .9);
+        animation: none;
+    }
 }

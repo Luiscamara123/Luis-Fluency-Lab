@@ -18,6 +18,8 @@ let currentSpeechLevel = 'easy';
 let currentStoryIndex = 0; // Índice de 0 a 49 (50 histórias por nível)
 let isRecognizingVoice = false;
 let speechRecognitionInstance = null;
+let lastDashboardModule = 'listening'; // último módulo com painel visitado (usado pelo botão "Painel" do dock)
+const NAV_TAB_INACTIVE = "px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all animated-nav-btn opacity-80 hover:opacity-100";
 let isSpeakingStory = false;   // true enquanto a história completa está sendo lida
 let storyUtterance = null;
 
@@ -46,7 +48,7 @@ function generate50Stories(lang, level) {
 const UI_TEXTS = {
     pt: {
         learningLabel: "Estudando", uiLabel: "Interface",
-        navHub: "Início", navDash: "Dashboard", navCad: "Cadastrar",
+        navHub: "Início", navDash: "Painel", navCad: "Cadastrar",
         welcome: "BEM-VINDO, {NAME} •", headerAch: "Conquistas",
         hubTitle: "O que você deseja registrar ou praticar hoje?",
         hubDesc: "Selecione um módulo abaixo para acompanhar seu progresso.",
@@ -871,12 +873,17 @@ function openModule(moduleName) {
     } else {
         if (nav) nav.classList.remove('hidden');
         
-        if (subnavTabs) {
-            if (moduleName === 'achievements' || moduleName === 'speech') {
-                subnavTabs.classList.add('hidden');
-            } else {
-                subnavTabs.classList.remove('hidden');
-            }
+        // Conquistas e Leitor/Fala: sem "Cadastrar" — o dock mostra só Início e Painel
+        const noRegister = (moduleName === 'achievements' || moduleName === 'speech');
+        const btnCadNav = document.getElementById('btn-cadastro');
+        const btnDashNav = document.getElementById('btn-dashboard');
+        if (subnavTabs) subnavTabs.classList.remove('hidden');
+        if (noRegister) {
+            if (btnCadNav) btnCadNav.classList.add('hidden');
+            if (btnDashNav) btnDashNav.className = NAV_TAB_INACTIVE;
+        } else {
+            if (btnCadNav) btnCadNav.classList.remove('hidden');
+            lastDashboardModule = moduleName;
         }
 
         const activeEl = document.getElementById(`module-${moduleName}`);
@@ -892,6 +899,14 @@ function openModule(moduleName) {
         } else {
             switchTab('dashboard');
         }
+    }
+}
+
+function goToDashboard() {
+    if (['listening', 'reading', 'vocabulary'].includes(currentModule)) {
+        switchTab('dashboard');
+    } else {
+        openModule(lastDashboardModule || 'listening');
     }
 }
 
