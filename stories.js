@@ -1,269 +1,1517 @@
-/* Fluency Lab - Banco de textos de Leitura & Pronúncia
-   50 textos por nível (fácil / médio / difícil) em cada idioma = 750 textos.
-   Formato de cada linha: [titulo, facil_p1, facil_p2, medio_p1, medio_p2, dificil_p1, dificil_p2] */
-const STORIES_RAW = {};
-STORIES_RAW.en = [
-["The Happy Dog","Max is a happy dog. He runs in the park.","He finds a yellow ball. He plays all day.","Every morning, Max runs through the green park while his owner walks slowly behind him.","Today he found a bright yellow ball under a tree and played with it until sunset.","Max has endless energy, and the park is where he spends it, chasing every ball, bird and falling leaf.","When evening arrives, he collapses beside his owner, exhausted but content, already dreaming of tomorrow's adventures."],
-["Morning Coffee","Emma wakes up early. She drinks hot coffee.","She sits on the balcony. The sun is red and warm.","Emma loves the quiet hour before work, when the city is still sleeping and the street is empty.","She makes a strong coffee, sits on her balcony and watches the sunrise paint the buildings orange.","For Emma, this small ritual is more than a habit; it is the moment when she organizes her thoughts for the day.","By the time the first buses begin to rumble below, she feels calm, focused and ready to face any challenge."],
-["A Walk in the Woods","Leo walks in the forest. The trees are tall.","He hears birds singing. The air is fresh.","On Sundays, Leo leaves his village and follows a narrow path that leads deep into the forest.","He stops often to listen to the birds and to look at the small flowers beside the trail.","The forest offers Leo a rare silence, interrupted only by the wind moving through the leaves overhead.","Hours later, he returns home with muddy boots and a clear mind, convinced that nature is the best medicine."],
-["The New Bicycle","Tom has a new bike. It is red.","He rides with his friends. They are very happy.","For his birthday, Tom received a shiny red bicycle that he had wanted for almost a year.","He spent the whole afternoon riding around the neighborhood with his friends, racing down every hill.","Learning to ride without training wheels required patience, and Tom fell several times before finding his balance.","Now he cycles confidently everywhere, proud of the scraped knees that remind him how much he has improved."],
-["Baking a Cake","Lisa bakes a cake. It is a chocolate cake.","The kitchen smells sweet. Everyone is happy.","Lisa mixes flour, eggs, sugar and cocoa in a large bowl while the oven slowly warms up.","When the cake is ready, the delicious smell travels through the house and brings the whole family to the kitchen.","Baking requires precision, and Lisa follows her grandmother's recipe carefully, measuring every ingredient to the gram.","The result is a perfectly soft cake, and watching her family enjoy it makes all the effort worthwhile."],
-["At the Market","I go to the market. I buy red apples.","The seller is kind. He gives me a banana.","Every Saturday, my mother and I walk to the street market to buy fresh fruit and vegetables.","The sellers know us well, and they always give us a little extra, together with a friendly smile.","Shopping at the market is cheaper and more pleasant than going to a supermarket, and the produce tastes much better.","Besides, talking to the farmers helps us understand where our food comes from and how hard they work."],
-["A Day at the Beach","We go to the beach. The sea is blue.","I swim in the water. My sister builds a sandcastle.","Last summer, my family spent a whole day at the beach, swimming and playing volleyball on the warm sand.","At lunchtime we ate sandwiches under an umbrella, and later we collected beautiful shells near the rocks.","Although we applied sunscreen several times, I still returned home with sunburned shoulders and sand in every bag.","Nevertheless, the memory of the sunset over the waves remains one of the most peaceful moments of my year."],
-["The Train Trip","Ana takes the train. She sits by the window.","She sees green fields. The trip is long.","Ana travels by train to visit her grandparents, who live in a small town far from the capital.","During the trip she reads a novel, listens to music and watches farms and rivers pass by the window.","The journey takes almost five hours, but Ana prefers it to flying because it allows her to relax and observe the landscape.","When the train finally arrives, her grandparents are waiting on the platform, smiling and holding a basket of homemade bread."],
-["In the Library","Paul goes to the library. It is very quiet.","He takes a big book. He reads for an hour.","The public library is Paul's favorite place because it is quiet, free and full of interesting books.","He usually sits at a wooden table near the window and reads until the librarian announces closing time.","Libraries are more than collections of books; they are community spaces where anyone can learn, research and dream.","Paul believes that every town should protect its library, because access to knowledge should never depend on money."],
-["A Rainy Day","It is raining today. I stay at home.","I drink tea. I watch a movie.","Today the rain has been falling since the morning, so I decided to stay home and relax.","I prepared a pot of tea, wrapped myself in a blanket and watched an old comedy on television.","Some people complain about rainy weather, but I find that it creates a perfect atmosphere for reflection and rest.","The constant sound of raindrops against the window calms my mind and reminds me to slow down."],
-["The Garden","Rosa has a garden. It has many flowers.","She waters the plants. The roses are pink.","Rosa spends every afternoon in her garden, watering the flowers and pulling out the weeds.","This spring she planted tomatoes and herbs, and she is excited to see the first green leaves appear.","Gardening has taught Rosa patience, because plants grow according to their own rhythm and cannot be rushed.","Every harvest rewards her with fresh vegetables and a deep satisfaction that no supermarket could ever offer."],
-["The Birthday Party","Today is my birthday. I am ten years old.","My friends come to my house. We eat cake.","My parents organized a surprise birthday party with balloons, music and a huge chocolate cake.","All my friends arrived at four o'clock, and we played games in the garden until it got dark.","I had suspected nothing, so when I opened the door and everyone shouted my name, I almost cried with happiness.","Looking back, I realize that the best gift was not the presents but the effort my family made to make me feel special."],
-["The Football Match","Sam loves football. He plays on Sunday.","His team wins today. He scores a goal.","Every Sunday morning, Sam meets his teammates at the local field to play a friendly football match.","Today the game was very tight, but Sam scored the winning goal in the last minute.","Although the opposing team was physically stronger, Sam's team won through communication, discipline and a lot of practice.","After the match, they all shared pizza and laughed about the best moments, proving that friendship matters more than the score."],
-["The First Day of School","Today is my first day at school. I am nervous.","My teacher is nice. I make a new friend.","On the first day of school, Maria woke up early, put on her new uniform and packed her colorful backpack.","At first she felt nervous, but her teacher smiled warmly and introduced her to a girl named Clara.","Starting at a new school can be intimidating, since everything feels unfamiliar, from the corridors to the faces around you.","By the end of the week, however, Maria had friends, favorite subjects and a growing confidence in herself."],
-["At the Museum","We visit the museum. It is very big.","I see old paintings. I like the dinosaurs.","On Friday, our class visited the history museum to learn about life in ancient times.","The guide showed us enormous dinosaur bones, old coins, and a tiny statue that is more than three thousand years old.","What impressed me most was a collection of handwritten letters that revealed ordinary people's hopes and fears centuries ago.","Museums connect us with the past, and they remind us that every generation faces similar questions about life."],
-["Cooking Dinner","Dad cooks dinner. He makes pasta.","I help him cut the tomatoes. It is fun.","Tonight my father is preparing his famous spaghetti with fresh tomato sauce, garlic and basil.","I help him wash the vegetables and set the table while the kitchen fills with a wonderful aroma.","Cooking together has become our weekly tradition, a time when we talk, laugh and share stories about our week.","I am learning that a good meal is not only about flavor but also about the care and company that surround it."],
-["The Guitar","Ben has a guitar. It is old but nice.","He plays a song. His mother sings.","Ben began learning the guitar six months ago, and he practices for thirty minutes every evening.","His fingers still hurt a little, but he can already play three songs without looking at the notes.","Learning an instrument demands consistency, and Ben has discovered that small daily efforts produce remarkable progress.","One day he hopes to perform in front of an audience, sharing the emotions that only music can express."],
-["The Moon","The moon is round tonight. It is very bright.","I look at the sky. I see many stars.","Last night the moon was full, so my brother and I went to the roof to look at it.","We used his small telescope to see the craters, and we counted the stars until we felt sleepy.","Humans have always been fascinated by the moon, which inspired countless myths, poems and scientific discoveries.","Standing under that enormous sky, I understood how small our problems are compared with the vastness of the universe."],
-["Snow Day","It is snowing. Everything is white.","The children play outside. They make a snowman.","This morning we woke up to find the whole town covered by a thick layer of white snow.","School was canceled, so the neighborhood children gathered to build snowmen and throw snowballs.","Although the freezing temperature made our fingers numb, nobody wanted to go inside until the sun began to set.","We finally returned home to enjoy hot chocolate by the fire, feeling grateful for such a magical day."],
-["The Bakery","The bakery opens at six. The bread is warm.","I buy two rolls. The baker says good morning.","Every morning on my way to work, I stop at the small bakery on the corner to buy fresh bread.","The baker already knows my order, and she always adds a warm smile to my paper bag.","Small neighborhood businesses like this one give a city its character and create bonds between the people who live there.","I would happily pay a little more to support them rather than buy industrial products from a large chain."],
-["The Cat","My cat is black. Her name is Luna.","She sleeps all day. She plays at night.","Luna is a curious black cat who adopted our family after appearing on our doorstep one rainy night.","She spends her days sleeping on the sofa, and in the evening she hunts toys around the living room.","Cats are independent animals, yet Luna shows her affection by purring on my lap whenever I feel tired or sad.","Having a pet has taught me responsibility, patience and the simple pleasure of being accompanied without needing words."],
-["The Lost Umbrella","I lose my umbrella. It is blue.","I look in the bus. A girl finds it.","Yesterday it started raining heavily, and I realized that I had left my blue umbrella on the bus.","I was upset until a girl ran after me and returned it, saying she had seen it under a seat.","This small act of kindness restored my faith in people, because most strangers would have simply ignored it.","It reminded me that generosity does not need to be spectacular; sometimes it is simply paying attention to others."],
-["The Picnic","We have a picnic in the park. It is sunny.","We eat sandwiches and fruit. We play cards.","On Sunday, my friends and I organized a picnic by the lake with sandwiches, juice and a big blanket.","We stayed for hours, talking, playing cards and watching the ducks swim peacefully across the water.","Spending time outdoors with good company is, in my opinion, one of the simplest and most effective ways to recover energy.","Before leaving, we collected all the trash, because we believe nature should be left even cleaner than we found it."],
-["The Old Photo","I find an old photo. It is my father.","He is young in the photo. He smiles.","While cleaning the attic, I found a faded photograph of my father standing next to his first car.","He looked about twenty years old, and he was smiling proudly with his arms crossed.","Looking at that picture, I realized that my parents had dreams and adventures long before I was born.","Photographs preserve fragments of time, allowing us to meet again the people we love as they once were."],
-["Grandma's House","I visit my grandma. Her house is small.","She makes soup. It is delicious.","Every holiday, we travel to my grandmother's house in the countryside, where life moves at a slower pace.","She always welcomes us with a big hug, a bowl of hot soup and stories from her childhood.","Her house smells of wood and cinnamon, and every object seems to contain a memory that she is happy to share.","I cherish these visits deeply, because I know the time we spend together is a treasure that cannot be replaced."],
-["At the Doctor","I feel sick. I go to the doctor.","He says, rest and drink water. I feel better.","Yesterday I woke up with a sore throat and a high fever, so I made an appointment with my doctor.","He examined me carefully, prescribed some medicine and recommended resting for at least three days.","Although I dislike staying in bed, I understand that ignoring the symptoms of an illness may cause complications.","Health is something we only value when we lose it, so I promise to take better care of myself in the future."],
-["At the Airport","Jane is at the airport. She has a big bag.","Her plane leaves at noon. She is excited.","Jane arrived at the airport two hours early, checked in her luggage and passed through security without problems.","While waiting at the gate, she bought a magazine and watched planes taking off through the enormous windows.","Traveling abroad for the first time filled her with a mixture of excitement and anxiety about everything that could go wrong.","When the plane finally lifted off, however, the nervousness disappeared and was replaced by pure curiosity about the unknown."],
-["The Hotel","We stay at a hotel. Our room is clean.","We see the sea from the window. It is lovely.","We booked a small hotel near the beach, and the receptionist gave us a room with a beautiful view.","Every morning we enjoyed a delicious breakfast on the terrace before exploring the city on foot.","Choosing accommodation carefully can transform a trip, since comfort, location and friendly service determine how relaxed you feel.","Although the hotel was modest, the warm hospitality of the staff made us feel at home during the whole week."],
-["The New Neighbor","We have a new neighbor. His name is Carl.","He lives next door. He is friendly.","Last month, a man named Carl moved into the apartment next to ours, carrying dozens of boxes up the stairs.","My mother baked a cake to welcome him, and he thanked us with a surprised and grateful smile.","Meeting neighbors can be awkward in big cities, where many people live side by side without ever speaking.","Yet a simple greeting is often enough to build trust and create a sense of community in an unfamiliar place."],
-["The Haircut","I need a haircut. My hair is long.","The barber cuts it short. I like it.","My hair had grown so long that it was covering my eyes, so I finally booked an appointment at the barbershop.","The barber asked what style I wanted, and we agreed on something short and easy to maintain.","Although I was nervous about changing my appearance, the result made me feel fresh, confident and lighter.","Sometimes a small change on the outside is enough to renew our attitude and motivate us to start new projects."],
-["Swimming Lessons","Mia learns to swim. The water is cold.","The teacher helps her. She is brave.","Mia was afraid of water until her parents enrolled her in swimming lessons at the community center.","Her instructor was patient, and little by little she learned to float, kick and breathe correctly.","After three months of practice, Mia crossed the entire pool without help, and the whole class applauded her progress.","This experience taught her that fear can be overcome step by step when we receive support and keep trying."],
-["The Mountain Hike","We climb a mountain. It is high.","At the top, we see the valley. It is beautiful.","We woke up at five in the morning to start climbing before the sun became too strong.","The path was steep and rocky, but the fresh air and the wonderful views motivated us to continue.","After four exhausting hours, we reached the summit and sat silently, admiring the valley spread out below us like a map.","Moments like this remind me that effort has its rewards, and that the most beautiful places rarely come easily."],
-["At the Supermarket","I go to the supermarket. I need milk and bread.","The line is long. I pay and go home.","After work, I stopped at the supermarket with a list of things that we needed for the week.","I bought vegetables, rice, milk and eggs, and then I waited fifteen minutes in a very long line.","Making a shopping list in advance helps me avoid impulse purchases and saves both time and money.","Moreover, comparing prices and choosing seasonal products allows families to eat well without exceeding their budget."],
-["A Phone Call","My phone rings. It is my friend Nina.","We talk for an hour. She lives far away.","Last night, my friend Nina called me from another country to tell me about her new job.","We talked for almost two hours, laughing about old memories and making plans to meet next summer.","Although messages are convenient, hearing someone's voice creates a closeness that text can rarely replace.","Distance has not weakened our friendship; it has simply taught us to value every conversation more deeply."],
-["The Painting","Julia likes to paint. She uses bright colors.","Today she paints the sea. It is blue and green.","Julia discovered painting during a difficult period of her life, and it quickly became her favorite escape.","Every weekend she sets up her easel by the window and paints the landscapes she imagines.","For Julia, art is not about creating perfect images but about expressing feelings that words cannot describe.","Recently, she exhibited her work in a small gallery, and many visitors told her that her colors made them feel hopeful."],
-["The Bus Ride","I take the bus to school. It is yellow.","The driver is friendly. I sit near my friend.","Every morning, I take the number twelve bus to school, and the ride lasts about twenty minutes.","During the trip, I usually chat with my friend or review my homework before the first class.","Public transportation can be crowded and slow, but it is cheaper and better for the environment than driving.","If more people used buses and trains, our cities would have less traffic, less pollution and more space for everyone."],
-["The City Park","The park is near my house. It is big.","Old men play chess there. Children play too.","The city park is a green oasis where people of all ages meet to relax, exercise or simply breathe.","On weekends, families have picnics under the trees while musicians perform near the central fountain.","Urban parks play an essential role in public health, since they reduce stress and encourage physical activity.","Therefore, governments should invest in maintaining and expanding these spaces, which benefit the entire community."],
-["The Lighthouse","A lighthouse stands by the sea. It is white.","It shines at night. Ships can see it.","The old lighthouse stands on a cliff at the edge of the village, guiding fishermen safely back to the harbor.","Every evening, its powerful light begins to turn, cutting through the fog and the darkness of the ocean.","Although modern technology has replaced many of its functions, the lighthouse remains a symbol of hope and protection.","Tourists climb its spiral staircase to admire the view and imagine the lives of the keepers who once lived there."],
-["The Farm","Tim lives on a farm. He has a horse.","The cows give milk. The chickens give eggs.","Tim's family has owned a farm for three generations, and he wakes up before dawn to help with the animals.","He feeds the chickens, milks the cows and then rides his horse across the fields before breakfast.","Farm life is demanding, since the weather, the animals and the crops require constant attention and hard work.","Nevertheless, Tim feels privileged to grow up surrounded by nature and to understand where real food comes from."],
-["The Concert","We go to a concert. The music is loud.","The singer is famous. We dance and sing.","Last Saturday, I attended my first live concert, and I was amazed by the energy of the crowd.","The band played all my favorite songs, and thousands of people sang together under colorful lights.","Listening to music on headphones cannot compare with the electricity of sharing a song with strangers who feel the same emotion.","I left the stadium hoarse and exhausted, but with the certainty that I would remember that night forever."],
-["The Job Interview","Tom has a job interview. He wears a suit.","He answers the questions. The manager smiles.","Tom prepared carefully for his job interview, researching the company and practicing answers to common questions.","He arrived ten minutes early, shook hands firmly and spoke clearly about his skills and experience.","Although he was nervous, he remembered that an interview is also an opportunity to find out whether the company suits him.","Two days later, he received a phone call offering him the position, and all his preparation finally paid off."],
-["Moving House","We move to a new house. There are many boxes.","My room is bigger now. I paint it blue.","After years of living in a small apartment, my family moved into a bigger house with a garden.","For a week, we packed boxes, carried furniture and cleaned every room before the new life could begin.","Moving is exhausting and stressful, yet it also gives you the chance to discard what you no longer need.","Standing in the empty living room, I felt sadness for the past and excitement for everything the future would bring."],
-["Recycling","We recycle at home. We have three bins.","Paper goes in the blue bin. Glass goes in the green one.","In my house, we separate paper, plastic and glass, and we take them to the recycling center every week.","At first it seemed complicated, but now everybody in the family does it automatically.","Recycling is not a complete solution to environmental problems, but it is an accessible habit that reduces waste significantly.","If every household committed to sorting its garbage, the collective impact on our planet would be enormous."],
-["A Good Night's Sleep","I go to bed at ten. I am tired.","I close my eyes. I sleep well.","Sleeping eight hours a night is essential for my health, so I try to go to bed at the same time every day.","Before sleeping, I turn off my phone, read a few pages and drink a glass of water.","Scientists have shown that sleep strengthens memory, regulates mood and protects the heart from numerous diseases.","Unfortunately, modern lifestyles often treat rest as a luxury, even though it is a basic biological necessity."],
-["The Lost Key","I cannot find my key. Where is it?","It is in my coat. I am so relieved.","This morning I was already late for work when I realized that I could not find my house key.","I searched the kitchen, the bedroom and the bag, until I finally discovered it in the pocket of my coat.","The incident taught me that being organized saves a surprising amount of time and prevents unnecessary stress.","Since then, I always leave my keys in the same small bowl by the door, and I have never lost them again."],
-["Fishing by the River","Dad and I go fishing. The river is calm.","I catch a small fish. We let it go.","Early on Saturday, my father and I drove to the river with our fishing rods and a thermos of coffee.","We waited patiently for hours, enjoying the silence, until I finally caught a small silver fish.","Fishing teaches patience, because the best results usually come to those who can wait without becoming frustrated.","We released the fish back into the water, agreeing that the real treasure of the day was our time together."],
-["The Science Fair","Our school has a science fair. I make a volcano.","It erupts with foam. Everyone says wow.","For the school science fair, my partner and I built a model volcano using clay, vinegar and baking soda.","The judges asked many questions, and we explained the chemical reaction that produces the foam.","Preparing the project required research, teamwork and creativity, and we learned more than any textbook could teach us.","Although we did not win first prize, the experience inspired me to consider a career in science in the future."],
-["A Weekend Trip","We go to the mountains this weekend. Pack your bag.","We stay in a small cabin. It has a fireplace.","This weekend, my friends and I are driving to a mountain village to escape the noise of the city.","We rented a wooden cabin with a fireplace, and we plan to cook, hike and play board games.","Short trips are valuable because they interrupt the routine and give our minds the rest they urgently need.","Returning on Sunday evening, we always feel renewed and more grateful for the simple pleasures of life."],
-["Learning a Language","I study English every day. It is fun.","I learn ten new words. I listen to songs.","Learning a foreign language opens doors to new cultures, friendships and professional opportunities.","The best method is to practice a little every day, listening, reading, speaking and writing without fear of making mistakes.","Fluency is not a destination reached overnight but the gradual result of consistency, curiosity and a great deal of patience.","Every mistake is valuable evidence that you are trying, and each conversation brings you one step closer to confidence."],
-["New Year's Eve","Tonight is New Year's Eve. We wait for midnight.","We watch the fireworks. Everyone says happy new year.","On December thirty-first, our family gathers to eat a special dinner and to wait for the clock to strike midnight.","When the fireworks light up the sky, we hug each other and share our wishes for the new year.","The end of the year invites us to reflect on our achievements and to forgive the mistakes we have made.","Setting realistic goals, rather than impossible promises, is the best way to turn a new calendar into a genuine fresh start."]
-];
+/* ==========================================================================
+   FLUENCY LAB - BANCO DE HISTÓRIAS MULTILÍNGUES (EN, ES, FR, JA, PT)
+   50 textos Fáceis (easy) + 50 Médios (medium) + 50 Difíceis (hard) por idioma
+   ========================================================================== */
 
-STORIES_RAW.es = [
-["El Perro Feliz","Max es un perro feliz. Corre por el parque.","Encuentra una pelota amarilla. Juega todo el día.","Cada mañana, Max corre por el parque verde mientras su dueño camina despacio detrás de él.","Hoy encontró una pelota amarilla debajo de un árbol y jugó con ella hasta la puesta del sol.","Max tiene una energía infinita y el parque es el lugar donde la gasta, persiguiendo cada pelota, pájaro y hoja que cae.","Cuando llega la noche, se tumba junto a su dueño, cansado pero contento, soñando ya con las aventuras de mañana."],
-["El Café de la Mañana","Elena se despierta temprano. Bebe café caliente.","Se sienta en el balcón. El sol es rojo y cálido.","A Elena le encanta la hora tranquila antes del trabajo, cuando la ciudad aún duerme y la calle está vacía.","Prepara un café fuerte, se sienta en el balcón y mira cómo el amanecer pinta los edificios de naranja.","Para Elena, este pequeño ritual es más que un hábito; es el momento en que ordena sus pensamientos para el día.","Cuando los primeros autobuses empiezan a sonar abajo, se siente tranquila, concentrada y lista para cualquier desafío."],
-["Un Paseo por el Bosque","Leo camina por el bosque. Los árboles son altos.","Oye cantar a los pájaros. El aire es fresco.","Los domingos, Leo sale de su pueblo y sigue un sendero estrecho que se adentra en el bosque.","Se detiene a menudo para escuchar a los pájaros y mirar las pequeñas flores junto al camino.","El bosque le ofrece a Leo un silencio poco común, interrumpido solo por el viento entre las hojas.","Horas después vuelve a casa con las botas llenas de barro y la mente despejada, convencido de que la naturaleza es la mejor medicina."],
-["La Bicicleta Nueva","Tomás tiene una bicicleta nueva. Es roja.","Anda con sus amigos. Están muy contentos.","Por su cumpleaños, Tomás recibió una bicicleta roja y brillante que deseaba desde hacía casi un año.","Pasó toda la tarde recorriendo el barrio con sus amigos y haciendo carreras en cada bajada.","Aprender a montar sin ruedines requiere paciencia, y Tomás se cayó varias veces antes de encontrar el equilibrio.","Ahora pedalea con seguridad a todas partes, orgulloso de las rodillas raspadas que le recuerdan cuánto ha mejorado."],
-["Hacer un Pastel","Lisa hace un pastel. Es de chocolate.","La cocina huele a dulce. Todos están felices.","Lisa mezcla harina, huevos, azúcar y cacao en un cuenco grande mientras el horno se calienta poco a poco.","Cuando el pastel está listo, el delicioso aroma recorre la casa y trae a toda la familia a la cocina.","Hornear exige precisión, y Lisa sigue con cuidado la receta de su abuela, midiendo cada ingrediente al gramo.","El resultado es un bizcocho perfectamente suave, y ver a su familia disfrutarlo hace que todo el esfuerzo valga la pena."],
-["En el Mercado","Voy al mercado. Compro manzanas rojas.","El vendedor es amable. Me da un plátano.","Todos los sábados, mi madre y yo vamos al mercado de la calle a comprar fruta y verduras frescas.","Los vendedores nos conocen bien y siempre nos regalan un poco más, junto con una sonrisa amable.","Comprar en el mercado es más barato y agradable que ir al supermercado, y los productos tienen mucho mejor sabor.","Además, hablar con los agricultores nos ayuda a entender de dónde viene nuestra comida y cuánto trabajan."],
-["Un Día en la Playa","Vamos a la playa. El mar es azul.","Yo nado en el agua. Mi hermana hace un castillo de arena.","El verano pasado, mi familia pasó un día entero en la playa, nadando y jugando al voleibol en la arena caliente.","A la hora del almuerzo comimos bocadillos bajo una sombrilla y después recogimos conchas junto a las rocas.","Aunque nos pusimos protector solar varias veces, volví a casa con los hombros quemados y arena en todas las bolsas.","Aun así, el recuerdo del atardecer sobre las olas sigue siendo uno de los momentos más tranquilos de mi año."],
-["El Viaje en Tren","Ana viaja en tren. Se sienta junto a la ventana.","Ve campos verdes. El viaje es largo.","Ana viaja en tren para visitar a sus abuelos, que viven en un pueblo pequeño lejos de la capital.","Durante el viaje lee una novela, escucha música y mira pasar granjas y ríos por la ventana.","El trayecto dura casi cinco horas, pero Ana lo prefiere al avión porque le permite relajarse y observar el paisaje.","Cuando el tren por fin llega, sus abuelos la esperan en el andén, sonriendo y con una cesta de pan casero."],
-["En la Biblioteca","Pablo va a la biblioteca. Hay mucho silencio.","Toma un libro grande. Lee durante una hora.","La biblioteca pública es el lugar favorito de Pablo porque es tranquila, gratuita y está llena de libros interesantes.","Suele sentarse en una mesa de madera junto a la ventana y lee hasta que la bibliotecaria anuncia el cierre.","Las bibliotecas son más que colecciones de libros; son espacios comunitarios donde cualquiera puede aprender, investigar y soñar.","Pablo cree que todas las ciudades deberían proteger su biblioteca, porque el acceso al conocimiento nunca debe depender del dinero."],
-["Un Día de Lluvia","Hoy llueve. Me quedo en casa.","Bebo té. Veo una película.","Hoy la lluvia cae desde la mañana, así que decidí quedarme en casa y descansar.","Preparé una tetera, me envolví en una manta y vi una vieja comedia en la televisión.","Algunas personas se quejan del mal tiempo, pero a mí me parece que crea el ambiente perfecto para reflexionar y descansar.","El sonido constante de las gotas contra la ventana calma mi mente y me recuerda que debo ir más despacio."],
-["El Jardín","Rosa tiene un jardín. Tiene muchas flores.","Riega las plantas. Las rosas son rosadas.","Rosa pasa todas las tardes en su jardín, regando las flores y quitando las malas hierbas.","Esta primavera plantó tomates y hierbas aromáticas, y está emocionada por ver salir las primeras hojas verdes.","La jardinería le ha enseñado paciencia, porque las plantas crecen a su propio ritmo y no se pueden apresurar.","Cada cosecha la recompensa con verduras frescas y una satisfacción profunda que ningún supermercado podría ofrecerle."],
-["La Fiesta de Cumpleaños","Hoy es mi cumpleaños. Tengo diez años.","Mis amigos vienen a mi casa. Comemos pastel.","Mis padres organizaron una fiesta sorpresa con globos, música y un enorme pastel de chocolate.","Todos mis amigos llegaron a las cuatro y jugamos en el jardín hasta que oscureció.","No sospechaba nada, así que cuando abrí la puerta y todos gritaron mi nombre, casi lloro de felicidad.","Mirando atrás, me doy cuenta de que el mejor regalo no fueron los obsequios, sino el esfuerzo de mi familia por hacerme sentir especial."],
-["El Partido de Fútbol","Sam ama el fútbol. Juega el domingo.","Su equipo gana hoy. Él marca un gol.","Cada domingo por la mañana, Sam se reúne con sus compañeros en el campo del barrio para jugar un partido amistoso.","Hoy el partido estuvo muy reñido, pero Sam marcó el gol de la victoria en el último minuto.","Aunque el equipo rival era físicamente más fuerte, el equipo de Sam ganó gracias a la comunicación, la disciplina y mucho entrenamiento.","Después del partido compartieron una pizza y se rieron de los mejores momentos, demostrando que la amistad importa más que el marcador."],
-["El Primer Día de Clase","Hoy es mi primer día de clase. Estoy nervioso.","Mi maestra es amable. Hago un amigo nuevo.","El primer día de clase, María se despertó temprano, se puso su uniforme nuevo y preparó su mochila de colores.","Al principio estaba nerviosa, pero su maestra le sonrió con calidez y le presentó a una niña llamada Clara.","Empezar en un colegio nuevo puede intimidar, porque todo resulta desconocido, desde los pasillos hasta las caras que te rodean.","Sin embargo, al terminar la semana María ya tenía amigos, asignaturas favoritas y una confianza creciente en sí misma."],
-["En el Museo","Visitamos el museo. Es muy grande.","Veo pinturas antiguas. Me gustan los dinosaurios.","El viernes, nuestra clase visitó el museo de historia para aprender cómo se vivía en la antigüedad.","El guía nos mostró enormes huesos de dinosaurio, monedas antiguas y una pequeña estatua de más de tres mil años.","Lo que más me impresionó fue una colección de cartas manuscritas que revelaban las esperanzas y los miedos de gente común hace siglos.","Los museos nos conectan con el pasado y nos recuerdan que cada generación se enfrenta a preguntas parecidas sobre la vida."],
-["Preparar la Cena","Papá prepara la cena. Hace pasta.","Yo le ayudo a cortar los tomates. Es divertido.","Esta noche mi padre prepara sus famosos espaguetis con salsa de tomate fresco, ajo y albahaca.","Le ayudo a lavar las verduras y a poner la mesa mientras la cocina se llena de un aroma maravilloso.","Cocinar juntos se ha convertido en nuestra tradición semanal, un momento para hablar, reír y contar historias de la semana.","Estoy aprendiendo que una buena comida no es solo sabor, sino también el cuidado y la compañía que la rodean."],
-["La Guitarra","Beto tiene una guitarra. Es vieja pero bonita.","Toca una canción. Su madre canta.","Beto empezó a aprender guitarra hace seis meses y practica treinta minutos cada tarde.","Todavía le duelen un poco los dedos, pero ya puede tocar tres canciones sin mirar las notas.","Aprender un instrumento exige constancia, y Beto ha descubierto que los pequeños esfuerzos diarios producen un progreso notable.","Algún día espera actuar frente al público y compartir las emociones que solo la música puede expresar."],
-["La Luna","La luna está redonda esta noche. Brilla mucho.","Miro al cielo. Veo muchas estrellas.","Anoche había luna llena, así que mi hermano y yo subimos a la azotea para mirarla.","Usamos su pequeño telescopio para ver los cráteres y contamos estrellas hasta que nos dio sueño.","Los seres humanos siempre se han fascinado con la luna, que inspiró innumerables mitos, poemas y descubrimientos científicos.","Bajo ese cielo inmenso comprendí lo pequeños que son nuestros problemas comparados con la inmensidad del universo."],
-["Un Día de Nieve","Está nevando. Todo es blanco.","Los niños juegan afuera. Hacen un muñeco de nieve.","Esta mañana despertamos y encontramos todo el pueblo cubierto por una espesa capa de nieve blanca.","Cancelaron las clases, así que los niños del barrio se reunieron para hacer muñecos y lanzarse bolas de nieve.","Aunque el frío nos entumecía los dedos, nadie quería entrar a casa hasta que empezó a ponerse el sol.","Al final volvimos a casa a tomar chocolate caliente junto al fuego, agradecidos por un día tan mágico."],
-["La Panadería","La panadería abre a las seis. El pan está caliente.","Compro dos bollos. La panadera dice buenos días.","Cada mañana, de camino al trabajo, paso por la pequeña panadería de la esquina para comprar pan fresco.","La panadera ya conoce mi pedido y siempre añade una sonrisa cálida a mi bolsa de papel.","Los pequeños negocios de barrio como este dan carácter a una ciudad y crean lazos entre las personas que viven en ella.","Pagaría con gusto un poco más por apoyarlos en lugar de comprar productos industriales en una gran cadena."],
-["La Gata","Mi gata es negra. Se llama Luna.","Duerme todo el día. Juega por la noche.","Luna es una gata negra y curiosa que adoptó a nuestra familia al aparecer en la puerta una noche de lluvia.","Se pasa los días durmiendo en el sofá y por la noche caza juguetes por toda la sala.","Los gatos son animales independientes, pero Luna demuestra su cariño ronroneando en mi regazo cuando estoy cansado o triste.","Tener una mascota me ha enseñado responsabilidad, paciencia y el placer sencillo de estar acompañado sin necesidad de palabras."],
-["El Paraguas Perdido","Pierdo mi paraguas. Es azul.","Lo busco en el autobús. Una chica lo encuentra.","Ayer empezó a llover con fuerza y me di cuenta de que había dejado mi paraguas azul en el autobús.","Estaba molesto hasta que una chica corrió detrás de mí y me lo devolvió, diciendo que lo vio debajo de un asiento.","Este pequeño gesto de amabilidad me devolvió la fe en las personas, porque la mayoría de los desconocidos lo habría ignorado.","Me recordó que la generosidad no tiene por qué ser espectacular; a veces consiste simplemente en prestar atención a los demás."],
-["El Picnic","Hacemos un picnic en el parque. Hace sol.","Comemos bocadillos y fruta. Jugamos a las cartas.","El domingo, mis amigos y yo organizamos un picnic junto al lago con bocadillos, zumo y una manta grande.","Nos quedamos horas hablando, jugando a las cartas y viendo a los patos nadar tranquilamente por el agua.","Pasar tiempo al aire libre con buena compañía es, en mi opinión, una de las formas más simples y eficaces de recuperar energía.","Antes de irnos recogimos toda la basura, porque creemos que la naturaleza debe quedar aún más limpia de como la encontramos."],
-["La Foto Antigua","Encuentro una foto antigua. Es mi padre.","Es joven en la foto. Sonríe.","Mientras limpiaba el desván, encontré una fotografía descolorida de mi padre junto a su primer coche.","Parecía tener unos veinte años y sonreía con orgullo con los brazos cruzados.","Al mirar esa imagen, comprendí que mis padres tuvieron sueños y aventuras mucho antes de que yo naciera.","Las fotografías conservan fragmentos del tiempo y nos permiten reencontrarnos con las personas que amamos tal como fueron."],
-["La Casa de la Abuela","Visito a mi abuela. Su casa es pequeña.","Ella hace sopa. Está deliciosa.","En cada vacación viajamos a la casa de mi abuela en el campo, donde la vida transcurre más despacio.","Siempre nos recibe con un gran abrazo, un plato de sopa caliente y historias de su infancia.","Su casa huele a madera y canela, y cada objeto parece guardar un recuerdo que ella comparte con gusto.","Aprecio mucho estas visitas, porque sé que el tiempo que pasamos juntos es un tesoro que nada puede reemplazar."],
-["En el Médico","Me siento mal. Voy al médico.","Dice que descanse y beba agua. Me siento mejor.","Ayer me desperté con dolor de garganta y fiebre alta, así que pedí cita con mi médico.","Me examinó con cuidado, me recetó unas medicinas y me recomendó descansar al menos tres días.","Aunque no me gusta quedarme en la cama, entiendo que ignorar los síntomas de una enfermedad puede causar complicaciones.","La salud solo se valora cuando se pierde, así que prometo cuidarme mejor de ahora en adelante."],
-["En el Aeropuerto","Jane está en el aeropuerto. Tiene una maleta grande.","Su avión sale a mediodía. Está emocionada.","Jane llegó al aeropuerto con dos horas de antelación, facturó su equipaje y pasó el control de seguridad sin problemas.","Mientras esperaba en la puerta de embarque, compró una revista y miró despegar los aviones por los enormes ventanales.","Viajar al extranjero por primera vez le provocaba una mezcla de emoción y ansiedad por todo lo que podía salir mal.","Sin embargo, cuando el avión despegó, los nervios desaparecieron y los sustituyó una pura curiosidad por lo desconocido."],
-["El Hotel","Nos quedamos en un hotel. Nuestra habitación está limpia.","Vemos el mar desde la ventana. Es precioso.","Reservamos un pequeño hotel cerca de la playa y la recepcionista nos dio una habitación con una vista preciosa.","Cada mañana disfrutábamos de un delicioso desayuno en la terraza antes de explorar la ciudad a pie.","Elegir bien el alojamiento puede transformar un viaje, ya que la comodidad, la ubicación y el trato amable determinan lo relajado que te sientes.","Aunque el hotel era modesto, la cálida hospitalidad del personal nos hizo sentir como en casa durante toda la semana."],
-["El Nuevo Vecino","Tenemos un vecino nuevo. Se llama Carlos.","Vive al lado. Es simpático.","El mes pasado, un hombre llamado Carlos se mudó al apartamento de al lado, subiendo decenas de cajas por la escalera.","Mi madre hizo un pastel para darle la bienvenida y él nos lo agradeció con una sonrisa sorprendida y agradecida.","Conocer a los vecinos puede resultar incómodo en las grandes ciudades, donde muchas personas viven puerta con puerta sin hablarse nunca.","Sin embargo, un simple saludo suele bastar para crear confianza y generar sensación de comunidad en un lugar desconocido."],
-["El Corte de Pelo","Necesito un corte de pelo. Tengo el pelo largo.","El peluquero lo corta corto. Me gusta.","Mi pelo había crecido tanto que me cubría los ojos, así que por fin pedí cita en la peluquería.","El peluquero me preguntó qué estilo quería y acordamos algo corto y fácil de mantener.","Aunque me daba nervios cambiar de aspecto, el resultado me hizo sentir fresco, seguro y más ligero.","A veces un pequeño cambio exterior basta para renovar nuestra actitud y motivarnos a empezar nuevos proyectos."],
-["Clases de Natación","Mía aprende a nadar. El agua está fría.","La profesora la ayuda. Ella es valiente.","Mía le tenía miedo al agua hasta que sus padres la apuntaron a clases de natación en el centro comunitario.","Su instructor fue paciente y, poco a poco, aprendió a flotar, a patalear y a respirar correctamente.","Después de tres meses de práctica, Mía cruzó toda la piscina sin ayuda y la clase entera aplaudió su progreso.","Esta experiencia le enseñó que el miedo se puede superar paso a paso cuando recibimos apoyo y seguimos intentándolo."],
-["La Excursión a la Montaña","Subimos una montaña. Es alta.","Arriba vemos el valle. Es hermoso.","Nos levantamos a las cinco de la mañana para empezar a subir antes de que el sol apretara demasiado.","El camino era empinado y pedregoso, pero el aire fresco y las vistas maravillosas nos animaron a continuar.","Tras cuatro horas agotadoras llegamos a la cima y nos sentamos en silencio a admirar el valle extendido como un mapa.","Momentos así me recuerdan que el esfuerzo tiene su recompensa y que los lugares más bellos rara vez se alcanzan con facilidad."],
-["En el Supermercado","Voy al supermercado. Necesito leche y pan.","La cola es larga. Pago y vuelvo a casa.","Después del trabajo pasé por el supermercado con una lista de lo que necesitábamos para la semana.","Compré verduras, arroz, leche y huevos, y luego esperé quince minutos en una cola larguísima.","Hacer una lista de compras con antelación me ayuda a evitar compras impulsivas y ahorra tiempo y dinero.","Además, comparar precios y elegir productos de temporada permite a las familias comer bien sin pasarse del presupuesto."],
-["Una Llamada","Suena mi teléfono. Es mi amiga Nina.","Hablamos una hora. Ella vive lejos.","Anoche mi amiga Nina me llamó desde otro país para contarme sobre su nuevo trabajo.","Hablamos casi dos horas, riéndonos de viejos recuerdos y haciendo planes para vernos el próximo verano.","Aunque los mensajes son cómodos, oír la voz de alguien crea una cercanía que el texto rara vez puede sustituir.","La distancia no ha debilitado nuestra amistad; simplemente nos ha enseñado a valorar más cada conversación."],
-["La Pintura","A Julia le gusta pintar. Usa colores vivos.","Hoy pinta el mar. Es azul y verde.","Julia descubrió la pintura en una etapa difícil de su vida y pronto se convirtió en su escape favorito.","Cada fin de semana coloca su caballete junto a la ventana y pinta los paisajes que imagina.","Para Julia, el arte no consiste en crear imágenes perfectas, sino en expresar sentimientos que las palabras no pueden describir.","Recientemente expuso su obra en una pequeña galería y muchos visitantes le dijeron que sus colores les daban esperanza."],
-["El Viaje en Autobús","Tomo el autobús a la escuela. Es amarillo.","El conductor es amable. Me siento junto a mi amigo.","Cada mañana tomo el autobús número doce para ir a la escuela y el trayecto dura unos veinte minutos.","Durante el viaje suelo charlar con mi amigo o repasar la tarea antes de la primera clase.","El transporte público puede estar lleno y ser lento, pero es más barato y mejor para el medio ambiente que conducir.","Si más personas usaran autobuses y trenes, nuestras ciudades tendrían menos tráfico, menos contaminación y más espacio para todos."],
-["El Parque de la Ciudad","El parque está cerca de mi casa. Es grande.","Allí los abuelos juegan al ajedrez. Los niños también juegan.","El parque de la ciudad es un oasis verde donde personas de todas las edades se reúnen para descansar, hacer ejercicio o simplemente respirar.","Los fines de semana las familias hacen picnic bajo los árboles mientras unos músicos tocan junto a la fuente central.","Los parques urbanos desempeñan un papel esencial en la salud pública, ya que reducen el estrés y fomentan la actividad física.","Por eso los gobiernos deberían invertir en mantener y ampliar estos espacios, que benefician a toda la comunidad."],
-["El Faro","Un faro está junto al mar. Es blanco.","Brilla de noche. Los barcos lo ven.","El viejo faro se alza sobre un acantilado al borde del pueblo y guía a los pescadores de regreso al puerto.","Cada noche su potente luz empieza a girar, atravesando la niebla y la oscuridad del océano.","Aunque la tecnología moderna ha sustituido muchas de sus funciones, el faro sigue siendo un símbolo de esperanza y protección.","Los turistas suben por su escalera de caracol para admirar la vista e imaginar la vida de los fareros que vivieron allí."],
-["La Granja","Tim vive en una granja. Tiene un caballo.","Las vacas dan leche. Las gallinas dan huevos.","La familia de Tim tiene una granja desde hace tres generaciones y él se levanta antes del amanecer para ayudar con los animales.","Da de comer a las gallinas, ordeña las vacas y luego cabalga por los campos antes del desayuno.","La vida en la granja es exigente, pues el clima, los animales y los cultivos requieren atención constante y mucho trabajo.","Aun así, Tim se siente afortunado de crecer rodeado de naturaleza y de saber de dónde viene la comida de verdad."],
-["El Concierto","Vamos a un concierto. La música está alta.","El cantante es famoso. Bailamos y cantamos.","El sábado pasado asistí a mi primer concierto en vivo y me asombró la energía del público.","La banda tocó todas mis canciones favoritas y miles de personas cantaron juntas bajo luces de colores.","Escuchar música con auriculares no se compara con la electricidad de compartir una canción con desconocidos que sienten la misma emoción.","Salí del estadio ronco y agotado, pero con la certeza de que recordaría esa noche para siempre."],
-["La Entrevista de Trabajo","Tomás tiene una entrevista de trabajo. Lleva traje.","Responde las preguntas. El jefe sonríe.","Tomás se preparó con cuidado para su entrevista de trabajo, investigando la empresa y practicando respuestas a preguntas frecuentes.","Llegó diez minutos antes, estrechó la mano con firmeza y habló con claridad sobre sus habilidades y su experiencia.","Aunque estaba nervioso, recordó que una entrevista también es una oportunidad para saber si la empresa le conviene.","Dos días después recibió una llamada ofreciéndole el puesto y toda su preparación dio por fin resultado."],
-["La Mudanza","Nos mudamos a una casa nueva. Hay muchas cajas.","Mi cuarto es más grande ahora. Lo pinto de azul.","Después de años en un apartamento pequeño, mi familia se mudó a una casa más grande con jardín.","Durante una semana empacamos cajas, cargamos muebles y limpiamos cada habitación antes de empezar la nueva vida.","Mudarse es agotador y estresante, pero también ofrece la oportunidad de descartar lo que ya no necesitamos.","De pie en la sala vacía, sentí tristeza por el pasado e ilusión por todo lo que traería el futuro."],
-["El Reciclaje","Reciclamos en casa. Tenemos tres contenedores.","El papel va en el azul. El vidrio va en el verde.","En mi casa separamos el papel, el plástico y el vidrio, y los llevamos al punto limpio cada semana.","Al principio parecía complicado, pero ahora todos en la familia lo hacen de forma automática.","El reciclaje no es una solución completa a los problemas ambientales, pero es un hábito accesible que reduce mucho los residuos.","Si cada hogar se comprometiera a clasificar su basura, el impacto colectivo sobre nuestro planeta sería enorme."],
-["Dormir Bien","Me acuesto a las diez. Estoy cansada.","Cierro los ojos. Duermo bien.","Dormir ocho horas cada noche es esencial para mi salud, por eso intento acostarme a la misma hora todos los días.","Antes de dormir apago el teléfono, leo unas páginas y bebo un vaso de agua.","Los científicos han demostrado que el sueño fortalece la memoria, regula el ánimo y protege el corazón de numerosas enfermedades.","Lamentablemente, el estilo de vida moderno suele tratar el descanso como un lujo, aunque es una necesidad biológica básica."],
-["La Llave Perdida","No encuentro mi llave. ¿Dónde está?","Está en mi abrigo. Qué alivio.","Esta mañana ya iba tarde al trabajo cuando me di cuenta de que no encontraba la llave de casa.","Busqué en la cocina, en el dormitorio y en el bolso, hasta que por fin la descubrí en el bolsillo de mi abrigo.","El incidente me enseñó que ser ordenado ahorra una cantidad sorprendente de tiempo y evita estrés innecesario.","Desde entonces dejo siempre las llaves en el mismo cuenco junto a la puerta y nunca más las he perdido."],
-["Pescar en el Río","Papá y yo vamos a pescar. El río está tranquilo.","Pesco un pez pequeño. Lo soltamos.","El sábado temprano, mi padre y yo fuimos al río con las cañas de pescar y un termo de café.","Esperamos con paciencia durante horas, disfrutando del silencio, hasta que por fin pesqué un pequeño pez plateado.","Pescar enseña paciencia, porque los mejores resultados suelen llegar a quienes saben esperar sin frustrarse.","Devolvimos el pez al agua, de acuerdo en que el verdadero tesoro del día fue el tiempo que pasamos juntos."],
-["La Feria de Ciencias","Mi escuela tiene una feria de ciencias. Hago un volcán.","Entra en erupción con espuma. Todos dicen guau.","Para la feria de ciencias de la escuela, mi compañero y yo construimos un volcán con arcilla, vinagre y bicarbonato.","Los jueces hicieron muchas preguntas y explicamos la reacción química que produce la espuma.","Preparar el proyecto exigió investigación, trabajo en equipo y creatividad, y aprendimos más de lo que cualquier libro de texto podría enseñarnos.","Aunque no ganamos el primer premio, la experiencia me animó a considerar una carrera científica en el futuro."],
-["Una Escapada de Fin de Semana","Este fin de semana vamos a la montaña. Prepara tu mochila.","Nos quedamos en una cabaña pequeña. Tiene chimenea.","Este fin de semana mis amigos y yo vamos en coche a un pueblo de montaña para escapar del ruido de la ciudad.","Alquilamos una cabaña de madera con chimenea y pensamos cocinar, caminar y jugar juegos de mesa.","Los viajes cortos son valiosos porque interrumpen la rutina y dan a nuestra mente el descanso que necesita con urgencia.","Al volver el domingo por la noche, siempre nos sentimos renovados y más agradecidos por los placeres sencillos de la vida."],
-["Aprender un Idioma","Estudio inglés todos los días. Es divertido.","Aprendo diez palabras nuevas. Escucho canciones.","Aprender un idioma extranjero abre puertas a nuevas culturas, amistades y oportunidades profesionales.","El mejor método es practicar un poco cada día: escuchar, leer, hablar y escribir sin miedo a equivocarse.","La fluidez no es un destino que se alcanza de la noche a la mañana, sino el resultado gradual de constancia, curiosidad y mucha paciencia.","Cada error es una prueba valiosa de que lo estás intentando y cada conversación te acerca un paso más a la confianza."],
-["Nochevieja","Esta noche es Nochevieja. Esperamos la medianoche.","Vemos los fuegos artificiales. Todos dicen feliz año nuevo.","El treinta y uno de diciembre, nuestra familia se reúne para cenar algo especial y esperar a que el reloj marque la medianoche.","Cuando los fuegos artificiales iluminan el cielo, nos abrazamos y compartimos nuestros deseos para el nuevo año.","El final del año nos invita a reflexionar sobre nuestros logros y a perdonar los errores que hemos cometido.","Fijarse metas realistas, en lugar de promesas imposibles, es la mejor manera de convertir un calendario nuevo en un verdadero nuevo comienzo."]
-];
-
-STORIES_RAW.fr = [
-["Le Chien Heureux","Max est un chien heureux. Il court dans le parc.","Il trouve une balle jaune. Il joue toute la journée.","Chaque matin, Max court dans le parc vert pendant que son maître marche lentement derrière lui.","Aujourd'hui, il a trouvé une balle jaune sous un arbre et a joué avec jusqu'au coucher du soleil.","Max a une énergie infinie, et le parc est l'endroit où il la dépense, poursuivant chaque balle, oiseau et feuille qui tombe.","Quand le soir arrive, il s'allonge près de son maître, fatigué mais content, rêvant déjà aux aventures de demain."],
-["Le Café du Matin","Hélène se réveille tôt. Elle boit un café chaud.","Elle s'assoit sur le balcon. Le soleil est rouge et chaud.","Hélène adore l'heure tranquille avant le travail, quand la ville dort encore et que la rue est vide.","Elle prépare un café fort, s'installe sur son balcon et regarde le lever du soleil colorer les immeubles en orange.","Pour Hélène, ce petit rituel est plus qu'une habitude ; c'est le moment où elle organise ses pensées pour la journée.","Quand les premiers bus se mettent à gronder en bas, elle se sent calme, concentrée et prête à relever n'importe quel défi."],
-["Une Promenade en Forêt","Léo marche dans la forêt. Les arbres sont grands.","Il entend chanter les oiseaux. L'air est frais.","Le dimanche, Léo quitte son village et suit un sentier étroit qui s'enfonce dans la forêt.","Il s'arrête souvent pour écouter les oiseaux et regarder les petites fleurs au bord du chemin.","La forêt offre à Léo un silence rare, interrompu seulement par le vent qui passe dans les feuilles.","Des heures plus tard, il rentre avec des bottes pleines de boue et l'esprit clair, convaincu que la nature est le meilleur remède."],
-["Le Vélo Neuf","Tom a un vélo neuf. Il est rouge.","Il roule avec ses amis. Ils sont très contents.","Pour son anniversaire, Tom a reçu un vélo rouge et brillant qu'il désirait depuis presque un an.","Il a passé tout l'après-midi à parcourir le quartier avec ses amis, en faisant la course dans chaque descente.","Apprendre à rouler sans petites roues demande de la patience, et Tom est tombé plusieurs fois avant de trouver son équilibre.","Il pédale maintenant partout avec assurance, fier de ses genoux écorchés qui lui rappellent combien il a progressé."],
-["Préparer un Gâteau","Lisa fait un gâteau. C'est un gâteau au chocolat.","La cuisine sent bon. Tout le monde est content.","Lisa mélange de la farine, des œufs, du sucre et du cacao dans un grand saladier pendant que le four chauffe doucement.","Quand le gâteau est prêt, la délicieuse odeur se répand dans la maison et attire toute la famille à la cuisine.","Faire de la pâtisserie demande de la précision, et Lisa suit soigneusement la recette de sa grand-mère, pesant chaque ingrédient au gramme près.","Le résultat est un gâteau parfaitement moelleux, et voir sa famille le savourer rend tous ses efforts utiles."],
-["Au Marché","Je vais au marché. J'achète des pommes rouges.","Le vendeur est gentil. Il me donne une banane.","Tous les samedis, ma mère et moi allons au marché de la rue pour acheter des fruits et des légumes frais.","Les vendeurs nous connaissent bien et nous donnent toujours un peu plus, avec un sourire aimable.","Faire ses courses au marché est moins cher et plus agréable qu'aller au supermarché, et les produits ont bien meilleur goût.","De plus, parler avec les agriculteurs nous aide à comprendre d'où vient notre nourriture et combien ils travaillent."],
-["Une Journée à la Plage","Nous allons à la plage. La mer est bleue.","Je nage dans l'eau. Ma sœur fait un château de sable.","L'été dernier, ma famille a passé une journée entière à la plage, à nager et à jouer au volley sur le sable chaud.","À midi, nous avons mangé des sandwichs sous un parasol, puis ramassé de jolis coquillages près des rochers.","Bien que nous ayons mis de la crème solaire plusieurs fois, je suis rentré avec les épaules brûlées et du sable dans tous les sacs.","Pourtant, le souvenir du coucher de soleil sur les vagues reste l'un des moments les plus paisibles de mon année."],
-["Le Voyage en Train","Anne prend le train. Elle s'assoit près de la fenêtre.","Elle voit des champs verts. Le voyage est long.","Anne voyage en train pour rendre visite à ses grands-parents, qui habitent une petite ville loin de la capitale.","Pendant le trajet, elle lit un roman, écoute de la musique et regarde défiler fermes et rivières par la fenêtre.","Le voyage dure presque cinq heures, mais Anne le préfère à l'avion car il lui permet de se détendre et d'observer le paysage.","Quand le train arrive enfin, ses grands-parents l'attendent sur le quai, souriants, avec un panier de pain maison."],
-["À la Bibliothèque","Paul va à la bibliothèque. C'est très calme.","Il prend un gros livre. Il lit pendant une heure.","La bibliothèque municipale est l'endroit préféré de Paul parce qu'elle est calme, gratuite et pleine de livres intéressants.","Il s'installe d'habitude à une table en bois près de la fenêtre et lit jusqu'à ce que la bibliothécaire annonce la fermeture.","Les bibliothèques sont plus que des collections de livres ; ce sont des espaces collectifs où chacun peut apprendre, chercher et rêver.","Paul pense que chaque ville devrait protéger sa bibliothèque, car l'accès au savoir ne devrait jamais dépendre de l'argent."],
-["Un Jour de Pluie","Il pleut aujourd'hui. Je reste à la maison.","Je bois du thé. Je regarde un film.","Aujourd'hui, la pluie tombe depuis ce matin, alors j'ai décidé de rester chez moi pour me reposer.","J'ai préparé une théière, je me suis enroulé dans une couverture et j'ai regardé une vieille comédie à la télévision.","Certaines personnes se plaignent du temps pluvieux, mais je trouve qu'il crée l'atmosphère parfaite pour réfléchir et se reposer.","Le bruit constant des gouttes contre la fenêtre apaise mon esprit et me rappelle de ralentir."],
-["Le Jardin","Rose a un jardin. Il y a beaucoup de fleurs.","Elle arrose les plantes. Les roses sont roses.","Rose passe tous ses après-midi dans son jardin, à arroser les fleurs et à arracher les mauvaises herbes.","Ce printemps, elle a planté des tomates et des herbes aromatiques, et elle a hâte de voir apparaître les premières feuilles vertes.","Le jardinage a appris la patience à Rose, car les plantes poussent à leur propre rythme et on ne peut pas les presser.","Chaque récolte la récompense de légumes frais et d'une profonde satisfaction qu'aucun supermarché ne pourrait offrir."],
-["La Fête d'Anniversaire","Aujourd'hui, c'est mon anniversaire. J'ai dix ans.","Mes amis viennent chez moi. Nous mangeons du gâteau.","Mes parents ont organisé une fête surprise avec des ballons, de la musique et un énorme gâteau au chocolat.","Tous mes amis sont arrivés à quatre heures et nous avons joué dans le jardin jusqu'à la tombée de la nuit.","Je ne soupçonnais rien, alors quand j'ai ouvert la porte et que tout le monde a crié mon nom, j'ai failli pleurer de bonheur.","En y repensant, je comprends que le plus beau cadeau n'était pas les paquets, mais l'effort de ma famille pour me faire me sentir spécial."],
-["Le Match de Football","Sam adore le football. Il joue le dimanche.","Son équipe gagne aujourd'hui. Il marque un but.","Chaque dimanche matin, Sam retrouve ses coéquipiers sur le terrain du quartier pour jouer un match amical.","Aujourd'hui, le match était très serré, mais Sam a marqué le but de la victoire à la dernière minute.","Bien que l'équipe adverse fût physiquement plus forte, celle de Sam a gagné grâce à la communication, à la discipline et à beaucoup d'entraînement.","Après le match, ils ont partagé une pizza et ri des meilleurs moments, prouvant que l'amitié compte plus que le score."],
-["Le Premier Jour d'École","Aujourd'hui, c'est mon premier jour d'école. Je suis nerveux.","Ma maîtresse est gentille. Je me fais un nouvel ami.","Le premier jour d'école, Marie s'est réveillée tôt, a mis son nouvel uniforme et préparé son sac à dos coloré.","Au début, elle était nerveuse, mais sa maîtresse lui a souri chaleureusement et lui a présenté une fille nommée Clara.","Commencer dans une nouvelle école peut être intimidant, car tout semble inconnu, des couloirs aux visages autour de soi.","À la fin de la semaine, pourtant, Marie avait des amis, des matières préférées et une confiance grandissante en elle."],
-["Au Musée","Nous visitons le musée. Il est très grand.","Je vois de vieux tableaux. J'aime les dinosaures.","Vendredi, notre classe a visité le musée d'histoire pour découvrir la vie dans l'Antiquité.","Le guide nous a montré d'énormes os de dinosaure, de vieilles pièces et une petite statue de plus de trois mille ans.","Ce qui m'a le plus impressionné, c'est une collection de lettres manuscrites qui révélaient les espoirs et les peurs de gens ordinaires il y a des siècles.","Les musées nous relient au passé et nous rappellent que chaque génération se pose des questions semblables sur la vie."],
-["Préparer le Dîner","Papa prépare le dîner. Il fait des pâtes.","Je l'aide à couper les tomates. C'est amusant.","Ce soir, mon père prépare ses célèbres spaghettis à la sauce tomate fraîche, à l'ail et au basilic.","Je l'aide à laver les légumes et à mettre la table pendant que la cuisine se remplit d'un parfum merveilleux.","Cuisiner ensemble est devenu notre tradition hebdomadaire, un moment pour parler, rire et raconter notre semaine.","J'apprends qu'un bon repas, ce n'est pas seulement du goût, mais aussi l'attention et la compagnie qui l'entourent."],
-["La Guitare","Ben a une guitare. Elle est vieille mais jolie.","Il joue une chanson. Sa mère chante.","Ben a commencé à apprendre la guitare il y a six mois et s'exerce trente minutes chaque soir.","Ses doigts lui font encore un peu mal, mais il sait déjà jouer trois chansons sans regarder les notes.","Apprendre un instrument exige de la régularité, et Ben a découvert que de petits efforts quotidiens produisent des progrès remarquables.","Un jour, il espère se produire devant un public et partager les émotions que seule la musique peut exprimer."],
-["La Lune","La lune est ronde ce soir. Elle brille beaucoup.","Je regarde le ciel. Je vois beaucoup d'étoiles.","Hier soir, la lune était pleine, alors mon frère et moi sommes montés sur le toit pour l'admirer.","Nous avons utilisé son petit télescope pour voir les cratères et nous avons compté les étoiles jusqu'à avoir sommeil.","Les humains ont toujours été fascinés par la lune, qui a inspiré d'innombrables mythes, poèmes et découvertes scientifiques.","Sous ce ciel immense, j'ai compris combien nos problèmes sont petits comparés à l'immensité de l'univers."],
-["Jour de Neige","Il neige. Tout est blanc.","Les enfants jouent dehors. Ils font un bonhomme de neige.","Ce matin, nous nous sommes réveillés et avons trouvé toute la ville couverte d'une épaisse couche de neige blanche.","L'école était fermée, alors les enfants du quartier se sont réunis pour faire des bonshommes et lancer des boules de neige.","Même si le froid engourdissait nos doigts, personne ne voulait rentrer avant que le soleil commence à se coucher.","Nous sommes enfin rentrés boire un chocolat chaud près du feu, reconnaissants d'une journée si magique."],
-["La Boulangerie","La boulangerie ouvre à six heures. Le pain est chaud.","J'achète deux petits pains. La boulangère dit bonjour.","Chaque matin, en allant au travail, je m'arrête à la petite boulangerie du coin pour acheter du pain frais.","La boulangère connaît déjà ma commande et ajoute toujours un sourire chaleureux à mon sac en papier.","Les petits commerces de quartier comme celui-ci donnent du caractère à une ville et créent des liens entre ses habitants.","Je paierais volontiers un peu plus pour les soutenir plutôt que d'acheter des produits industriels dans une grande chaîne."],
-["La Chatte","Ma chatte est noire. Elle s'appelle Luna.","Elle dort toute la journée. Elle joue la nuit.","Luna est une chatte noire et curieuse qui a adopté notre famille en apparaissant à notre porte par une nuit pluvieuse.","Elle passe ses journées à dormir sur le canapé, et le soir elle chasse des jouets dans tout le salon.","Les chats sont des animaux indépendants, mais Luna montre son affection en ronronnant sur mes genoux quand je suis fatigué ou triste.","Avoir un animal m'a appris la responsabilité, la patience et le plaisir simple d'être accompagné sans avoir besoin de mots."],
-["Le Parapluie Perdu","Je perds mon parapluie. Il est bleu.","Je cherche dans le bus. Une fille le trouve.","Hier, il s'est mis à pleuvoir très fort et j'ai réalisé que j'avais oublié mon parapluie bleu dans le bus.","J'étais contrarié jusqu'à ce qu'une fille coure derrière moi pour me le rendre, disant qu'elle l'avait vu sous un siège.","Ce petit geste de gentillesse m'a redonné foi en les gens, car la plupart des inconnus l'auraient simplement ignoré.","Il m'a rappelé que la générosité n'a pas besoin d'être spectaculaire ; parfois, il suffit de prêter attention aux autres."],
-["Le Pique-nique","Nous faisons un pique-nique au parc. Il y a du soleil.","Nous mangeons des sandwichs et des fruits. Nous jouons aux cartes.","Dimanche, mes amis et moi avons organisé un pique-nique au bord du lac avec des sandwichs, du jus et une grande couverture.","Nous sommes restés des heures à bavarder, à jouer aux cartes et à regarder les canards nager paisiblement.","Passer du temps dehors en bonne compagnie est, à mon avis, l'un des moyens les plus simples et les plus efficaces de retrouver de l'énergie.","Avant de partir, nous avons ramassé tous les déchets, car nous pensons que la nature doit être laissée plus propre qu'à notre arrivée."],
-["La Vieille Photo","Je trouve une vieille photo. C'est mon père.","Il est jeune sur la photo. Il sourit.","En nettoyant le grenier, j'ai trouvé une photographie fanée de mon père à côté de sa première voiture.","Il avait environ vingt ans et souriait fièrement, les bras croisés.","En regardant cette image, j'ai compris que mes parents avaient eu des rêves et des aventures bien avant ma naissance.","Les photographies conservent des fragments de temps et nous permettent de retrouver les personnes que nous aimons telles qu'elles étaient."],
-["La Maison de Mamie","Je rends visite à ma mamie. Sa maison est petite.","Elle fait de la soupe. Elle est délicieuse.","À chaque vacances, nous allons chez ma grand-mère à la campagne, où la vie s'écoule plus lentement.","Elle nous accueille toujours avec un gros câlin, un bol de soupe chaude et des histoires de son enfance.","Sa maison sent le bois et la cannelle, et chaque objet semble renfermer un souvenir qu'elle partage volontiers.","Je chéris profondément ces visites, car je sais que le temps passé ensemble est un trésor irremplaçable."],
-["Chez le Médecin","Je me sens mal. Je vais chez le médecin.","Il dit de me reposer et de boire de l'eau. Je vais mieux.","Hier, je me suis réveillé avec mal à la gorge et une forte fièvre, alors j'ai pris rendez-vous chez mon médecin.","Il m'a examiné attentivement, prescrit des médicaments et recommandé de me reposer au moins trois jours.","Bien que je déteste rester au lit, je comprends qu'ignorer les symptômes d'une maladie peut provoquer des complications.","On ne mesure la valeur de la santé qu'une fois qu'on l'a perdue, alors je promets de mieux prendre soin de moi."],
-["À l'Aéroport","Jeanne est à l'aéroport. Elle a une grande valise.","Son avion part à midi. Elle est excitée.","Jeanne est arrivée à l'aéroport avec deux heures d'avance, a enregistré ses bagages et passé la sécurité sans problème.","En attendant à la porte d'embarquement, elle a acheté un magazine et regardé les avions décoller par les immenses baies vitrées.","Voyager à l'étranger pour la première fois lui causait un mélange d'excitation et d'angoisse à l'idée de tout ce qui pouvait mal tourner.","Pourtant, quand l'avion a décollé, la nervosité a disparu pour laisser place à une pure curiosité envers l'inconnu."],
-["L'Hôtel","Nous sommes dans un hôtel. Notre chambre est propre.","Nous voyons la mer par la fenêtre. C'est joli.","Nous avons réservé un petit hôtel près de la plage, et la réceptionniste nous a donné une chambre avec une belle vue.","Chaque matin, nous profitions d'un délicieux petit-déjeuner sur la terrasse avant d'explorer la ville à pied.","Bien choisir son hébergement peut transformer un voyage, car le confort, l'emplacement et l'accueil déterminent à quel point on se détend.","Même si l'hôtel était modeste, la chaleureuse hospitalité du personnel nous a fait nous sentir chez nous toute la semaine."],
-["Le Nouveau Voisin","Nous avons un nouveau voisin. Il s'appelle Charles.","Il habite à côté. Il est sympathique.","Le mois dernier, un homme nommé Charles a emménagé dans l'appartement voisin, montant des dizaines de cartons dans l'escalier.","Ma mère a préparé un gâteau pour l'accueillir, et il nous a remerciés avec un sourire surpris et reconnaissant.","Faire connaissance avec ses voisins peut être gênant dans les grandes villes, où beaucoup de gens vivent côte à côte sans jamais se parler.","Pourtant, un simple bonjour suffit souvent à instaurer la confiance et un sentiment de communauté dans un endroit inconnu."],
-["La Coupe de Cheveux","J'ai besoin d'une coupe de cheveux. Mes cheveux sont longs.","Le coiffeur les coupe court. J'aime ça.","Mes cheveux avaient tellement poussé qu'ils me cachaient les yeux, alors j'ai enfin pris rendez-vous chez le coiffeur.","Le coiffeur m'a demandé quel style je voulais, et nous avons choisi quelque chose de court et facile à entretenir.","Même si j'étais nerveux à l'idée de changer d'apparence, le résultat m'a donné une impression de fraîcheur, d'assurance et de légèreté.","Parfois, un petit changement extérieur suffit à renouveler notre attitude et à nous motiver à lancer de nouveaux projets."],
-["Cours de Natation","Mia apprend à nager. L'eau est froide.","La monitrice l'aide. Elle est courageuse.","Mia avait peur de l'eau jusqu'à ce que ses parents l'inscrivent à des cours de natation au centre communautaire.","Sa monitrice a été patiente, et peu à peu elle a appris à flotter, à battre des jambes et à respirer correctement.","Après trois mois d'entraînement, Mia a traversé toute la piscine sans aide, et la classe entière a applaudi ses progrès.","Cette expérience lui a appris que la peur se surmonte pas à pas quand on reçoit du soutien et qu'on continue d'essayer."],
-["La Randonnée en Montagne","Nous montons une montagne. Elle est haute.","Au sommet, nous voyons la vallée. Elle est belle.","Nous nous sommes levés à cinq heures du matin pour commencer à grimper avant que le soleil ne devienne trop fort.","Le sentier était raide et rocailleux, mais l'air frais et les vues magnifiques nous ont encouragés à continuer.","Après quatre heures épuisantes, nous avons atteint le sommet et nous sommes assis en silence, admirant la vallée étalée comme une carte.","Des moments comme celui-ci me rappellent que l'effort a sa récompense, et que les plus beaux endroits se méritent rarement sans peine."],
-["Au Supermarché","Je vais au supermarché. J'ai besoin de lait et de pain.","La queue est longue. Je paie et je rentre.","Après le travail, je suis passé au supermarché avec une liste de ce dont nous avions besoin pour la semaine.","J'ai acheté des légumes, du riz, du lait et des œufs, puis j'ai attendu quinze minutes dans une très longue file.","Faire une liste de courses à l'avance m'aide à éviter les achats impulsifs et fait gagner du temps et de l'argent.","De plus, comparer les prix et choisir des produits de saison permet aux familles de bien manger sans dépasser leur budget."],
-["Un Appel Téléphonique","Mon téléphone sonne. C'est mon amie Nina.","Nous parlons une heure. Elle habite loin.","Hier soir, mon amie Nina m'a appelé depuis un autre pays pour me parler de son nouveau travail.","Nous avons parlé presque deux heures, riant de vieux souvenirs et faisant des projets pour nous revoir l'été prochain.","Même si les messages sont pratiques, entendre la voix de quelqu'un crée une proximité que le texte remplace rarement.","La distance n'a pas affaibli notre amitié ; elle nous a simplement appris à apprécier chaque conversation davantage."],
-["La Peinture","Julie aime peindre. Elle utilise des couleurs vives.","Aujourd'hui, elle peint la mer. Elle est bleue et verte.","Julie a découvert la peinture pendant une période difficile de sa vie, et elle est vite devenue son refuge préféré.","Chaque week-end, elle installe son chevalet près de la fenêtre et peint les paysages qu'elle imagine.","Pour Julie, l'art ne consiste pas à créer des images parfaites, mais à exprimer des sentiments que les mots ne peuvent décrire.","Récemment, elle a exposé ses œuvres dans une petite galerie, et beaucoup de visiteurs lui ont dit que ses couleurs leur donnaient de l'espoir."],
-["Le Trajet en Bus","Je prends le bus pour aller à l'école. Il est jaune.","Le chauffeur est aimable. Je m'assois près de mon ami.","Chaque matin, je prends le bus numéro douze pour aller à l'école, et le trajet dure environ vingt minutes.","Pendant le trajet, je discute souvent avec mon ami ou je révise mes devoirs avant le premier cours.","Les transports en commun peuvent être bondés et lents, mais ils sont moins chers et meilleurs pour l'environnement que la voiture.","Si davantage de gens prenaient le bus et le train, nos villes auraient moins d'embouteillages, moins de pollution et plus d'espace pour tous."],
-["Le Parc de la Ville","Le parc est près de ma maison. Il est grand.","Les vieux messieurs y jouent aux échecs. Les enfants jouent aussi.","Le parc de la ville est une oasis verte où des personnes de tous âges se retrouvent pour se détendre, faire du sport ou simplement respirer.","Le week-end, des familles pique-niquent sous les arbres pendant que des musiciens jouent près de la fontaine centrale.","Les parcs urbains jouent un rôle essentiel pour la santé publique, car ils réduisent le stress et encouragent l'activité physique.","C'est pourquoi les gouvernements devraient investir dans l'entretien et l'extension de ces espaces, qui profitent à toute la communauté."],
-["Le Phare","Un phare se dresse près de la mer. Il est blanc.","Il brille la nuit. Les bateaux le voient.","Le vieux phare se dresse sur une falaise au bord du village et guide les pêcheurs en toute sécurité jusqu'au port.","Chaque soir, sa puissante lumière se met à tourner, traversant le brouillard et l'obscurité de l'océan.","Bien que la technologie moderne ait remplacé nombre de ses fonctions, le phare reste un symbole d'espoir et de protection.","Les touristes montent son escalier en colimaçon pour admirer la vue et imaginer la vie des gardiens qui y ont vécu."],
-["La Ferme","Tim vit dans une ferme. Il a un cheval.","Les vaches donnent du lait. Les poules donnent des œufs.","La famille de Tim possède une ferme depuis trois générations, et il se lève avant l'aube pour aider avec les animaux.","Il nourrit les poules, trait les vaches, puis chevauche à travers les champs avant le petit-déjeuner.","La vie à la ferme est exigeante, car le climat, les animaux et les cultures demandent une attention constante et beaucoup de travail.","Pourtant, Tim se sent privilégié de grandir entouré de nature et de savoir d'où vient la vraie nourriture."],
-["Le Concert","Nous allons à un concert. La musique est forte.","Le chanteur est célèbre. Nous dansons et chantons.","Samedi dernier, j'ai assisté à mon premier concert en direct, et l'énergie de la foule m'a émerveillé.","Le groupe a joué toutes mes chansons préférées, et des milliers de personnes ont chanté ensemble sous des lumières colorées.","Écouter de la musique au casque n'a rien à voir avec l'électricité de partager une chanson avec des inconnus qui ressentent la même émotion.","Je suis sorti du stade enroué et épuisé, mais certain que je me souviendrais de cette soirée pour toujours."],
-["L'Entretien d'Embauche","Tom a un entretien d'embauche. Il porte un costume.","Il répond aux questions. Le directeur sourit.","Tom s'est préparé avec soin à son entretien d'embauche, en se renseignant sur l'entreprise et en s'entraînant à répondre aux questions courantes.","Il est arrivé dix minutes en avance, a serré la main fermement et parlé clairement de ses compétences et de son expérience.","Même s'il était nerveux, il s'est rappelé qu'un entretien est aussi l'occasion de voir si l'entreprise lui convient.","Deux jours plus tard, il a reçu un appel lui proposant le poste, et toute sa préparation a enfin porté ses fruits."],
-["Le Déménagement","Nous déménageons dans une nouvelle maison. Il y a beaucoup de cartons.","Ma chambre est plus grande maintenant. Je la peins en bleu.","Après des années dans un petit appartement, ma famille a emménagé dans une plus grande maison avec jardin.","Pendant une semaine, nous avons empaqueté des cartons, porté des meubles et nettoyé chaque pièce avant que la nouvelle vie commence.","Déménager est épuisant et stressant, mais cela donne aussi l'occasion de se débarrasser de ce dont on n'a plus besoin.","Debout dans le salon vide, j'ai ressenti de la tristesse pour le passé et de l'enthousiasme pour tout ce que l'avenir apporterait."],
-["Le Recyclage","Nous recyclons à la maison. Nous avons trois poubelles.","Le papier va dans la bleue. Le verre va dans la verte.","Chez moi, nous trions le papier, le plastique et le verre, et nous les apportons à la déchetterie chaque semaine.","Au début, cela semblait compliqué, mais maintenant tout le monde dans la famille le fait automatiquement.","Le recyclage n'est pas une solution complète aux problèmes environnementaux, mais c'est une habitude accessible qui réduit beaucoup les déchets.","Si chaque foyer s'engageait à trier ses ordures, l'impact collectif sur notre planète serait énorme."],
-["Une Bonne Nuit de Sommeil","Je me couche à dix heures. Je suis fatiguée.","Je ferme les yeux. Je dors bien.","Dormir huit heures par nuit est essentiel pour ma santé, alors j'essaie de me coucher à la même heure chaque jour.","Avant de dormir, j'éteins mon téléphone, je lis quelques pages et je bois un verre d'eau.","Les scientifiques ont montré que le sommeil renforce la mémoire, régule l'humeur et protège le cœur de nombreuses maladies.","Malheureusement, le mode de vie moderne traite souvent le repos comme un luxe, alors que c'est un besoin biologique fondamental."],
-["La Clé Perdue","Je ne trouve pas ma clé. Où est-elle ?","Elle est dans mon manteau. Quel soulagement.","Ce matin, j'étais déjà en retard au travail quand j'ai réalisé que je ne trouvais pas la clé de ma maison.","J'ai cherché dans la cuisine, la chambre et le sac, jusqu'à la découvrir enfin dans la poche de mon manteau.","L'incident m'a appris qu'être organisé fait gagner un temps surprenant et évite un stress inutile.","Depuis, je laisse toujours mes clés dans le même petit bol près de la porte et je ne les ai plus jamais perdues."],
-["La Pêche à la Rivière","Papa et moi allons pêcher. La rivière est calme.","J'attrape un petit poisson. Nous le relâchons.","Samedi tôt, mon père et moi sommes allés à la rivière avec nos cannes à pêche et un thermos de café.","Nous avons attendu patiemment pendant des heures, profitant du silence, jusqu'à ce que j'attrape enfin un petit poisson argenté.","La pêche enseigne la patience, car les meilleurs résultats viennent généralement à ceux qui savent attendre sans se décourager.","Nous avons remis le poisson à l'eau, d'accord pour dire que le vrai trésor de la journée était le temps passé ensemble."],
-["La Fête de la Science","Notre école a une fête de la science. Je fais un volcan.","Il entre en éruption avec de la mousse. Tout le monde dit waouh.","Pour la fête de la science de l'école, mon partenaire et moi avons construit un volcan avec de l'argile, du vinaigre et du bicarbonate.","Les jurés ont posé beaucoup de questions, et nous avons expliqué la réaction chimique qui produit la mousse.","Préparer le projet a demandé de la recherche, du travail d'équipe et de la créativité, et nous avons appris plus que n'importe quel manuel.","Même si nous n'avons pas gagné le premier prix, l'expérience m'a donné envie d'envisager une carrière scientifique."],
-["Un Week-end Évasion","Ce week-end, nous allons à la montagne. Prépare ton sac.","Nous restons dans un petit chalet. Il a une cheminée.","Ce week-end, mes amis et moi allons en voiture dans un village de montagne pour échapper au bruit de la ville.","Nous avons loué un chalet en bois avec cheminée, et nous prévoyons de cuisiner, de randonner et de jouer à des jeux de société.","Les courtes escapades sont précieuses car elles interrompent la routine et offrent à notre esprit le repos dont il a urgemment besoin.","En rentrant le dimanche soir, nous nous sentons toujours ressourcés et plus reconnaissants pour les plaisirs simples de la vie."],
-["Apprendre une Langue","J'étudie l'anglais tous les jours. C'est amusant.","J'apprends dix mots nouveaux. J'écoute des chansons.","Apprendre une langue étrangère ouvre des portes vers de nouvelles cultures, amitiés et opportunités professionnelles.","La meilleure méthode est de pratiquer un peu chaque jour : écouter, lire, parler et écrire sans peur de se tromper.","La maîtrise d'une langue n'est pas une destination atteinte du jour au lendemain, mais le résultat progressif de la régularité, de la curiosité et de beaucoup de patience.","Chaque erreur prouve que vous essayez, et chaque conversation vous rapproche un peu plus de la confiance."],
-["Le Réveillon","Ce soir, c'est le réveillon. Nous attendons minuit.","Nous regardons les feux d'artifice. Tout le monde dit bonne année.","Le trente et un décembre, notre famille se réunit pour un dîner spécial et pour attendre que l'horloge sonne minuit.","Quand les feux d'artifice illuminent le ciel, nous nous embrassons et partageons nos vœux pour la nouvelle année.","La fin de l'année nous invite à réfléchir à nos réussites et à pardonner les erreurs que nous avons commises.","Se fixer des objectifs réalistes, plutôt que des promesses impossibles, est la meilleure façon de faire d'un nouveau calendrier un véritable nouveau départ."]
-];
-
-STORIES_RAW.ja = [
-["幸せな犬","マックスは幸せな犬です。公園で走ります。","黄色いボールを見つけました。一日中遊びます。","毎朝、マックスは緑の公園を走り、飼い主はその後ろをゆっくり歩きます。","今日は木の下で明るい黄色のボールを見つけて、夕日が沈むまで遊びました。","マックスは尽きることのない元気を持っていて、ボールや鳥や落ち葉を追いかけながら公園でそれを使い果たします。","夜になると、飼い主の隣で疲れても満足そうに横になり、もう明日の冒険を夢見ています。"],
-["朝のコーヒー","エレナは早く起きます。熱いコーヒーを飲みます。","ベランダに座ります。太陽は赤くて暖かいです。","エレナは仕事の前の静かな時間が大好きで、街はまだ眠っていて、通りには誰もいません。","彼女は濃いコーヒーをいれ、ベランダに座って、朝日がビルをオレンジ色に染めるのを眺めます。","エレナにとって、この小さな習慣は単なるくせではなく、一日の考えを整理する大切な時間です。","下で最初のバスの音が聞こえ始める頃には、落ち着いて集中し、どんな課題にも向き合える気持ちになっています。"],
-["森の散歩","レオは森を歩きます。木は高いです。","鳥の歌が聞こえます。空気はさわやかです。","日曜日、レオは村を出て、森の奥へ続く細い道を歩きます。","彼はよく立ち止まって、鳥の声を聞いたり、道ばたの小さな花を見たりします。","森はレオに珍しい静けさを与えてくれ、聞こえるのは頭上の葉を揺らす風の音だけです。","数時間後、彼は泥だらけの靴とすっきりした心で家に帰り、自然こそ最高の薬だと確信します。"],
-["新しい自転車","トムは新しい自転車を持っています。赤いです。","友達と走ります。みんなとても楽しそうです。","誕生日に、トムは一年近く欲しかったぴかぴかの赤い自転車をもらいました。","午後はずっと友達と近所を走り回り、坂道を下るたびに競走をしました。","補助輪なしで乗れるようになるには忍耐が必要で、トムはバランスをつかむまで何度も転びました。","今では自信を持ってどこへでも自転車で行き、すりむいた膝は上達の証だと誇らしく思っています。"],
-["ケーキを焼く","リサはケーキを焼きます。チョコレートケーキです。","台所はいい匂いです。みんな幸せです。","リサは大きなボウルに小麦粉、卵、砂糖、ココアを入れて混ぜ、その間にオーブンが少しずつ温まります。","ケーキが焼き上がると、おいしそうな香りが家中に広がり、家族みんなが台所に集まってきます。","お菓子作りには正確さが必要で、リサは祖母のレシピを守り、材料をグラム単位まで丁寧に量ります。","ふわふわの完璧なケーキができ上がり、家族がおいしそうに食べる姿を見ると、苦労がすべて報われます。"],
-["市場で","私は市場に行きます。赤いりんごを買います。","店の人は親切です。バナナをくれます。","毎週土曜日、母と私は新鮮な果物や野菜を買いに通りの市場へ歩いて行きます。","お店の人は私たちをよく知っていて、いつも笑顔でおまけをつけてくれます。","市場での買い物はスーパーよりも安くて気持ちがよく、野菜や果物の味もずっとおいしいです。","それに、農家の人と話すと、食べ物がどこから来て、どれだけ大変な仕事なのかがよくわかります。"],
-["海辺の一日","私たちは海に行きます。海は青いです。","私は水の中で泳ぎます。妹は砂のお城を作ります。","去年の夏、家族で一日中海辺で過ごし、熱い砂の上で泳いだりバレーボールをしたりしました。","昼にはパラソルの下でサンドイッチを食べ、その後、岩のそばできれいな貝がらを集めました。","何度も日焼け止めを塗ったのに、肩を赤く焼いて、どのかばんにも砂を入れたまま帰ってきました。","それでも、波の向こうに沈む夕日の記憶は、その年で最も穏やかなひとときの一つです。"],
-["電車の旅","アナは電車に乗ります。窓のそばに座ります。","緑の畑が見えます。旅は長いです。","アナは、首都から遠い小さな町に住む祖父母に会うために電車で旅をします。","旅の間、彼女は小説を読み、音楽を聴き、窓の外を流れる農場や川を眺めます。","旅は五時間近くかかりますが、アナは景色を眺めてくつろげるので、飛行機より電車を好みます。","電車がやっと着くと、祖父母がホームで待っていて、手作りのパンのかごを持って笑っています。"],
-["図書館で","ポールは図書館に行きます。とても静かです。","大きな本を取ります。一時間読みます。","公立図書館は静かで無料で、おもしろい本がたくさんあるので、ポールのお気に入りの場所です。","彼はたいてい窓のそばの木のテーブルに座り、司書が閉館を知らせるまで本を読みます。","図書館は単なる本の集まりではなく、誰もが学び、調べ、夢を見ることができる地域の場所です。","ポールは、知識へのアクセスがお金に左右されてはならないので、どの町も図書館を守るべきだと考えています。"],
-["雨の日","今日は雨です。私は家にいます。","お茶を飲みます。映画を見ます。","今日は朝から雨が降っているので、私は家でゆっくり過ごすことにしました。","ポットにお茶を用意し、毛布にくるまって、テレビで古いコメディを見ました。","雨の日に文句を言う人もいますが、私は考えたり休んだりするのにぴったりの雰囲気だと思います。","窓をたたく雨粒の絶え間ない音は心を落ち着かせ、ゆっくり進むことを思い出させてくれます。"],
-["庭","ローザは庭を持っています。花がたくさんあります。","植物に水をやります。バラはピンクです。","ローザは毎日午後を庭で過ごし、花に水をやり、雑草を抜きます。","この春、彼女はトマトとハーブを植え、最初の緑の葉が出てくるのを楽しみにしています。","ガーデニングはローザに忍耐を教えてくれました。植物は自分のペースで育ち、急がせることはできないからです。","収穫のたびに新鮮な野菜と、どんなスーパーでも味わえない深い満足感を得られます。"],
-["誕生日パーティー","今日は私の誕生日です。十歳になりました。","友達が家に来ます。みんなでケーキを食べます。","両親は、風船と音楽と大きなチョコレートケーキで、サプライズの誕生日パーティーを開いてくれました。","友達はみんな四時に来て、暗くなるまで庭でゲームをして遊びました。","何も気づいていなかったので、ドアを開けてみんなが私の名前を叫んだとき、うれしくて泣きそうになりました。","振り返ると、一番のプレゼントは贈り物ではなく、私を特別な気持ちにさせようとした家族の努力だったと思います。"],
-["サッカーの試合","サムはサッカーが大好きです。日曜日にします。","今日、チームが勝ちます。彼はゴールを決めます。","毎週日曜日の朝、サムは近所のグラウンドでチームメイトと集まり、親善試合をします。","今日の試合は接戦でしたが、サムは最後の一分で決勝ゴールを決めました。","相手チームは体格で勝っていましたが、サムのチームはコミュニケーションと規律と多くの練習で勝ちました。","試合の後、みんなでピザを分け合って名場面を笑い合い、友情はスコアより大切だと証明しました。"],
-["学校の初日","今日は学校の初日です。緊張しています。","先生は優しいです。新しい友達ができます。","学校の初日、マリアは早く起きて、新しい制服を着て、カラフルなリュックに荷物を詰めました。","最初は緊張していましたが、先生が温かくほほえみ、クララという女の子を紹介してくれました。","新しい学校に通い始めるのは、廊下から周りの顔まですべてが知らないものなので、不安になることがあります。","しかし週の終わりには、マリアには友達も好きな科目もでき、自分への自信も少しずつ育っていました。"],
-["博物館で","私たちは博物館を訪れます。とても大きいです。","古い絵を見ます。恐竜が好きです。","金曜日、私たちのクラスは昔の暮らしを学ぶために歴史博物館を訪れました。","案内の人は、大きな恐竜の骨や古いコイン、三千年以上前の小さな像を見せてくれました。","一番印象に残ったのは、何世紀も前の普通の人々の希望や不安を伝える手書きの手紙のコレクションでした。","博物館は私たちを過去とつないでくれ、どの世代も人生について似た問いに向き合っていると教えてくれます。"],
-["夕食を作る","お父さんは夕食を作ります。パスタです。","私はトマトを切るのを手伝います。楽しいです。","今夜、父は新鮮なトマトソースとにんにくとバジルを使った得意のスパゲッティを作っています。","私は野菜を洗ったりテーブルを準備したりして手伝い、台所はすてきな香りでいっぱいになります。","一緒に料理することは私たちの毎週の習慣になり、話したり笑ったり、その週の出来事を語り合う時間です。","おいしい食事とは味だけでなく、そこにある心づかいと一緒に過ごす人も大切なのだと学んでいます。"],
-["ギター","ベンはギターを持っています。古いけれどすてきです。","彼は歌を弾きます。お母さんが歌います。","ベンは六か月前にギターを習い始め、毎晩三十分練習しています。","指はまだ少し痛いですが、楽譜を見ずに三曲弾けるようになりました。","楽器の上達には継続が必要で、ベンは毎日の小さな努力が大きな進歩を生むことに気づきました。","いつか観客の前で演奏し、音楽でしか伝えられない気持ちを分かち合いたいと思っています。"],
-["月","今夜、月は丸いです。とても明るいです。","私は空を見ます。たくさんの星が見えます。","昨夜は満月だったので、兄と私は屋上に上がって月を眺めました。","兄の小さな望遠鏡でクレーターを見て、眠くなるまで星を数えました。","人間は昔から月に魅了され、月は数えきれない神話や詩や科学的発見のきっかけになりました。","その広い空の下に立ち、宇宙の広さに比べれば私たちの悩みがどれほど小さいかを理解しました。"],
-["雪の日","雪が降っています。すべてが白いです。","子どもたちは外で遊びます。雪だるまを作ります。","今朝起きると、町全体が厚い白い雪に覆われていました。","学校が休みになったので、近所の子どもたちが集まって雪だるまを作り、雪合戦をしました。","寒さで指の感覚がなくなりましたが、日が沈み始めるまで、誰も家に入ろうとしませんでした。","やっと家に戻って暖炉のそばでホットチョコレートを飲み、こんな魔法のような一日に感謝しました。"],
-["パン屋さん","パン屋は六時に開きます。パンは温かいです。","私は丸いパンを二つ買います。店員さんがおはようと言います。","毎朝、仕事へ行く途中、角の小さなパン屋に寄って焼きたてのパンを買います。","店員さんは私の注文をもう覚えていて、紙袋にいつも温かい笑顔を添えてくれます。","こうした小さな地域のお店は、街に個性を与え、そこに住む人々のつながりを生み出します。","大きなチェーン店で工場の製品を買うより、少し高くても喜んでこの店を応援したいです。"],
-["猫","私の猫は黒いです。名前はルナです。","一日中寝ます。夜に遊びます。","ルナは好奇心の強い黒猫で、雨の夜に玄関先に現れて、私たちの家族になりました。","昼はソファで寝て過ごし、夕方になるとリビングじゅうでおもちゃを追いかけます。","猫は独立した動物ですが、ルナは私が疲れたり悲しんだりしていると、膝の上でのどを鳴らして愛情を示してくれます。","ペットを飼うことで、責任と忍耐、そして言葉がなくても誰かがそばにいてくれる素朴な喜びを学びました。"],
-["なくした傘","私は傘をなくしました。青い傘です。","バスの中を探します。女の子が見つけます。","昨日、急に雨が強くなり、青い傘をバスに忘れたことに気づきました。","がっかりしていると、一人の女の子が走って追いかけてきて、座席の下で見たと言って傘を返してくれました。","この小さな親切は人への信頼を取り戻してくれました。ほとんどの知らない人は気にも留めなかったでしょう。","思いやりは立派である必要はなく、時にはただ周りの人に気を配ることだと教えてくれました。"],
-["ピクニック","私たちは公園でピクニックをします。いい天気です。","サンドイッチと果物を食べます。トランプをします。","日曜日、友達と私は、サンドイッチとジュースと大きな敷物を持って、湖のそばでピクニックをしました。","何時間も話したり、トランプをしたり、カモが静かに水の上を泳ぐのを眺めたりして過ごしました。","私は、気の合う仲間と外で過ごすことが、元気を取り戻すいちばん簡単で効果的な方法の一つだと思います。","帰る前に、自然は来た時よりきれいにして残すべきだと考え、ごみをすべて拾いました。"],
-["古い写真","私は古い写真を見つけます。父です。","写真の父は若いです。笑っています。","屋根裏を掃除していると、最初の車の隣に立つ父の色あせた写真を見つけました。","父は二十歳くらいに見え、腕を組んで誇らしげに笑っていました。","その写真を見て、両親には私が生まれるずっと前から、夢や冒険があったのだと気づきました。","写真は時間のかけらを残し、愛する人たちにかつての姿でもう一度会わせてくれます。"],
-["おばあちゃんの家","私はおばあちゃんの家に行きます。家は小さいです。","おばあちゃんはスープを作ります。おいしいです。","休みのたびに、時間がゆっくり流れる田舎の祖母の家へ旅行します。","祖母はいつも、大きなハグと温かいスープ、そして子どもの頃の話で迎えてくれます。","祖母の家は木とシナモンの香りがして、どの物にも、喜んで話してくれる思い出が宿っているようです。","一緒に過ごす時間は何ものにも代えられない宝物だと知っているので、この訪問をとても大切にしています。"],
-["病院で","具合が悪いです。病院に行きます。","先生は休んで水を飲むように言います。よくなります。","昨日、のどが痛くて高い熱があったので、医者に予約を入れました。","医者は丁寧に診察し、薬を出して、少なくとも三日は休むようにと言いました。","寝ているのは好きではありませんが、病気の症状を無視すると悪化する恐れがあることは理解しています。","健康は失って初めてありがたみがわかるものなので、これからは自分をもっと大切にすると誓います。"],
-["空港で","ジェーンは空港にいます。大きなかばんを持っています。","飛行機は正午に出ます。わくわくしています。","ジェーンは二時間前に空港に着き、荷物を預け、問題なく保安検査を通りました。","搭乗口で待つ間に、雑誌を買って、大きな窓から飛行機が離陸するのを眺めました。","初めての海外旅行は、わくわくする気持ちと、うまくいかないかもしれないという不安が入り混じっていました。","しかし飛行機が離陸すると、緊張は消えて、未知の世界への純粋な好奇心に変わりました。"],
-["ホテル","私たちはホテルに泊まります。部屋はきれいです。","窓から海が見えます。すてきです。","私たちはビーチの近くの小さなホテルを予約し、フロントの人が景色のよい部屋を用意してくれました。","毎朝、テラスでおいしい朝食を食べてから、歩いて街を探検しました。","宿を慎重に選ぶと旅は変わります。快適さや立地、親切な対応が、どれだけくつろげるかを決めるからです。","ホテルは質素でしたが、スタッフの温かいもてなしのおかげで、一週間ずっと家にいるように過ごせました。"],
-["新しい隣人","新しい隣の人が来ました。名前はカールです。","となりに住んでいます。親切です。","先月、カールという男性が隣の部屋に引っ越してきて、何十個もの箱を階段で運んでいました。","母が歓迎のケーキを焼くと、彼は驚きと感謝のこもった笑顔でお礼を言いました。","大都市では、多くの人が隣り合って暮らしているのに一度も話さないので、隣人との出会いはぎこちないものです。","それでも、簡単なあいさつだけで信頼が生まれ、知らない場所に地域のつながりを感じられることがよくあります。"],
-["散髪","髪を切る必要があります。髪は長いです。","美容師は短く切ります。気に入りました。","髪が目を隠すほど伸びたので、ようやく理容室に予約を入れました。","理容師にどんなスタイルがいいか聞かれ、短くて手入れしやすい髪型に決めました。","見た目が変わることに緊張していましたが、仕上がりはさっぱりして自信がつき、気持ちも軽くなりました。","外見の小さな変化だけで、気持ちが新しくなり、新しいことを始める意欲がわくこともあります。"],
-["水泳教室","ミアは泳ぎを習います。水は冷たいです。","先生が手伝います。ミアは勇気があります。","ミアは水が怖かったのですが、両親が地域センターの水泳教室に申し込んでくれました。","先生は辛抱強く、ミアは少しずつ浮くことやバタ足、正しい呼吸を覚えました。","三か月の練習の後、ミアは助けなしでプールを泳ぎきり、クラス全員が彼女の進歩に拍手しました。","この経験で、支えがあってあきらめなければ、恐怖は一歩ずつ乗り越えられると学びました。"],
-["山登り","私たちは山に登ります。山は高いです。","頂上から谷が見えます。きれいです。","日差しが強くなる前に登り始めるため、朝五時に起きました。","道は急で岩だらけでしたが、新鮮な空気とすばらしい景色が私たちを前に進ませました。","四時間の厳しい登りの後、頂上に着き、地図のように広がる谷を黙って眺めました。","こんな瞬間は、努力には報いがあり、最も美しい場所はたいてい簡単には手に入らないと教えてくれます。"],
-["スーパーで","私はスーパーに行きます。牛乳とパンが必要です。","列は長いです。お金を払って家に帰ります。","仕事の後、一週間に必要なものを書いたリストを持ってスーパーに寄りました。","野菜、米、牛乳、卵を買い、とても長い列に十五分並びました。","前もって買い物リストを作ると、衝動買いを避けられ、時間もお金も節約できます。","さらに、値段を比べて旬の食材を選べば、家計を超えずにしっかり食べることができます。"],
-["電話","電話が鳴ります。友達のニナです。","一時間話します。彼女は遠くに住んでいます。","昨夜、友達のニナが外国から電話をかけてきて、新しい仕事のことを話してくれました。","二時間近く話して、昔の思い出を笑い合い、来年の夏に会う計画を立てました。","メッセージは便利ですが、誰かの声を聞くことで生まれる近さは、文字ではなかなか代わりになりません。","距離は私たちの友情を弱めず、一つ一つの会話をもっと大切にすることを教えてくれました。"],
-["絵を描く","ジュリアは絵を描くのが好きです。明るい色を使います。","今日は海を描きます。青と緑です。","ジュリアは人生の苦しい時期に絵と出会い、それはすぐに彼女のお気に入りの逃げ場になりました。","毎週末、窓のそばにイーゼルを立てて、頭に思い描いた風景を描きます。","ジュリアにとって芸術は完璧な絵を作ることではなく、言葉では表せない気持ちを表現することです。","最近、小さなギャラリーで作品を展示し、多くの来場者が、彼女の色に希望をもらったと話してくれました。"],
-["バスの時間","私は学校へバスで行きます。バスは黄色いです。","運転手は親切です。友達のそばに座ります。","毎朝、十二番のバスで学校へ行き、乗車時間は約二十分です。","バスの中では、友達とおしゃべりしたり、一時間目の前に宿題を見直したりします。","公共交通機関は混んでいて遅いこともありますが、運転するより安く、環境にもやさしいです。","もっと多くの人がバスや電車を使えば、街の渋滞や汚染は減り、みんなが使える空間も増えるでしょう。"],
-["市民公園","公園は私の家の近くです。大きいです。","お年寄りがチェスをします。子どもも遊びます。","市民公園は、あらゆる年代の人が休んだり運動したり、ただ深呼吸したりするために集まる緑のオアシスです。","週末には、家族が木の下でピクニックをし、中央の噴水のそばでは音楽家が演奏します。","都市の公園はストレスを減らし運動を促すので、公衆衛生において重要な役割を果たしています。","したがって、政府は地域全体の利益になるこうした空間の維持と拡大に投資すべきです。"],
-["灯台","灯台が海のそばに立っています。白いです。","夜に光ります。船から見えます。","古い灯台は村のはずれの崖の上に立ち、漁師たちを安全に港へ導いています。","毎晩、強い光が回り始め、霧と海の暗闇を切り裂きます。","現代の技術が多くの役目を引き継いだとはいえ、灯台は今も希望と守りの象徴です。","観光客はらせん階段を上って景色を眺め、かつてそこに暮らした灯台守の生活を想像します。"],
-["農場","ティムは農場に住んでいます。馬を飼っています。","牛は牛乳をくれます。にわとりは卵をくれます。","ティムの家族は三世代にわたって農場を営み、彼は夜明け前に起きて動物の世話を手伝います。","彼はにわとりに餌をやり、牛の乳をしぼり、朝食の前に馬で畑を駆けます。","農場の生活は大変で、天気や動物や作物には絶えず注意と重労働が必要です。","それでもティムは、自然に囲まれて育ち、本物の食べ物がどこから来るのかを知っていることを幸せに思っています。"],
-["コンサート","私たちはコンサートに行きます。音楽は大きいです。","歌手は有名です。私たちは踊って歌います。","先週の土曜日、初めてライブコンサートに行き、観客の熱気に驚きました。","バンドは私の好きな曲を全部演奏し、何千人もがカラフルな照明の下で一緒に歌いました。","ヘッドホンで聴く音楽は、同じ感動を抱く知らない人たちと歌を分かち合う興奮にはかないません。","スタジアムを出る時には声がかれて疲れ果てていましたが、あの夜を一生忘れないと確信しました。"],
-["就職の面接","トムは面接があります。スーツを着ています。","彼は質問に答えます。部長はほほえみます。","トムは会社を調べ、よくある質問の答えを練習して、面接に丁寧に備えました。","彼は十分前に到着し、しっかり握手をして、自分の能力と経験をはっきり話しました。","緊張していましたが、面接は会社が自分に合うかどうかを見極める機会でもあると思い出しました。","二日後、採用の電話を受け、これまでの準備がついに実を結びました。"],
-["引っ越し","私たちは新しい家に引っ越します。箱がたくさんあります。","私の部屋は前より大きいです。青く塗ります。","何年も小さなアパートに住んだ後、私の家族は庭のある大きな家に引っ越しました。","一週間、箱を詰め、家具を運び、新しい生活が始まる前にすべての部屋を掃除しました。","引っ越しは疲れてストレスもたまりますが、もう必要のないものを手放す機会にもなります。","空っぽのリビングに立ち、過去への寂しさと、これから来るすべてへの期待を感じました。"],
-["リサイクル","私たちは家でリサイクルします。ごみ箱が三つあります。","紙は青い箱です。びんは緑の箱です。","私の家では、紙とプラスチックとガラスを分けて、毎週回収所へ持って行きます。","最初は面倒に思えましたが、今では家族全員が自然にやっています。","リサイクルは環境問題の完全な解決策ではありませんが、ごみを大きく減らせる身近な習慣です。","すべての家庭がごみの分別に取り組めば、地球に与える全体の影響は非常に大きくなるでしょう。"],
-["ぐっすり眠る","私は十時に寝ます。疲れています。","目を閉じます。よく眠ります。","毎晩八時間眠ることは健康に欠かせないので、毎日同じ時間に寝るようにしています。","寝る前に、携帯の電源を切り、数ページ本を読み、水を一杯飲みます。","科学者は、睡眠が記憶を強め、気分を整え、多くの病気から心臓を守ることを示してきました。","残念ながら現代の生活は休息を贅沢のように扱いがちですが、本来は基本的な生理的欲求です。"],
-["なくした鍵","鍵が見つかりません。どこでしょう。","コートの中です。ほっとしました。","今朝、すでに仕事に遅れそうなところで、家の鍵が見つからないことに気づきました。","台所、寝室、かばんの中を探し、ようやくコートのポケットで見つけました。","この出来事で、整理整頓が驚くほど時間を節約し、無駄なストレスを防ぐことを学びました。","それ以来、鍵はいつもドアのそばの小さな器に置き、二度となくしていません。"],
-["川で釣り","お父さんと私は釣りに行きます。川は静かです。","私は小さな魚を釣ります。逃がします。","土曜日の朝早く、父と私は釣りざおとコーヒーの魔法びんを持って川へ行きました。","静けさを楽しみながら何時間も辛抱強く待ち、ついに小さな銀色の魚を釣りました。","釣りは忍耐を教えてくれます。最高の結果は、いらいらせずに待てる人のところにやって来ることが多いからです。","私たちは魚を水に戻し、その日の本当の宝物は一緒に過ごした時間だったと話し合いました。"],
-["科学フェア","学校で科学フェアがあります。私は火山を作ります。","泡が噴き出します。みんなが「わあ」と言います。","学校の科学フェアのために、パートナーと私は粘土と酢と重曹で火山の模型を作りました。","審査員は多くの質問をし、私たちは泡を作る化学反応を説明しました。","この発表には調査とチームワークと創造力が必要で、どんな教科書より多くのことを学びました。","一等賞は取れませんでしたが、この経験で将来、科学の道に進むことを考えるようになりました。"],
-["週末の旅行","今週末は山に行きます。かばんを準備して。","小さなコテージに泊まります。暖炉があります。","今週末、友達と私は街の騒音から逃れるために、車で山の村へ行きます。","暖炉のある木のコテージを借り、料理やハイキング、ボードゲームをする予定です。","短い旅行は日常を中断し、心が切実に必要としている休息を与えてくれるので価値があります。","日曜の夜に帰る時は、いつも元気を取り戻し、人生の素朴な喜びにいっそう感謝しています。"],
-["言語を学ぶ","私は毎日英語を勉強します。楽しいです。","新しい言葉を十個覚えます。歌を聞きます。","外国語を学ぶことは、新しい文化や友情、仕事の機会への扉を開きます。","一番よい方法は、間違いを恐れずに、聞く、読む、話す、書くを毎日少しずつ練習することです。","流暢さは一夜で着く目的地ではなく、継続と好奇心と多くの忍耐が少しずつ積み重なった結果です。","間違いは挑戦している大切な証拠であり、会話の一つ一つが自信に一歩近づけてくれます。"],
-["大みそか","今夜は大みそかです。真夜中を待ちます。","花火を見ます。みんな「あけましておめでとう」と言います。","十二月三十一日、私たちの家族は特別な夕食のために集まり、時計が真夜中を打つのを待ちます。","花火が空を照らすと、私たちは抱き合い、新しい年への願いを分かち合います。","年の終わりは、自分の成果を振り返り、犯した過ちを許すきっかけを与えてくれます。","不可能な約束ではなく現実的な目標を立てることが、新しいカレンダーを本物の再出発に変える最良の方法です。"]
-];
-
-STORIES_RAW.pt = [
-["O Cachorro Feliz","Max é um cachorro feliz. Ele corre no parque.","Ele acha uma bola amarela. Brinca o dia todo.","Toda manhã, Max corre pelo parque verde enquanto seu dono caminha devagar atrás dele.","Hoje ele encontrou uma bola amarela embaixo de uma árvore e brincou com ela até o pôr do sol.","Max tem uma energia infinita, e o parque é o lugar onde ele a gasta, perseguindo cada bola, pássaro e folha que cai.","Quando a noite chega, ele se deita ao lado do dono, cansado mas contente, já sonhando com as aventuras de amanhã."],
-["O Café da Manhã","Elena acorda cedo. Ela bebe café quente.","Ela senta na varanda. O sol é vermelho e quente.","Elena adora a hora tranquila antes do trabalho, quando a cidade ainda dorme e a rua está vazia.","Ela prepara um café forte, senta na varanda e vê o nascer do sol pintar os prédios de laranja.","Para Elena, esse pequeno ritual é mais que um hábito; é o momento em que ela organiza os pensamentos para o dia.","Quando os primeiros ônibus começam a roncar lá embaixo, ela se sente calma, concentrada e pronta para qualquer desafio."],
-["Uma Caminhada na Floresta","Leo anda na floresta. As árvores são altas.","Ele ouve os pássaros cantando. O ar é fresco.","Aos domingos, Leo sai da sua vila e segue uma trilha estreita que entra fundo na floresta.","Ele para muitas vezes para ouvir os pássaros e olhar as pequenas flores ao lado do caminho.","A floresta oferece a Leo um silêncio raro, interrompido apenas pelo vento que passa entre as folhas.","Horas depois, ele volta para casa com as botas cheias de lama e a mente leve, convencido de que a natureza é o melhor remédio."],
-["A Bicicleta Nova","Tomás tem uma bicicleta nova. Ela é vermelha.","Ele anda com os amigos. Eles estão muito felizes.","No aniversário, Tomás ganhou uma bicicleta vermelha e brilhante que desejava havia quase um ano.","Ele passou a tarde inteira andando pelo bairro com os amigos, fazendo corrida em cada ladeira.","Aprender a andar sem rodinhas exige paciência, e Tomás caiu várias vezes antes de encontrar o equilíbrio.","Agora ele pedala com confiança por toda parte, orgulhoso dos joelhos ralados que lembram o quanto ele melhorou."],
-["Fazendo um Bolo","Lisa faz um bolo. É de chocolate.","A cozinha tem cheiro doce. Todos estão felizes.","Lisa mistura farinha, ovos, açúcar e cacau numa tigela grande enquanto o forno esquenta aos poucos.","Quando o bolo fica pronto, o cheiro delicioso se espalha pela casa e traz a família inteira para a cozinha.","Fazer bolo exige precisão, e Lisa segue com cuidado a receita da avó, medindo cada ingrediente até o grama.","O resultado é um bolo perfeitamente macio, e ver a família saboreando faz todo o esforço valer a pena."],
-["Na Feira","Eu vou à feira. Compro maçãs vermelhas.","O vendedor é gentil. Ele me dá uma banana.","Todo sábado, minha mãe e eu vamos à feira da rua comprar frutas e verduras frescas.","Os feirantes nos conhecem bem e sempre dão um pouquinho a mais, junto com um sorriso simpático.","Comprar na feira é mais barato e mais agradável do que ir ao supermercado, e os produtos têm muito mais sabor.","Além disso, conversar com os agricultores nos ajuda a entender de onde vem a nossa comida e o quanto eles trabalham."],
-["Um Dia na Praia","Nós vamos à praia. O mar é azul.","Eu nado na água. Minha irmã faz um castelo de areia.","No verão passado, minha família passou um dia inteiro na praia, nadando e jogando vôlei na areia quente.","Na hora do almoço comemos sanduíches debaixo de um guarda-sol e depois juntamos conchas perto das pedras.","Embora tenhamos passado protetor solar várias vezes, voltei para casa com os ombros queimados e areia em todas as bolsas.","Mesmo assim, a lembrança do pôr do sol sobre as ondas continua sendo um dos momentos mais tranquilos do meu ano."],
-["A Viagem de Trem","Ana pega o trem. Ela senta perto da janela.","Ela vê campos verdes. A viagem é longa.","Ana viaja de trem para visitar os avós, que moram numa cidade pequena, longe da capital.","Durante a viagem, ela lê um romance, ouve música e vê fazendas e rios passando pela janela.","A viagem dura quase cinco horas, mas Ana prefere o trem ao avião porque pode relaxar e observar a paisagem.","Quando o trem finalmente chega, os avós a esperam na plataforma, sorrindo e segurando uma cesta de pão caseiro."],
-["Na Biblioteca","Paulo vai à biblioteca. Lá é muito quieto.","Ele pega um livro grande. Lê por uma hora.","A biblioteca pública é o lugar favorito de Paulo porque é silenciosa, gratuita e cheia de livros interessantes.","Ele costuma sentar numa mesa de madeira perto da janela e lê até a bibliotecária avisar que vai fechar.","Bibliotecas são mais que coleções de livros; são espaços comunitários onde qualquer pessoa pode aprender, pesquisar e sonhar.","Paulo acredita que toda cidade deveria proteger sua biblioteca, porque o acesso ao conhecimento nunca deve depender de dinheiro."],
-["Um Dia de Chuva","Hoje está chovendo. Eu fico em casa.","Eu tomo chá. Eu assisto a um filme.","Hoje a chuva cai desde a manhã, então decidi ficar em casa e descansar.","Preparei um bule de chá, me enrolei num cobertor e assisti a uma velha comédia na televisão.","Algumas pessoas reclamam do tempo chuvoso, mas acho que ele cria o clima perfeito para refletir e descansar.","O som constante das gotas na janela acalma minha mente e me lembra de desacelerar."],
-["O Jardim","Rosa tem um jardim. Ele tem muitas flores.","Ela rega as plantas. As rosas são cor-de-rosa.","Rosa passa todas as tardes no jardim, regando as flores e arrancando o mato.","Nesta primavera ela plantou tomates e ervas, e está animada para ver as primeiras folhas verdes aparecerem.","A jardinagem ensinou paciência a Rosa, porque as plantas crescem no seu próprio ritmo e não podem ser apressadas.","Cada colheita a recompensa com verduras frescas e uma satisfação profunda que nenhum supermercado poderia oferecer."],
-["A Festa de Aniversário","Hoje é meu aniversário. Eu tenho dez anos.","Meus amigos vêm à minha casa. Nós comemos bolo.","Meus pais organizaram uma festa-surpresa com balões, música e um enorme bolo de chocolate.","Todos os meus amigos chegaram às quatro horas e brincamos no jardim até escurecer.","Eu não suspeitava de nada, então, quando abri a porta e todos gritaram meu nome, quase chorei de felicidade.","Olhando para trás, percebo que o melhor presente não foram os embrulhos, mas o esforço da minha família para me fazer sentir especial."],
-["O Jogo de Futebol","Samuel ama futebol. Ele joga no domingo.","O time dele ganha hoje. Ele faz um gol.","Todo domingo de manhã, Samuel encontra os colegas no campinho do bairro para jogar uma partida amistosa.","Hoje o jogo foi muito disputado, mas Samuel marcou o gol da vitória no último minuto.","Embora o time adversário fosse fisicamente mais forte, a equipe de Samuel venceu pela comunicação, pela disciplina e por muito treino.","Depois da partida, todos dividiram uma pizza e riram dos melhores lances, provando que a amizade vale mais que o placar."],
-["O Primeiro Dia de Aula","Hoje é meu primeiro dia de aula. Estou nervoso.","Minha professora é legal. Eu faço uma amiga nova.","No primeiro dia de aula, Maria acordou cedo, vestiu o uniforme novo e arrumou a mochila colorida.","No começo ela estava nervosa, mas a professora sorriu com carinho e a apresentou a uma menina chamada Clara.","Começar numa escola nova pode ser intimidante, pois tudo parece desconhecido, dos corredores aos rostos ao redor.","No fim da semana, porém, Maria já tinha amigos, matérias favoritas e uma confiança crescente em si mesma."],
-["No Museu","Nós visitamos o museu. Ele é muito grande.","Eu vejo quadros antigos. Eu gosto dos dinossauros.","Na sexta-feira, nossa turma visitou o museu de história para aprender sobre a vida nos tempos antigos.","O guia mostrou enormes ossos de dinossauro, moedas antigas e uma pequena estátua com mais de três mil anos.","O que mais me impressionou foi uma coleção de cartas escritas à mão que revelavam as esperanças e os medos de pessoas comuns séculos atrás.","Os museus nos conectam com o passado e lembram que cada geração enfrenta perguntas parecidas sobre a vida."],
-["Preparando o Jantar","O papai faz o jantar. Ele faz macarrão.","Eu ajudo a cortar os tomates. É divertido.","Esta noite meu pai está preparando seu famoso espaguete com molho de tomate fresco, alho e manjericão.","Eu o ajudo a lavar os legumes e a pôr a mesa enquanto a cozinha se enche de um aroma maravilhoso.","Cozinhar juntos virou nossa tradição semanal, um momento para conversar, rir e contar histórias da semana.","Estou aprendendo que uma boa refeição não é só sabor, mas também o cuidado e a companhia que a envolvem."],
-["O Violão","Beto tem um violão. Ele é velho, mas bonito.","Ele toca uma música. A mãe dele canta.","Beto começou a aprender violão há seis meses e pratica trinta minutos todas as noites.","Os dedos ainda doem um pouco, mas ele já consegue tocar três músicas sem olhar as notas.","Aprender um instrumento exige constância, e Beto descobriu que pequenos esforços diários geram um progresso notável.","Um dia ele espera se apresentar diante do público e compartilhar as emoções que só a música consegue expressar."],
-["A Lua","A lua está redonda hoje. Ela brilha muito.","Eu olho para o céu. Vejo muitas estrelas.","Ontem à noite a lua estava cheia, então meu irmão e eu subimos na laje para olhá-la.","Usamos o pequeno telescópio dele para ver as crateras e contamos estrelas até dar sono.","Os seres humanos sempre se fascinaram pela lua, que inspirou incontáveis mitos, poemas e descobertas científicas.","Sob aquele céu imenso, entendi como são pequenos os nossos problemas diante da vastidão do universo."],
-["Dia de Neve","Está nevando. Tudo é branco.","As crianças brincam lá fora. Elas fazem um boneco de neve.","Esta manhã acordamos e encontramos a cidade inteira coberta por uma grossa camada de neve branca.","As aulas foram canceladas, então as crianças do bairro se reuniram para fazer bonecos e jogar bolas de neve.","Embora o frio deixasse nossos dedos dormentes, ninguém queria entrar até o sol começar a se pôr.","Por fim voltamos para casa para tomar chocolate quente perto da lareira, agradecidos por um dia tão mágico."],
-["A Padaria","A padaria abre às seis. O pão está quente.","Eu compro dois pãezinhos. A padeira diz bom dia.","Toda manhã, a caminho do trabalho, passo na pequena padaria da esquina para comprar pão fresco.","A padeira já sabe o meu pedido e sempre põe um sorriso caloroso no meu saquinho de papel.","Pequenos comércios de bairro como esse dão personalidade a uma cidade e criam laços entre as pessoas que vivem nela.","Eu pagaria com prazer um pouco mais para apoiá-los, em vez de comprar produtos industriais numa grande rede."],
-["A Gata","Minha gata é preta. O nome dela é Luna.","Ela dorme o dia todo. Ela brinca à noite.","Luna é uma gata preta e curiosa que adotou nossa família ao aparecer na porta numa noite de chuva.","Ela passa os dias dormindo no sofá e, à noite, caça brinquedos pela sala inteira.","Gatos são animais independentes, mas Luna demonstra carinho ronronando no meu colo quando estou cansado ou triste.","Ter um bichinho me ensinou responsabilidade, paciência e o prazer simples de ter companhia sem precisar de palavras."],
-["O Guarda-chuva Perdido","Eu perco meu guarda-chuva. Ele é azul.","Eu procuro no ônibus. Uma menina o acha.","Ontem começou a chover forte e percebi que tinha esquecido meu guarda-chuva azul no ônibus.","Fiquei chateado até que uma menina correu atrás de mim e o devolveu, dizendo que o viu embaixo de um banco.","Esse pequeno gesto de gentileza devolveu minha fé nas pessoas, porque a maioria dos desconhecidos teria ignorado.","Ele me lembrou que a generosidade não precisa ser espetacular; às vezes é apenas prestar atenção nos outros."],
-["O Piquenique","Nós fazemos um piquenique no parque. Faz sol.","Nós comemos sanduíches e frutas. Jogamos cartas.","No domingo, meus amigos e eu organizamos um piquenique à beira do lago com sanduíches, suco e uma toalha grande.","Ficamos horas conversando, jogando cartas e vendo os patos nadarem tranquilamente pela água.","Passar tempo ao ar livre com boa companhia é, na minha opinião, uma das formas mais simples e eficazes de recuperar a energia.","Antes de ir embora, recolhemos todo o lixo, porque acreditamos que a natureza deve ficar ainda mais limpa do que a encontramos."],
-["A Foto Antiga","Eu acho uma foto antiga. É o meu pai.","Ele é jovem na foto. Ele sorri.","Enquanto limpava o sótão, encontrei uma fotografia desbotada do meu pai ao lado do seu primeiro carro.","Ele parecia ter uns vinte anos e sorria com orgulho, de braços cruzados.","Olhando aquela imagem, percebi que meus pais tiveram sonhos e aventuras muito antes de eu nascer.","As fotografias guardam fragmentos do tempo e nos permitem reencontrar as pessoas que amamos como elas já foram."],
-["A Casa da Vovó","Eu visito minha vovó. A casa dela é pequena.","Ela faz sopa. A sopa é deliciosa.","Em todo feriado viajamos para a casa da minha avó no interior, onde a vida passa mais devagar.","Ela sempre nos recebe com um grande abraço, uma tigela de sopa quente e histórias da infância.","A casa dela cheira a madeira e canela, e cada objeto parece guardar uma lembrança que ela compartilha com prazer.","Valorizo muito essas visitas, pois sei que o tempo que passamos juntos é um tesouro que nada pode substituir."],
-["No Médico","Eu me sinto mal. Eu vou ao médico.","Ele diz: descanse e beba água. Eu melhoro.","Ontem acordei com dor de garganta e febre alta, então marquei uma consulta com o médico.","Ele me examinou com atenção, receitou alguns remédios e recomendou descansar pelo menos três dias.","Embora eu não goste de ficar na cama, entendo que ignorar os sintomas de uma doença pode causar complicações.","A saúde só é valorizada quando é perdida, por isso prometo cuidar melhor de mim daqui para frente."],
-["No Aeroporto","Jane está no aeroporto. Ela tem uma mala grande.","O avião dela sai ao meio-dia. Ela está animada.","Jane chegou ao aeroporto com duas horas de antecedência, despachou a bagagem e passou pela segurança sem problemas.","Enquanto esperava no portão, comprou uma revista e viu os aviões decolarem pelas enormes janelas.","Viajar ao exterior pela primeira vez a enchia de uma mistura de empolgação e ansiedade com tudo o que poderia dar errado.","Porém, quando o avião decolou, o nervosismo desapareceu e deu lugar a uma pura curiosidade pelo desconhecido."],
-["O Hotel","Nós ficamos num hotel. Nosso quarto é limpo.","Nós vemos o mar da janela. É lindo.","Reservamos um pequeno hotel perto da praia, e a recepcionista nos deu um quarto com uma vista linda.","Toda manhã tomávamos um café da manhã delicioso no terraço antes de explorar a cidade a pé.","Escolher bem a hospedagem pode transformar uma viagem, pois conforto, localização e bom atendimento definem o quanto você relaxa.","Embora o hotel fosse simples, a calorosa hospitalidade dos funcionários nos fez sentir em casa a semana inteira."],
-["O Novo Vizinho","Nós temos um vizinho novo. O nome dele é Carlos.","Ele mora ao lado. Ele é simpático.","No mês passado, um homem chamado Carlos se mudou para o apartamento ao lado, carregando dezenas de caixas pela escada.","Minha mãe fez um bolo para recebê-lo, e ele agradeceu com um sorriso surpreso e grato.","Conhecer os vizinhos pode ser constrangedor nas grandes cidades, onde muita gente mora lado a lado sem nunca conversar.","No entanto, um simples cumprimento costuma bastar para criar confiança e um senso de comunidade num lugar desconhecido."],
-["O Corte de Cabelo","Eu preciso cortar o cabelo. Ele está comprido.","O barbeiro corta curto. Eu gosto.","Meu cabelo tinha crescido tanto que cobria meus olhos, então finalmente marquei horário na barbearia.","O barbeiro perguntou qual estilo eu queria, e combinamos algo curto e fácil de manter.","Embora eu estivesse nervoso com a mudança de aparência, o resultado me deixou renovado, confiante e mais leve.","Às vezes uma pequena mudança por fora basta para renovar nossa atitude e nos motivar a começar novos projetos."],
-["Aulas de Natação","Mia aprende a nadar. A água está fria.","A professora a ajuda. Ela é corajosa.","Mia tinha medo de água até que os pais a matricularam em aulas de natação no centro comunitário.","A instrutora foi paciente e, aos poucos, ela aprendeu a boiar, bater as pernas e respirar corretamente.","Depois de três meses de prática, Mia atravessou a piscina inteira sem ajuda, e a turma toda aplaudiu seu progresso.","Essa experiência lhe ensinou que o medo pode ser vencido passo a passo quando recebemos apoio e continuamos tentando."],
-["A Trilha na Montanha","Nós subimos uma montanha. Ela é alta.","No topo, vemos o vale. Ele é lindo.","Acordamos às cinco da manhã para começar a subir antes que o sol ficasse forte demais.","A trilha era íngreme e pedregosa, mas o ar fresco e as vistas maravilhosas nos incentivaram a continuar.","Depois de quatro horas exaustivas, chegamos ao cume e nos sentamos em silêncio, admirando o vale estendido como um mapa.","Momentos assim me lembram que o esforço tem sua recompensa e que os lugares mais bonitos raramente se alcançam com facilidade."],
-["No Supermercado","Eu vou ao supermercado. Preciso de leite e pão.","A fila é grande. Eu pago e volto para casa.","Depois do trabalho, passei no supermercado com uma lista do que precisávamos para a semana.","Comprei legumes, arroz, leite e ovos, e depois esperei quinze minutos numa fila enorme.","Fazer uma lista de compras com antecedência me ajuda a evitar compras por impulso e economiza tempo e dinheiro.","Além disso, comparar preços e escolher produtos da estação permite que as famílias comam bem sem estourar o orçamento."],
-["Uma Ligação","Meu telefone toca. É minha amiga Nina.","Nós conversamos por uma hora. Ela mora longe.","Ontem à noite minha amiga Nina me ligou de outro país para contar do novo emprego dela.","Conversamos por quase duas horas, rindo de velhas lembranças e fazendo planos para nos encontrar no próximo verão.","Embora as mensagens sejam práticas, ouvir a voz de alguém cria uma proximidade que o texto raramente substitui.","A distância não enfraqueceu nossa amizade; apenas nos ensinou a valorizar cada conversa ainda mais."],
-["A Pintura","Julia gosta de pintar. Ela usa cores vivas.","Hoje ela pinta o mar. Ele é azul e verde.","Julia descobriu a pintura num período difícil da vida, e ela logo se tornou seu refúgio favorito.","Todo fim de semana ela monta o cavalete perto da janela e pinta as paisagens que imagina.","Para Julia, a arte não é criar imagens perfeitas, mas expressar sentimentos que as palavras não conseguem descrever.","Recentemente ela expôs seus trabalhos numa pequena galeria, e muitos visitantes disseram que suas cores lhes davam esperança."],
-["O Passeio de Ônibus","Eu pego o ônibus para a escola. Ele é amarelo.","O motorista é simpático. Eu sento perto do meu amigo.","Toda manhã pego o ônibus número doze para ir à escola, e o trajeto dura uns vinte minutos.","Durante a viagem, costumo conversar com meu amigo ou revisar a lição antes da primeira aula.","O transporte público pode ser lotado e lento, mas é mais barato e melhor para o meio ambiente do que dirigir.","Se mais pessoas usassem ônibus e trens, nossas cidades teriam menos trânsito, menos poluição e mais espaço para todos."],
-["O Parque da Cidade","O parque fica perto da minha casa. Ele é grande.","Lá os idosos jogam xadrez. As crianças também brincam.","O parque da cidade é um oásis verde onde pessoas de todas as idades se reúnem para descansar, se exercitar ou simplesmente respirar.","Nos fins de semana, famílias fazem piquenique sob as árvores enquanto músicos tocam perto da fonte central.","Os parques urbanos têm um papel essencial na saúde pública, pois reduzem o estresse e incentivam a atividade física.","Por isso, os governos deveriam investir na manutenção e na ampliação desses espaços, que beneficiam toda a comunidade."],
-["O Farol","Um farol fica perto do mar. Ele é branco.","Ele brilha à noite. Os navios o veem.","O velho farol fica sobre um penhasco na beira da vila e guia os pescadores de volta ao porto.","Toda noite sua luz potente começa a girar, atravessando a névoa e a escuridão do oceano.","Embora a tecnologia moderna tenha substituído muitas de suas funções, o farol continua sendo um símbolo de esperança e proteção.","Os turistas sobem a escada em espiral para admirar a vista e imaginar a vida dos faroleiros que moraram ali."],
-["A Fazenda","Tim mora numa fazenda. Ele tem um cavalo.","As vacas dão leite. As galinhas dão ovos.","A família de Tim tem uma fazenda há três gerações, e ele acorda antes do amanhecer para ajudar com os animais.","Ele alimenta as galinhas, tira o leite das vacas e depois cavalga pelos campos antes do café da manhã.","A vida na fazenda é exigente, pois o clima, os animais e as plantações pedem atenção constante e muito trabalho.","Mesmo assim, Tim se sente privilegiado por crescer cercado de natureza e saber de onde vem a comida de verdade."],
-["O Show","Nós vamos a um show. A música está alta.","O cantor é famoso. Nós dançamos e cantamos.","No sábado passado, fui ao meu primeiro show ao vivo e fiquei impressionado com a energia do público.","A banda tocou todas as minhas músicas favoritas, e milhares de pessoas cantaram juntas sob luzes coloridas.","Ouvir música no fone de ouvido não se compara à eletricidade de dividir uma canção com desconhecidos que sentem a mesma emoção.","Saí do estádio rouco e exausto, mas com a certeza de que me lembraria daquela noite para sempre."],
-["A Entrevista de Emprego","Tomás tem uma entrevista de emprego. Ele usa terno.","Ele responde às perguntas. O gerente sorri.","Tomás se preparou com cuidado para a entrevista, pesquisando a empresa e treinando respostas para perguntas comuns.","Ele chegou dez minutos antes, apertou a mão com firmeza e falou com clareza sobre suas habilidades e experiência.","Embora estivesse nervoso, lembrou que a entrevista também é uma oportunidade de saber se a empresa combina com ele.","Dois dias depois, recebeu uma ligação oferecendo a vaga, e toda a sua preparação finalmente valeu a pena."],
-["A Mudança","Nós nos mudamos para uma casa nova. Há muitas caixas.","Meu quarto é maior agora. Eu o pinto de azul.","Depois de anos num apartamento pequeno, minha família se mudou para uma casa maior, com jardim.","Durante uma semana, empacotamos caixas, carregamos móveis e limpamos cada cômodo antes de a nova vida começar.","Mudar de casa é cansativo e estressante, mas também dá a chance de descartar o que não precisamos mais.","De pé na sala vazia, senti tristeza pelo passado e empolgação por tudo o que o futuro traria."],
-["A Reciclagem","Nós reciclamos em casa. Temos três lixeiras.","O papel vai na azul. O vidro vai na verde.","Na minha casa, separamos papel, plástico e vidro, e os levamos ao ponto de coleta toda semana.","No começo parecia complicado, mas agora todos na família fazem isso automaticamente.","A reciclagem não resolve sozinha os problemas ambientais, mas é um hábito acessível que reduz bastante o lixo.","Se cada família se comprometesse a separar o lixo, o impacto coletivo no nosso planeta seria enorme."],
-["Uma Boa Noite de Sono","Eu vou dormir às dez. Estou cansada.","Eu fecho os olhos. Eu durmo bem.","Dormir oito horas por noite é essencial para minha saúde, por isso tento deitar no mesmo horário todos os dias.","Antes de dormir, desligo o celular, leio algumas páginas e bebo um copo de água.","Cientistas já mostraram que o sono fortalece a memória, regula o humor e protege o coração de várias doenças.","Infelizmente, o estilo de vida moderno costuma tratar o descanso como luxo, embora seja uma necessidade biológica básica."],
-["A Chave Perdida","Não acho minha chave. Onde ela está?","Ela está no meu casaco. Que alívio.","Hoje de manhã eu já estava atrasado para o trabalho quando percebi que não achava a chave de casa.","Procurei na cozinha, no quarto e na bolsa, até que finalmente a descobri no bolso do casaco.","O episódio me ensinou que ser organizado economiza um tempo surpreendente e evita estresse desnecessário.","Desde então, sempre deixo as chaves na mesma tigelinha ao lado da porta e nunca mais as perdi."],
-["Pescaria no Rio","Papai e eu vamos pescar. O rio está calmo.","Eu pego um peixe pequeno. Nós o soltamos.","Cedo no sábado, meu pai e eu fomos ao rio com as varas de pescar e uma garrafa térmica de café.","Esperamos com paciência por horas, aproveitando o silêncio, até que finalmente peguei um pequeno peixe prateado.","A pesca ensina paciência, porque os melhores resultados costumam vir para quem sabe esperar sem se frustrar.","Devolvemos o peixe à água, concordando que o verdadeiro tesouro do dia foi o tempo que passamos juntos."],
-["A Feira de Ciências","Minha escola tem uma feira de ciências. Eu faço um vulcão.","Ele entra em erupção com espuma. Todos dizem uau.","Para a feira de ciências da escola, meu colega e eu construímos um vulcão com argila, vinagre e bicarbonato.","Os jurados fizeram muitas perguntas, e explicamos a reação química que produz a espuma.","Preparar o projeto exigiu pesquisa, trabalho em equipe e criatividade, e aprendemos mais do que qualquer livro didático poderia ensinar.","Embora não tenhamos ganhado o primeiro prêmio, a experiência me incentivou a considerar uma carreira científica no futuro."],
-["Uma Viagem de Fim de Semana","Neste fim de semana vamos à serra. Arrume a mochila.","Nós ficamos numa cabana pequena. Ela tem lareira.","Neste fim de semana, meus amigos e eu vamos de carro para uma vila na serra para fugir do barulho da cidade.","Alugamos uma cabana de madeira com lareira e planejamos cozinhar, fazer trilhas e jogar jogos de tabuleiro.","Viagens curtas são valiosas porque interrompem a rotina e dão à nossa mente o descanso de que ela precisa com urgência.","Ao voltar no domingo à noite, sempre nos sentimos renovados e mais gratos pelos prazeres simples da vida."],
-["Aprendendo um Idioma","Eu estudo inglês todos os dias. É divertido.","Eu aprendo dez palavras novas. Eu escuto músicas.","Aprender um idioma estrangeiro abre portas para novas culturas, amizades e oportunidades profissionais.","O melhor método é praticar um pouco todos os dias: ouvir, ler, falar e escrever sem medo de errar.","A fluência não é um destino alcançado da noite para o dia, mas o resultado gradual de constância, curiosidade e muita paciência.","Cada erro é uma prova valiosa de que você está tentando, e cada conversa o aproxima um passo da confiança."],
-["Réveillon","Hoje é noite de Réveillon. Nós esperamos a meia-noite.","Nós vemos os fogos de artifício. Todos dizem feliz ano novo.","No dia trinta e um de dezembro, nossa família se reúne para um jantar especial e para esperar o relógio marcar meia-noite.","Quando os fogos iluminam o céu, nós nos abraçamos e compartilhamos nossos desejos para o novo ano.","O fim do ano nos convida a refletir sobre nossas conquistas e a perdoar os erros que cometemos.","Definir metas realistas, em vez de promessas impossíveis, é a melhor maneira de transformar um calendário novo em um verdadeiro recomeço."]
-];
-
+const FLUENCY_STORIES = {
+    en: [
+        {
+            title: "Morning Coffee",
+            easy: "Leo wakes up early. He makes hot coffee and sits near the window. Birds sing outside and the sun shines bright.",
+            medium: "Leo wakes up early every weekday before work. He brews hot coffee, sits by the sunny window, and reviews his daily goals while listening to the morning birds.",
+            hard: "Every morning before the city fully awakens, Leo brews a fresh cup of coffee and sits beside the sun-drenched window, organizing his thoughts and embracing the quiet momentum of a brand-new day."
+        },
+        {
+            title: "Walk in the Park",
+            easy: "Maya walks in the park with her dog. They run on the green grass and play with a red ball.",
+            medium: "Maya takes her energetic dog for a walk through the neighborhood park every afternoon. They jog along the winding path and play fetch on the open grass.",
+            hard: "As golden afternoon light filters through tall oak trees, Maya jogs along the winding park trail with her loyal dog, pausing only when a red ball rolls beneath a cluster of fallen leaves."
+        },
+        {
+            title: "Train Station",
+            easy: "Sam arrives at the station. He buys a ticket and waits for the blue train. People hurry to their jobs.",
+            medium: "Sam arrives at the busy train station ten minutes early. He checks the departure board, buys a ticket, and watches commuters rush toward their morning trains.",
+            hard: "Amid the rhythmic hum of announcements and hurried footsteps, Sam checks the departure schedule at the central station, stepping aboard the express train just as the sliding doors lock into place."
+        },
+        {
+            title: "Cooking Together",
+            easy: "Ana and Tom cook dinner at home. They cut fresh vegetables and make pasta with tomato sauce.",
+            medium: "Ana and Tom cook dinner together after a long day. They chop fresh vegetables, boil pasta, and simmer a rich tomato sauce with garlic and basil.",
+            hard: "Turning their small kitchen into a lively workspace, Ana and Tom chop fresh herbs, toast garlic in olive oil, and simmer a fragrant tomato sauce while sharing stories from the day."
+        },
+        {
+            title: "Lost Keys",
+            easy: "Ben cannot find his house keys. He checks his bag, his jacket pocket, and the table near the door.",
+            medium: "Ben searches the apartment before leaving because his house keys are missing. He checks his backpack, coat pockets, and the entryway table before spotting them under a notebook.",
+            hard: "With the clock ticking toward an important meeting, Ben retraces his steps across the living room, searching coat pockets and desk drawers before discovering his keys tucked beneath a stack of notebooks."
+        },
+        {
+            title: "Rainy Afternoon",
+            easy: "Rain falls on the glass roof. Clara reads a good book and drinks warm tea on the sofa.",
+            medium: "A steady rain taps against the window all afternoon. Clara curls up on the sofa with a warm mug of tea and reads a gripping mystery novel.",
+            hard: "While cool rain streaks down the windowpane, Clara settles into the corner of the sofa with steaming herbal tea, losing herself in a chapter that refuses to let go of her attention."
+        },
+        {
+            title: "First Day at Work",
+            easy: "David meets his new team. Everyone smiles and shows him his desk and computer.",
+            medium: "David arrives early for his first day at the new office. His manager introduces the team, sets up his workspace, and explains the main project.",
+            hard: "Stepping into the new office with equal parts excitement and focus, David greets his teammates, configures his workstation, and maps out his first milestones with quiet confidence."
+        },
+        {
+            title: "Stargazing on the Roof",
+            easy: "The night sky is clear. Elena looks at the stars and the bright moon from the balcony.",
+            medium: "On a clear autumn night, Elena steps onto the balcony to watch the stars. The air is cool, and the moon shines silver over the quiet street.",
+            hard: "Beneath a crisp canopy of stars far from city glare, Elena stands on the quiet terrace tracing constellations and appreciating how vast and peaceful the night sky feels."
+        },
+        {
+            title: "Little Bookstore",
+            easy: "Lucas enters a small bookstore. The shelves are full of old and new books. He picks two stories.",
+            medium: "Lucas stops by a cozy corner bookstore on his way home. Between wooden shelves packed with novels and travel guides, he picks two books to read this week.",
+            hard: "Tucked along a quiet cobblestone lane, the small bookstore smells of paper and cedar, inviting Lucas to linger among towering shelves until two compelling titles earn a place in his bag."
+        },
+        {
+            title: "Catching the Sunset",
+            easy: "The sun goes down behind the hills. Orange and pink colors fill the sky.",
+            medium: "At the end of the day, friends gather on the hill to watch the sunset. Warm orange and violet light spreads across the valley as the breeze cools.",
+            hard: "As the sun dips below the distant ridge, ribbons of amber, rose, and deep indigo sweep across the horizon, turning an ordinary evening into a moment worth remembering."
+        },
+        {
+            title: "Baking Bread",
+            easy: "Mia mixes flour and warm water. She puts the dough in the oven and waits for the smell.",
+            medium: "Mia kneads fresh dough on the counter and lets it rise before baking. Soon the kitchen fills with the warm scent of crusty homemade bread.",
+            hard: "Dusting flour across the wooden counter, Mia shapes the risen dough with practiced hands and slides it into the hot oven until a golden crust and rich aroma fill the room."
+        },
+        {
+            title: "Morning Bus Ride",
+            easy: "Noah gets on the bus at seven. He listens to music and looks out the window.",
+            medium: "Noah catches the seven o'clock bus across town. With headphones on, he watches shop lights turn on as the morning traffic begins to move.",
+            hard: "Settled beside the window of the early morning bus, Noah lets familiar music set his pace while watching city storefronts wake up one by one in the cool dawn light."
+        },
+        {
+            title: "Watering the Plants",
+            easy: "Sofia has green plants on the balcony. She uses a small can to give them water.",
+            medium: "Sofia waters her potted plants every two days. She checks the soil, trims dry leaves, and moves ferns where they get gentle sunlight.",
+            hard: "Moving from pot to pot with a slender watering can, Sofia tends to her leafy collection by checking soil moisture, pruning tired stems, and balancing shade with morning sun."
+        },
+        {
+            title: "Grocery List",
+            easy: "Liam writes a short list. He buys apples, milk, rice, and eggs at the market.",
+            medium: "Liam writes a grocery list before heading to the market so he does not forget anything. He picks up fresh fruit, dairy, grains, and vegetables.",
+            hard: "Guided by a neat list on his phone, Liam weaves through the market aisles selecting crisp produce, pantry staples, and fresh ingredients without wasting time or impulse-buying."
+        },
+        {
+            title: "Study Desk",
+            easy: "Emma sits at her desk. She opens her notebook, takes a blue pen, and studies for an hour.",
+            medium: "Emma clears her desk before a study session so she can stay focused. She reviews her notes, highlights key ideas, and writes a quick summary.",
+            hard: "With a quiet lamp glowing over her desk, Emma organizes her notes, connects new concepts to old ones, and turns an hour of focused study into lasting understanding."
+        },
+        {
+            title: "Friendly Neighbor",
+            easy: "Mr. Park waves from the yard. He brings fresh oranges to his neighbors.",
+            medium: "Mr. Park often chats with his neighbors over the garden fence. Yesterday he shared ripe oranges harvested from his backyard tree.",
+            hard: "Known throughout the block for his warm greeting and generous spirit, Mr. Park stops by with a basket of sweet oranges picked fresh from the tree behind his house."
+        },
+        {
+            title: "Bike Ride at Dusk",
+            easy: "Leo rides his bike on the path. The air is cool and street lamps turn on.",
+            medium: "Leo rides his bicycle along the river path as evening arrives. Cool air greets him while street lamps reflect on the calm water.",
+            hard: "Pedaling smoothly along the riverside path as twilight settles, Leo feels the evening breeze cool his face while amber streetlights begin shimmering across the water."
+        },
+        {
+            title: "Packing a Bag",
+            easy: "Chloe packs a small bag for the trip. She puts in shirts, shoes, and a charger.",
+            medium: "Chloe makes a checklist before packing her weekend bag. She folds light clothes, packs her toiletries, and checks her travel tickets twice.",
+            hard: "Laying everything out on the bed first, Chloe packs her weekend bag with tidy efficiency, making sure clothes, chargers, and travel documents are ready before morning."
+        },
+        {
+            title: "Quiet Library",
+            easy: "The library is quiet and cool. Daniel reads a history book at a wooden table.",
+            medium: "Daniel spends two quiet hours at the library after class. He finds a corner table and reads a book on world history without distractions.",
+            hard: "Inside the hushed reading room of the library, Daniel settles at a sturdy oak table, turning pages of history at a steady rhythm while the outside world fades away."
+        },
+        {
+            title: "Making Tea",
+            easy: "Hannah boils water in the kettle. She pours hot water over mint leaves in a cup.",
+            medium: "Hannah boils water and steeps fresh mint leaves for an evening tea. The warm drink helps her relax after a busy day.",
+            hard: "As steam rises from the kettle, Hannah pours hot water over fresh mint leaves, inhaling the crisp aroma while letting the tension of a long day slowly unwind."
+        },
+        {
+            title: "Weekend Market",
+            easy: "On Saturday, people visit the street market. There are flowers, bread, and fruit.",
+            medium: "Every Saturday morning, the street market comes alive with colorful stalls. Visitors buy fresh flowers, warm pastries, and seasonal fruit.",
+            hard: "Bustling with conversation and bright colors every Saturday morning, the open-air market offers everything from crusty loaves and ripe fruit to freshly cut garden flowers."
+        },
+        {
+            title: "Fixing a Chair",
+            easy: "Dad gets a screwdriver from the box. He tightens the loose leg on the chair.",
+            medium: "When a dining chair starts to wobble, Dad checks the screws and tightens them carefully until the chair feels sturdy again.",
+            hard: "Testing the wobble with a careful hand, Dad retrieves his tool kit, aligns the joint, and tightens each bolt until the chair stands firm and solid once more."
+        },
+        {
+            title: "Phone Call Home",
+            easy: "Ines calls her parents in the evening. They talk for twenty minutes and laugh.",
+            medium: "Ines calls her parents every Sunday evening to catch up. They share news from the week and laugh about family memories.",
+            hard: "Even miles apart, Ines keeps a steady Sunday ritual of calling her parents, trading stories from the week and sharing laughter that bridges the distance."
+        },
+        {
+            title: "Clean Room",
+            easy: "Toby puts his clothes away and cleans his desk. Now the room looks neat and open.",
+            medium: "Toby spends fifteen minutes tidying his bedroom before going to sleep. Putting books and clothes in their place makes tomorrow easier.",
+            hard: "With a quick fifteen-minute reset before bedtime, Toby clears clutter from his desk, folds stray clothes, and leaves the room calm and ready for the next day."
+        },
+        {
+            title: "Sunny Balcony",
+            easy: "Morning sun warms the balcony. Paul drinks juice and reads the news.",
+            medium: "Paul enjoys a quiet breakfast on the sunny balcony. He sips fresh juice and reads a few articles before starting his tasks.",
+            hard: "Bathed in bright morning sunlight, Paul sits on the balcony with a glass of fresh juice, reading a few stories and easing into the day with a clear head."
+        },
+        {
+            title: "New Shoes",
+            easy: "Nina tries on new running shoes. They feel light and soft on her feet.",
+            medium: "Nina tests a pair of running shoes around the store to check the fit. They feel cushioned and supportive for her daily walks.",
+            hard: "Taking a few measured strides across the aisle, Nina tests how the new running shoes cushion her heel and support her arch for long walks ahead."
+        },
+        {
+            title: "Fruit Salad",
+            easy: "They cut banana, apple, and mango. They mix the fruit in a big bowl.",
+            medium: "For a fresh afternoon snack, they slice ripe bananas, apples, and mangoes and toss them together in a large bowl with a squeeze of lime.",
+            hard: "Combining sweet mango, crisp apple, and ripe banana in a chilled bowl with a hint of lime, they turn simple fruit into a refreshing afternoon treat."
+        },
+        {
+            title: "Late Night Code",
+            easy: "Arthur writes small lines of code. He tests the page and smiles when it works.",
+            medium: "Arthur works on a personal web project in the evening. He fixes a small bug, refreshes the browser, and sees the layout work cleanly.",
+            hard: "Focused by the soft glow of his monitor late at night, Arthur traces a stubborn bug, refines the logic, and watches the interface respond smoothly on screen."
+        },
+        {
+            title: "Cloudy Morning",
+            easy: "Gray clouds cover the sky today. The wind is soft and the air feels fresh.",
+            medium: "Soft gray clouds drift across the sky on a cool morning. A light breeze moves the trees while people walk briskly to school.",
+            hard: "Under a blanket of pale gray clouds, a cool morning breeze sweeps through the neighborhood, giving the air a crisp freshness that feels like a quiet reset."
+        },
+        {
+            title: "Art Class",
+            easy: "Students paint with watercolors on paper. Blue and yellow mix into green.",
+            medium: "In art class, students experiment with watercolor washes on thick paper. Blending blue and yellow creates soft shades of green.",
+            hard: "Dipping a fine brush into water and pigment, the students watch blue and yellow bloom across damp paper into layered shades of emerald and soft green."
+        },
+        {
+            title: "Feeding the Fish",
+            easy: "The small fish swim in clear water. Lucas gives them a pinch of food.",
+            medium: "Lucas checks the aquarium filter and feeds the fish a small pinch of flakes. They swim up quickly and eat calmly.",
+            hard: "Watching the clear aquarium water catch the light, Lucas offers a measured pinch of flakes and observes the fish dart forward with lively curiosity."
+        },
+        {
+            title: "Airport Gate",
+            easy: "Passengers wait near gate four. A plane lands outside on the runway.",
+            medium: "Travelers gather near boarding gate four as a flight prepares for departure. Outside, another plane touches down smoothly on the runway.",
+            hard: "Beside wide glass windows overlooking the tarmac, travelers await boarding while an arriving aircraft glides down and touches the runway in a smooth arc."
+        },
+        {
+            title: "Warm Soup",
+            easy: "Soup is hot in the bowl. Carrot, potato, and chicken smell very good.",
+            medium: "On a chilly evening, a bowl of hot vegetable and chicken soup warms everyone up after a long day outside.",
+            hard: "Ladled steaming into deep bowls, the rich broth of tender carrots, potatoes, and chicken brings immediate warmth against the evening chill."
+        },
+        {
+            title: "Piano Practice",
+            easy: "Sara plays a slow song on the piano. Her fingers move carefully on the keys.",
+            medium: "Sara practices a short piece on the piano every day. She repeats tricky measures slowly until her hands find a smooth rhythm.",
+            hard: "With measured patience, Sara works through a challenging passage on the piano, smoothing out uneven notes until the melody flows with poise and warmth."
+        },
+        {
+            title: "City Bridge",
+            easy: "Cars cross the wide bridge over the river. Walkers take photos of the view.",
+            medium: "Many cars and cyclists cross the river bridge during the day. Pedestrians stop at the overlook to admire the skyline.",
+            hard: "Spanning the wide river below, the bridge carries steady lines of traffic while walkers pause along the railing to take in the sweeping city view."
+        },
+        {
+            title: "Morning Stretch",
+            easy: "Evan stands up and stretches his arms. He takes a deep breath and feels ready.",
+            medium: "Evan starts his morning with a five-minute stretch by the open window. Deep breaths help wake up his body and focus his mind.",
+            hard: "Standing beside the open window as morning air enters the room, Evan stretches his shoulders, breathes deeply, and shakes off the last traces of sleep."
+        },
+        {
+            title: "Lost Umbrella",
+            easy: "It starts to rain, but Julia left her umbrella at home. She runs to the store.",
+            medium: "A sudden shower catches Julia on her way back from work. Without her umbrella, she ducks under a shop awning until the rain slows down.",
+            hard: "Caught off guard by a sudden downpour without her umbrella, Julia steps beneath a dry storefront awning and waits out the heaviest rush of rain."
+        },
+        {
+            title: "Movie Night",
+            easy: "They turn off the lights and start a movie. Popcorn is in a big bowl.",
+            medium: "On Friday night, they dim the lights, share a bowl of popcorn, and watch an adventure movie together at home.",
+            hard: "With the room lights dimmed and a bowl of warm popcorn close at hand, they settle in for an adventure film that keeps everyone hooked until the credits."
+        },
+        {
+            title: "Writing a Letter",
+            easy: "Grandpa writes a short note on paper. He puts it in an envelope with a stamp.",
+            medium: "Grandpa writes a thoughtful letter to an old friend. He folds the page neatly, seals the envelope, and posts it on his walk.",
+            hard: "Taking his time with neat handwriting on lined paper, Grandpa writes a warm note to an old friend, sealing an envelope that carries real care across the miles."
+        },
+        {
+            title: "Botanical Garden",
+            easy: "Tall trees and colorful flowers fill the garden. Paths go around a small pond.",
+            medium: "Visitors stroll along winding paths in the botanical garden, passing blooming flowerbeds, shade trees, and a peaceful pond.",
+            hard: "Winding past specimen trees, vibrant flowerbeds, and a still pond reflecting the sky, the botanical garden offers a calm sanctuary a short walk from the city."
+        },
+        {
+            title: "Quick Breakfast",
+            easy: "Toast, butter, and a banana make a fast breakfast. Leo eats before leaving.",
+            medium: "Leo prepares a quick breakfast of toasted bread, butter, and a banana so he has steady energy for his morning classes.",
+            hard: "With golden toast, a slice of banana, and a quick cup of coffee, Leo puts together a simple breakfast that fuels a busy morning ahead."
+        },
+        {
+            title: "Sunset on the Beach",
+            easy: "Waves roll onto the sand. The sky turns orange near the ocean line.",
+            medium: "People walk along the wet sand at sunset as gentle waves reach the shore and warm colors glow above the water.",
+            hard: "As gentle waves brush the shoreline and the tide glints with fading light, deep orange and violet streaks gather along the ocean horizon."
+        },
+        {
+            title: "Group Project",
+            easy: "Four friends work on a project together. They share ideas and write the plan.",
+            medium: "Four classmates meet at a table to plan their group project. Each person takes a clear task so everyone finishes on time.",
+            hard: "Gathered around a shared table with notebooks open, four teammates divide responsibilities, test ideas aloud, and turn a complex project into a clear plan."
+        },
+        {
+            title: "Cold Lemonade",
+            easy: "The day is hot and sunny. Mia makes cold lemonade with ice and sugar.",
+            medium: "On a warm afternoon, Mia squeezes fresh lemons, stirs in cold water and ice, and pours a tall glass of refreshing lemonade.",
+            hard: "Clinking with ice in a tall glass, Mia's freshly squeezed lemonade balances bright citrus tartness with cool sweetness on a scorching afternoon."
+        },
+        {
+            title: "Train Window",
+            easy: "Green fields pass outside the train window. Cows eat grass near a white fence.",
+            medium: "Through the train window, green hills and quiet farms pass by. A herd of cattle grazes beside a low fence under a wide sky.",
+            hard: "Beyond the rattling window of the train, patchwork fields, scattered farmhouses, and grazing cattle drift past in an unbroken rural panorama."
+        },
+        {
+            title: "First Snowfall",
+            easy: "White flakes fall softly from the sky. The roof and street turn white.",
+            medium: "Soft snowflakes begin to fall in the quiet evening, coating parked cars, rooftops, and tree branches in a thin white layer.",
+            hard: "Drifting down without a sound in the hush of evening, the first snowflakes dust rooftops, fences, and quiet streets in a delicate coat of white."
+        },
+        {
+            title: "Book Exchange",
+            easy: "Friends trade books they finished. Each person gets a new story to read.",
+            medium: "A group of friends swaps finished books every month so everyone can discover new authors without spending extra money.",
+            hard: "Passing along dog-eared favorites and fresh discoveries each month, the friends keep a lively book exchange going that introduces everyone to new voices."
+        },
+        {
+            title: "Morning Alarm",
+            easy: "The alarm rings at six. Alex turns it off, gets up, and opens the curtains.",
+            medium: "When the six o'clock alarm sounds, Alex gets out of bed right away, opens the curtains, and welcomes the new day.",
+            hard: "Resisting the urge to hit snooze, Alex turns off the morning alarm, draws back the curtains to let daylight in, and starts the day with purpose."
+        },
+        {
+            title: "Baker's Window",
+            easy: "Sweet cakes and rolls sit behind the glass. People stop to look inside.",
+            medium: "Passersby pause in front of the bakery window to admire trays of golden croissants, fruit tarts, and cinnamon rolls.",
+            hard: "Behind spotless glass in the morning light, trays of flaky pastries, fruit tarts, and braided loaves draw admiring glances from everyone passing by."
+        },
+        {
+            title: "Starry Campfire",
+            easy: "Friends sit near a small fire at night. Sparks rise up toward the stars.",
+            medium: "Around a crackling campfire in the woods, friends tell stories and watch bright sparks rise beneath a sky full of stars.",
+            hard: "Beneath a vast canopy of stars in the quiet clearing, a small campfire crackles softly as friends trade stories and watch warm sparks drift upward into the night."
+        }
+    ],
+    es: [
+        {
+            title: "El Café de la Mañana",
+            easy: "Leo despierta temprano. Prepara café caliente y se sienta cerca de la ventana. Los pájaros cantan afuera.",
+            medium: "Leo despierta temprano cada día antes de trabajar. Prepara café caliente, se sienta junto a la ventana soleada y repasa sus metas del día.",
+            hard: "Cada mañana antes de que la ciudad despierte del todo, Leo prepara una taza de café recién hecho y se sienta junto a la ventana luminosa para ordenar sus ideas con calma."
+        },
+        {
+            title: "Un Paseo por el Parque",
+            easy: "Maya pasea por el parque con su perro. Corren sobre la hierba verde y juegan con una pelota roja.",
+            medium: "Maya lleva a su perro a pasear por el parque cada tarde. Trotaban por el sendero y juegan con una pelota roja en el césped.",
+            hard: "Mientras la luz dorada de la tarde atraviesa los árboles altos, Maya corre por el sendero del parque con su perro, deteniéndose solo cuando la pelota rueda entre las hojas."
+        },
+        {
+            title: "La Estación del Tren",
+            easy: "Sam llega a la estación. Compra un boleto y espera el tren azul. La gente camina rápido.",
+            medium: "Sam llega diez minutos antes a la estación. Revisa los horarios, compra su boleto y observa a los viajeros apresurarse hacia sus trenes.",
+            hard: "Entre los avisos de megafonía y los pasos apresurados, Sam consulta la pantalla de salidas y sube al tren expreso justo antes de que cierren las puertas."
+        },
+        {
+            title: "Cocinando Juntos",
+            easy: "Ana y Tom cocinan la cena en casa. Cortan verduras frescas y preparan pasta con salsa de tomate.",
+            medium: "Ana y Tom cocinan juntos después del trabajo. Pican verduras frescas, cuecen la pasta y preparan una salsa de tomate con ajo y albahaca.",
+            hard: "Convirtiendo su pequeña cocina en un espacio animado, Ana y Tom pican hierbas frescas y cocinan una salsa aromática mientras comparten lo ocurrido durante el día."
+        },
+        {
+            title: "Las Llaves Perdidas",
+            easy: "Ben no encuentra las llaves de casa. Revisa su mochila, su abrigo y la mesa de la entrada.",
+            medium: "Ben busca sus llaves antes de salir de casa. Revisa la mochila, los bolsillos de su chaqueta y la mesa hasta encontrarlas bajo un cuaderno.",
+            hard: "Con el reloj avanzando hacia una cita importante, Ben revisa la sala, los bolsillos de su abrigo y el escritorio hasta hallar las llaves escondidas bajo unas notas."
+        },
+        {
+            title: "Tarde de Lluvia",
+            easy: "Llueve sobre el techo de cristal. Clara lee un buen libro y toma té caliente en el sofá.",
+            medium: "Una lluvia constante golpea la ventana toda la tarde. Clara se acomoda en el sofá con una taza de té caliente y lee una novela.",
+            hard: "Mientras la lluvia resbala por el cristal, Clara se refugia en el sofá con una infusión caliente y se sumerge en una historia que capta toda su atención."
+        },
+        {
+            title: "Primer Día de Trabajo",
+            easy: "David conoce a su nuevo equipo. Todos sonríen y le muestran su escritorio y computadora.",
+            medium: "David llega temprano en su primer día en la oficina. Su jefe le presenta al equipo, prepara su lugar de trabajo y explica el proyecto.",
+            hard: "Al entrar en la nueva oficina con entusiasmo y atención, David saluda a sus compañeros, organiza su escritorio y planifica sus primeras tareas con confianza."
+        },
+        {
+            title: "Mirando las Estrellas",
+            easy: "El cielo nocturno está despejado. Elena mira las estrellas y la luna brillante desde el balcón.",
+            medium: "En una noche despejada de otoño, Elena sale al balcón a observar las estrellas mientras la brisa fresca recorre la calle.",
+            hard: "Bajo un cielo limpio lejos del ruido de la ciudad, Elena contempla las estrellas desde el balcón y disfruta de la serenidad de la noche."
+        },
+        {
+            title: "La Pequeña Librería",
+            easy: "Lucas entra en una librería pequeña. Los estantes están llenos de libros y elige dos historias.",
+            medium: "Lucas pasa por una librería acogedora camino a casa. Entre estantes de madera llenos de novelas, elige dos libros para esta semana.",
+            hard: "Escondida en una calle tranquila, la pequeña librería huele a papel y madera e invita a Lucas a explorar sus estantes hasta elegir dos lecturas."
+        },
+        {
+            title: "Al Atardecer",
+            easy: "El sol baja detrás de las colinas. Colores naranjas y rosas llenan el cielo.",
+            medium: "Al final del día, varios amigos suben a la colina para ver el atardecer mientras el cielo se tiñe de naranja y violeta.",
+            hard: "Cuando el sol desciende tras las montañas, tonos ámbar, rosa y violeta iluminan el horizonte y convierten el final de la tarde en un instante especial."
+        },
+        {
+            title: "Horneando Pan",
+            easy: "Mía mezcla harina y agua tibia. Mete la masa al horno y espera el aroma.",
+            medium: "Mía amasa la mezcla sobre la mesa y deja que crezca antes de hornearla. Pronto toda la cocina huele a pan recién hecho.",
+            hard: "Espolvoreando harina sobre la mesa de madera, Mía moldea la masa con calma y la lleva al horno hasta lograr una corteza dorada y un aroma acogedor."
+        },
+        {
+            title: "Viaje en Autobús",
+            easy: "Noah sube al autobús a las siete. Escucha música y mira por la ventana.",
+            medium: "Noah toma el autobús de las siete para cruzar la ciudad. Con auriculares, observa cómo se encienden las luces de las tiendas.",
+            hard: "Sentado junto a la ventanilla del primer autobús, Noah deja que la música marque su ritmo mientras ve despertar las calles bajo la luz de la mañana."
+        },
+        {
+            title: "Regando las Plantas",
+            easy: "Sofía tiene plantas verdes en el balcón. Usa una regadera pequeña para darles agua.",
+            medium: "Sofía riega sus plantas cada dos días. Revisa la tierra, corta hojas secas y acomoda las que necesitan más luz.",
+            hard: "Recorriendo el balcón con una regadera ligera, Sofía cuida sus plantas comprobando la humedad de la tierra y equilibrando la sombra con el sol matinal."
+        },
+        {
+            title: "Lista del Mercado",
+            easy: "Liam escribe una lista corta. Compra manzanas, leche, arroz y huevos en el mercado.",
+            medium: "Liam prepara una lista antes de ir al mercado para no olvidar nada. Compra fruta fresca, lácteos, cereales y verduras.",
+            hard: "Guiado por una lista ordenada, Liam recorre los pasillos del mercado eligiendo productos frescos y básicos sin prisas ni compras impulsivas."
+        },
+        {
+            title: "Mesa de Estudio",
+            easy: "Emma se sienta en su escritorio. Abre su cuaderno, toma un lápiz y estudia una hora.",
+            medium: "Emma ordena su escritorio antes de estudiar para mantener la concentración. Repasa sus apuntes, subraya ideas clave y hace un resumen.",
+            hard: "Con la luz suave de la lámpara sobre su mesa, Emma organiza sus notas, conecta ideas nuevas y convierte una hora de estudio en aprendizaje real."
+        },
+        {
+            title: "Vecino Amable",
+            easy: "El señor Park saluda desde el patio. Trae naranjas frescas para los vecinos.",
+            medium: "El señor Park suele conversar con sus vecinos junto a la cerca. Ayer compartió naranjas maduras de su árbol.",
+            hard: "Conocido en todo el barrio por su trato cercano y generoso, el señor Park se acerca con una cesta de naranjas dulces recién cortadas."
+        },
+        {
+            title: "Paseo en Bicicleta",
+            easy: "Leo anda en bicicleta por el sendero. El aire es fresco y las farolas se encienden.",
+            medium: "Leo pedalea por el sendero del río al caer la tarde. El aire fresco lo acompaña mientras las luces se reflejan en el agua.",
+            hard: "Avanzando sin prisa por el camino junto al río al anochecer, Leo siente la brisa fresca mientras las farolas brillan sobre el agua tranquila."
+        },
+        {
+            title: "Preparar la Maleta",
+            easy: "Chloe prepara una bolsa pequeña para el viaje. Guarda camisas, zapatos y un cargador.",
+            medium: "Chloe hace una lista antes de empacar para el fin de semana. Dobla ropa ligera, guarda lo necesario y revisa sus boletos.",
+            hard: "Ordenando todo sobre la cama primero, Chloe arma su equipaje con cuidado para tener ropa, cargadores y documentos listos antes de salir."
+        },
+        {
+            title: "Biblioteca Tranquila",
+            easy: "La biblioteca es silenciosa y fresca. Daniel lee un libro de historia en una mesa.",
+            medium: "Daniel pasa dos horas tranquilas en la biblioteca después de clase. Busca una mesa apartada y lee historia sin distracciones.",
+            hard: "En la sala silenciosa de la biblioteca, Daniel se acomoda en una mesa de madera y avanza en su lectura con calma mientras el ruido queda atrás."
+        },
+        {
+            title: "Preparar un Té",
+            easy: "Hannah hierve agua en la tetera. Vierte agua caliente sobre hojas de menta en una taza.",
+            medium: "Hannah calienta agua y prepara una infusión de menta por la tarde. La bebida tibia le ayuda a descansar tras un día largo.",
+            hard: "Mientras sube el vapor de la tetera, Hannah vierte agua caliente sobre hojas de menta fresca y disfruta de un momento de calma al final del día."
+        },
+        {
+            title: "Mercado de Fin de Semana",
+            easy: "El sábado la gente visita el mercado callejero. Hay flores, pan y fruta.",
+            medium: "Cada sábado por la mañana el mercado se llena de color. Los visitantes compran flores frescas, pan caliente y fruta de temporada.",
+            hard: "Lleno de voces y colores cada sábado, el mercado al aire libre reúne panes crujientes, frutas maduras y flores recién cortadas."
+        },
+        {
+            title: "Arreglar una Silla",
+            easy: "Papá saca un destornillador de la caja. Aprieta la pata floja de la silla.",
+            medium: "Cuando una silla comienza a moverse, papá revisa los tornillos y los ajusta con cuidado hasta que queda firme de nuevo.",
+            hard: "Comprobando el movimiento con atención, papá toma sus herramientas, alinea la pieza y aprieta cada tornillo hasta dejar la silla estable."
+        },
+        {
+            title: "Llamada a Casa",
+            easy: "Inés llama a sus padres por la tarde. Hablan veinte minutos y se ríen.",
+            medium: "Inés llama a sus padres cada domingo para ponerse al día. Comparten noticias de la semana y recuerdan anécdotas familiares.",
+            hard: "Aunque vivan lejos, Inés mantiene la costumbre de llamar a sus padres los domingos para conversar y reír juntos como si estuvieran cerca."
+        },
+        {
+            title: "Cuarto Ordenado",
+            easy: "Toby guarda su ropa y limpia su escritorio. Ahora el cuarto se ve limpio y amplio.",
+            medium: "Toby dedica quince minutos a ordenar su habitación antes de dormir. Dejar todo en su sitio hace que mañana sea más fácil.",
+            hard: "Con un breve repaso de quince minutos antes de acostarse, Toby despeja su escritorio, guarda la ropa y deja el cuarto listo para el día siguiente."
+        },
+        {
+            title: "Balcón Soleado",
+            easy: "El sol de la mañana calienta el balcón. Paul toma jugo y lee las noticias.",
+            medium: "Paul disfruta un desayuno tranquilo en el balcón soleado. Toma jugo fresco y lee algunas noticias antes de empezar el día.",
+            hard: "Con la luz suave de la mañana en el balcón, Paul toma un jugo frío y repasa las noticias antes de comenzar sus actividades."
+        },
+        {
+            title: "Zapatillas Nuevas",
+            easy: "Nina prueba zapatillas nuevas para correr. Se sienten ligeras y suaves en sus pies.",
+            medium: "Nina camina por la tienda probando unas zapatillas nuevas. Siente buena amortiguación y comodidad para sus caminatas diarias.",
+            hard: "Dando unos pasos por el pasillo, Nina comprueba cómo las zapatillas nuevas amortiguan cada pisada y acompañan bien sus caminatas."
+        },
+        {
+            title: "Ensalada de Frutas",
+            easy: "Cortan plátano, manzana y mango. Mezclan la fruta en un tazón grande.",
+            medium: "Para una merienda fresca, cortan plátano, manzana y mango en trozos y los mezclan en un tazón con un poco de limón.",
+            hard: "Reuniendo mango dulce, manzana crujiente y plátano maduro con un toque de limón, preparan una ensalada de frutas fresca para la tarde."
+        },
+        {
+            title: "Código por la Noche",
+            easy: "Arthur escribe líneas cortas de código. Prueba la página y sonríe cuando funciona.",
+            medium: "Arthur trabaja en un proyecto web por la noche. Corrige un error pequeño, recarga la página y ve que todo funciona bien.",
+            hard: "Frente a la luz suave de la pantalla ya entrada la noche, Arthur ajusta un detalle del código y ve cómo la página responde sin fallos."
+        },
+        {
+            title: "Mañana Nublada",
+            easy: "Nubes grises cubren el cielo hoy. El viento es suave y el aire se siente fresco.",
+            medium: "Nubes grises avanzan despacio en una mañana fresca. Una brisa ligera mueve las ramas mientras la gente camina hacia sus clases.",
+            hard: "Bajo un cielo cubierto de nubes suaves, una brisa fresca recorre la calle y da a la mañana un aire limpio y sosegado."
+        },
+        {
+            title: "Clase de Arte",
+            easy: "Los alumnos pintan con acuarelas en papel. El azul y el amarillo forman verde.",
+            medium: "En clase de arte, los alumnos prueban acuarelas sobre papel grueso. Al mezclar azul y amarillo descubren tonos verdes.",
+            hard: "Con el pincel húmedo sobre el papel, los alumnos ven cómo el azul y el amarillo se funden en tonos verdes suaves y luminosos."
+        },
+        {
+            title: "Alimentar a los Peces",
+            easy: "Los peces pequeños nadan en agua clara. Lucas les da una pizca de comida.",
+            medium: "Lucas revisa el filtro del acuario y da una pizca de alimento a los peces. Ellos suben rápido y comen con calma.",
+            hard: "Observando el agua clara del acuario, Lucas deja caer una pequeña pizca de comida y mira a los peces acercarse con viveza."
+        },
+        {
+            title: "Puerta de Embarque",
+            easy: "Los pasajeros esperan cerca de la puerta cuatro. Un avión aterriza en la pista.",
+            medium: "Los viajeros esperan cerca de la puerta cuatro mientras preparan el vuelo. Afuera, otro avión aterriza con suavidad en la pista.",
+            hard: "Junto a los grandes cristales de la terminal, los pasajeros aguardan mientras un avión desciende y toca la pista con precisión."
+        },
+        {
+            title: "Sopa Caliente",
+            easy: "La sopa está caliente en el plato. La zanahoria, la papa y el pollo huelen muy bien.",
+            medium: "En una tarde fría, un plato de sopa caliente de verduras y pollo reconforta a todos después de estar fuera.",
+            hard: "Servida humeante en platos hondos, la sopa de zanahoria, papa y pollo aporta calor y bienestar frente al frío de la tarde."
+        },
+        {
+            title: "Práctica de Piano",
+            easy: "Sara toca una canción lenta en el piano. Sus dedos se mueven con cuidado en las teclas.",
+            medium: "Sara practica una pieza breve en el piano cada día. Repite los compases difíciles despacio hasta lograr un ritmo fluido.",
+            hard: "Con paciencia y atención, Sara ensaya un pasaje exigente en el piano hasta que las notas se encadenan con naturalidad."
+        },
+        {
+            title: "Puente de la Ciudad",
+            easy: "Los autos cruzan el puente ancho sobre el río. Los peatones toman fotos de la vista.",
+            medium: "Muchos autos y bicicletas cruzan el puente durante el día. Quienes caminan se detienen a mirar el paisaje de la ciudad.",
+            hard: "Tendido sobre el río ancho, el puente recibe el paso constante de vehículos mientras los peatones contemplan la vista panorámica."
+        },
+        {
+            title: "Estiramiento Matinal",
+            easy: "Evan se pone de pie y estira los brazos. Respira hondo y se siente listo.",
+            medium: "Evan empieza la mañana estirándose junto a la ventana abierta. Respirar profundo le ayuda a despejarse y concentrarse.",
+            hard: "Junto a la ventana abierta al empezar el día, Evan estira los brazos, respira hondo y deja atrás el cansancio del sueño."
+        },
+        {
+            title: "Paraguas Olvidado",
+            easy: "Empieza a llover, pero Julia dejó su paraguas en casa. Corre hacia la tienda.",
+            medium: "Una lluvia repentina sorprende a Julia al volver a casa. Sin paraguas, espera bajo el alero de una tienda hasta que baja la lluvia.",
+            hard: "Sorprendida por un chaparrón sin su paraguas, Julia se resguarda bajo el techo de una tienda y espera a que pase lo más fuerte."
+        },
+        {
+            title: "Noche de Película",
+            easy: "Apagan las luces y empiezan una película. Las palomitas están en un tazón grande.",
+            medium: "El viernes por la noche bajan las luces, comparten palomitas y ven una película de aventuras juntos en casa.",
+            hard: "Con las luces bajas y un tazón de palomitas a mano, se acomodan para ver una película de aventuras que los mantiene atentos hasta el final."
+        },
+        {
+            title: "Escribir una Carta",
+            easy: "El abuelo escribe una nota corta en papel. La guarda en un sobre con estampilla.",
+            medium: "El abuelo escribe una carta cariñosa a un viejo amigo. Dobla la hoja con cuidado, cierra el sobre y la envía en su paseo.",
+            hard: "Con letra clara sobre papel pautado, el abuelo escribe unas líneas a un amigo de toda la vida y cierra el sobre con afecto."
+        },
+        {
+            title: "Jardín Botánico",
+            easy: "Árboles altos y flores coloridas llenan el jardín. Los senderos rodean un estanque pequeño.",
+            medium: "Los visitantes pasean por senderos arbolados en el jardín botánico, entre flores de colores y un estanque tranquilo.",
+            hard: "Entre árboles frondosos, flores variadas y un estanque sereno, el jardín botánico ofrece un paseo tranquilo lejos del bullicio."
+        },
+        {
+            title: "Desayuno Rápido",
+            easy: "Tostadas, mantequilla y un plátano forman un desayuno rápido. Leo come antes de salir.",
+            medium: "Leo prepara un desayuno rápido con tostadas, mantequilla y un plátano para tener energía durante la mañana.",
+            hard: "Con tostadas doradas, un plátano y una bebida caliente, Leo arma un desayuno sencillo que le da impulso para empezar el día."
+        },
+        {
+            title: "Atardecer en la Playa",
+            easy: "Las olas llegan a la arena. El cielo se vuelve naranja cerca del mar.",
+            medium: "Varias personas caminan por la orilla al atardecer mientras las olas suaves llegan y el cielo brilla en tonos naranjas.",
+            hard: "Mientras las olas suaves alcanzan la orilla húmeda, tonos naranjas y rosados se extienden sobre el mar al caer la tarde."
+        },
+        {
+            title: "Trabajo en Equipo",
+            easy: "Cuatro amigos trabajan juntos en un proyecto. Comparten ideas y escriben el plan.",
+            medium: "Cuatro compañeros se reúnen para organizar su proyecto. Cada uno asume una tarea clara para avanzar a buen ritmo.",
+            hard: "Sentados alrededor de una mesa con sus cuadernos, cuatro compañeros reparten tareas, debaten ideas y ordenan el plan del proyecto."
+        },
+        {
+            title: "Limonada Fría",
+            easy: "El día es caluroso y soleado. Mía prepara limonada fría con hielo y azúcar.",
+            medium: "En una tarde calurosa, Mía exprime limones frescos, mezcla con agua fría y hielo y sirve un vaso bien refrescante.",
+            hard: "Con hielo en un vaso alto, la limonada recién exprimida de Mía combina el frescor cítrico con un toque dulce ideal para el calor."
+        },
+        {
+            title: "Ventana del Tren",
+            easy: "Campos verdes pasan tras la ventana del tren. Las vacas comen hierba cerca de una cerca.",
+            medium: "Por la ventanilla del tren pasan campos verdes y casas tranquilas. Unas vacas pastan junto a una cerca bajo un cielo amplio.",
+            hard: "Más allá de la ventanilla del tren, praderas verdes, caminos rurales y ganado pastando se suceden en un paisaje continuo."
+        },
+        {
+            title: "Primera Nevada",
+            easy: "Copos blancos caen suavemente del cielo. El techo y la calle se vuelven blancos.",
+            medium: "Copos de nieve caen en silencio al anochecer y cubren techos, autos y ramas con una capa blanca y ligera.",
+            hard: "Cayendo sin ruido al caer la noche, los primeros copos cubren tejados y calles con un manto blanco suave y sereno."
+        },
+        {
+            title: "Intercambio de Libros",
+            easy: "Los amigos intercambian libros que terminaron. Cada uno recibe una historia nueva para leer.",
+            medium: "Un grupo de amigos intercambia libros cada mes para conocer nuevas historias sin gastar de más.",
+            hard: "Compartiendo libros ya leídos cada mes, los amigos mantienen un intercambio sencillo que les abre la puerta a nuevas lecturas."
+        },
+        {
+            title: "Alarma de la Mañana",
+            easy: "La alarma suena a las seis. Alex la apaga, se levanta y abre las cortinas.",
+            medium: "Cuando suena la alarma a las seis, Alex se levanta de inmediato, abre las cortinas y deja entrar la luz del día.",
+            hard: "Al sonar la alarma de la mañana, Alex se pone en pie sin demora, abre las cortinas y comienza el día con orden."
+        },
+        {
+            title: "Vitrina de la Panadería",
+            easy: "Pasteles dulces y panecillos están tras el cristal. La gente se detiene a mirar.",
+            medium: "Quienes pasan frente a la panadería miran las bandejas de bollos dorados, tartas de fruta y pan recién horneado.",
+            hard: "Detrás del cristal limpio, las bandejas de panecillos dorados y tartas atraen la mirada de quienes pasan por la calle."
+        },
+        {
+            title: "Fogata Bajo las Estrellas",
+            easy: "Los amigos se sientan cerca de un fuego pequeño de noche. Las chispas suben hacia las estrellas.",
+            medium: "Junto a una pequeña fogata en el campo, los amigos conversan y ven subir chispas bajo un cielo lleno de estrellas.",
+            hard: "Bajo un cielo estrellado en el claro del bosque, la pequeña fogata acompaña las charlas mientras las chispas suben en la noche."
+        }
+    ],
+    fr: [
+        {
+            title: "Le Café du Matin",
+            easy: "Léo se réveille tôt. Il prépare un café chaud et s'assoit près de la fenêtre. Les oiseaux chantent.",
+            medium: "Léo se réveille tôt chaque matin avant le travail. Il prépare un café chaud, s'installe près de la fenêtre et organise sa journée.",
+            hard: "Chaque matin avant que la ville ne s'anime vraiment, Léo prépare un café fraîchement moulu et s'assoit près de la fenêtre lumineuse pour clarifier ses idées."
+        },
+        {
+            title: "Une Promenade au Parc",
+            easy: "Maya promène son chien dans le parc. Ils courent sur l'herbe verte et jouent avec un ballon rouge.",
+            medium: "Maya emmène son chien faire un tour au parc chaque après-midi. Ils courent sur le sentier et jouent avec un ballon rouge.",
+            hard: "Tandis que la lumière dorée filtre à travers les grands arbres, Maya court sur l'allée du parc avec son chien et s'arrête quand le ballon roule dans l'herbe."
+        },
+        {
+            title: "La Gare",
+            easy: "Sam arrive à la gare. Il achète un billet et attend le train bleu. Les gens sont pressés.",
+            medium: "Sam arrive dix minutes en avance à la gare. Il regarde les horaires, achète son billet et voit les voyageurs se hâter.",
+            hard: "Au milieu des annonces et des pas pressés, Sam vérifie l'affichage des départs et monte dans le train juste avant la fermeture des portes."
+        },
+        {
+            title: "Cuisiner Ensemble",
+            easy: "Ana et Tom préparent le dîner à la maison. Ils coupent des légumes frais et font des pâtes.",
+            medium: "Ana et Tom cuisinent ensemble après leur journée. Ils coupent des légumes frais, cuisent les pâtes et préparent une sauce tomate.",
+            hard: "Transformant leur petite cuisine en atelier convivial, Ana et Tom cisèlent des herbes fraîches et mijotent une sauce parfumée en partageant le récit de leur journée."
+        },
+        {
+            title: "Les Clés Perdues",
+            easy: "Ben ne trouve plus ses clés. Il regarde dans son sac, son manteau et sur la petite table.",
+            medium: "Ben cherche ses clés avant de partir. Il vérifie son sac, les poches de sa veste et l'entrée avant de les voir sous un cahier.",
+            hard: "Alors que l'heure d'un rendez-vous approche, Ben refait le chemin dans le salon, fouille ses poches et retrouve finalement ses clés sous un carnet."
+        },
+        {
+            title: "Après-Midi Pluvieux",
+            easy: "La pluie tombe sur la vitre. Clara lit un beau livre et boit un thé chaud sur le canapé.",
+            medium: "Une pluie régulière tombe tout l'après-midi. Clara s'installe sur le canapé avec une tasse de thé chaud et lit un roman.",
+            hard: "Pendant que la pluie glisse sur la vitre, Clara s'installe confortablement sur le canapé avec un thé fumant et se plonge dans une histoire captivante."
+        },
+        {
+            title: "Premier Jour au Travail",
+            easy: "David rencontre sa nouvelle équipe. Tout le monde sourit et lui montre son bureau.",
+            medium: "David arrive tôt pour son premier jour au bureau. Son responsable présente l'équipe, installe son poste et explique le projet.",
+            hard: "Entrant dans ses nouveaux bureaux avec enthousiasme, David salue ses collègues, règle son espace de travail et définit ses premiers objectifs avec assurance."
+        },
+        {
+            title: "Sous les Étoiles",
+            easy: "Le ciel est clair cette nuit. Elena regarde les étoiles et la lune brillante depuis le balcon.",
+            medium: "Par une nuit claire d'automne, Elena sort sur le balcon pour observer les étoiles dans l'air frais du soir.",
+            hard: "Sous un ciel étoilé loin de l'agitation urbaine, Elena contemple les constellations depuis le balcon et savoure le calme de la nuit."
+        },
+        {
+            title: "La Petite Librairie",
+            easy: "Lucas entre dans une petite librairie. Les étagères sont pleines de livres. Il choisit deux histoires.",
+            medium: "Lucas s'arrête dans une librairie chaleureuse sur le chemin du retour. Parmi les rayons, il choisit deux livres à lire cette semaine.",
+            hard: "Nichée dans une rue calme, la petite librairie sent le papier et attire Lucas vers ses étagères jusqu'à ce qu'il retienne deux ouvrages."
+        },
+        {
+            title: "Le Coucher du Soleil",
+            easy: "Le soleil descend derrière les collines. Des couleurs orange et rose remplissent le ciel.",
+            medium: "En fin de journée, des amis rejoignent la colline pour regarder le coucher du soleil aux reflets orangés et violets.",
+            hard: "Lorsque le soleil disparaît derrière la crête, des nuances ambrées, roses et violettes embrasent l'horizon et rendent la fin de journée inoubliable."
+        },
+        {
+            title: "Cuire du Pain",
+            easy: "Mia mélange de la farine et de l'eau tiède. Elle met la pâte au four et attend l'odeur.",
+            medium: "Mia pétrit la pâte sur le plan de travail et la laisse lever avant de cuire. Bientôt la cuisine sent bon le pain chaud.",
+            hard: "Saupoudrant un peu de farine sur la table, Mia façonne la pâte levée avec soin et l'enfourne jusqu'à obtenir une croûte dorée et parfumée."
+        },
+        {
+            title: "Trajet en Bus",
+            easy: "Noah monte dans le bus à sept heures. Il écoute de la musique et regarde par la fenêtre.",
+            medium: "Noah prend le bus de sept heures pour traverser la ville. Avec ses écouteurs, il regarde les lumières des boutiques s'allumer.",
+            hard: "Installé près de la vitre du bus matinal, Noah laisse la musique rythmer son trajet tandis que les rues s'éveillent doucement."
+        },
+        {
+            title: "Arroser les Plantes",
+            easy: "Sofia a des plantes vertes sur le balcon. Elle utilise un petit arrosoir pour leur donner de l'eau.",
+            medium: "Sofia arrose ses plantes tous les deux jours. Elle vérifie la terre, coupe les feuilles sèches et place les pots à la lumière.",
+            hard: "Passant d'un pot à l'autre avec son arrosoir, Sofia veille sur ses plantes en vérifiant l'humidité et l'exposition au soleil."
+        },
+        {
+            title: "Liste de Courses",
+            easy: "Liam écrit une courte liste. Il achète des pommes, du lait, du riz et des œufs au marché.",
+            medium: "Liam prépare une liste avant d'aller au marché pour ne rien oublier. Il prend des fruits frais, des légumes et des produits de base.",
+            hard: "Guidé par une liste claire, Liam parcourt les étals du marché en choisissant des produits frais et utiles sans se disperser."
+        },
+        {
+            title: "Bureau d'Étude",
+            easy: "Emma s'assoit à son bureau. Elle ouvre son cahier, prend un stylo bleu et étudie une heure.",
+            medium: "Emma range son bureau avant de réviser pour rester concentrée. Elle relit ses notes, souligne l'essentiel et écrit un résumé.",
+            hard: "Sous la lumière douce de sa lampe de bureau, Emma classe ses notes, relie les notions et transforme une heure d'étude en progrès concret."
+        },
+        {
+            title: "Voisin Sympathique",
+            easy: "Monsieur Park salue depuis le jardin. Il apporte des oranges fraîches aux voisins.",
+            medium: "Monsieur Park aime discuter avec ses voisins près de la haie. Hier, il a partagé des oranges mûres de son jardin.",
+            hard: "Apprécié de tous dans le quartier pour sa gentillesse, monsieur Park passe avec un panier d'oranges fraîchement cueillies."
+        },
+        {
+            title: "Balade à Vélo",
+            easy: "Léo fait du vélo sur le chemin. L'air est frais et les lampadaires s'allument.",
+            medium: "Léo roule à vélo le long de la rivière à la tombée du jour. L'air frais l'accompagne pendant que les lampadaires brillent.",
+            hard: "Pédalant tranquillement le long du sentier au crépuscule, Léo sent la brise fraîche tandis que les lumières se reflètent sur l'eau."
+        },
+        {
+            title: "Préparer son Sac",
+            easy: "Chloé prépare un petit sac pour le voyage. Elle met des chemises, des chaussures et un chargeur.",
+            medium: "Chloé fait une liste avant de préparer son sac pour le week-end. Elle plie des vêtements légers et vérifie ses billets.",
+            hard: "Disposant ses affaires sur le lit d'abord, Chloé prépare son sac avec méthode pour que tout soit prêt dès le matin."
+        },
+        {
+            title: "Bibliothèque Calme",
+            easy: "La bibliothèque est calme et fraîche. Daniel lit un livre d'histoire à une table en bois.",
+            medium: "Daniel passe deux heures calmes à la bibliothèque après les cours. Il choisit une table à l'écart et lit sans distraction.",
+            hard: "Dans le calme de la salle de lecture, Daniel s'installe à une grande table et avance dans son livre à un rythme posé."
+        },
+        {
+            title: "Préparer du Thé",
+            easy: "Hannah fait bouillir de l'eau dans la bouilloire. Elle verse l'eau chaude sur des feuilles de menthe.",
+            medium: "Hannah prépare une infusion de menthe fraîche en fin d'après-midi. La boisson chaude l'aide à se détendre après sa journée.",
+            hard: "Tandis que la bouilloire frémit, Hannah verse l'eau chaude sur la menthe fraîche et savoure un instant paisible."
+        },
+        {
+            title: "Marché du Week-End",
+            easy: "Le samedi, des gens visitent le marché de rue. Il y a des fleurs, du pain et des fruits.",
+            medium: "Chaque samedi matin, le marché s'anime avec des stands colorés. Les visiteurs achètent des fleurs, du pain et des fruits.",
+            hard: "Animé et coloré chaque samedi matin, le marché rassemble du pain croustillant, des fruits de saison et des fleurs coupées."
+        },
+        {
+            title: "Réparer une Chaise",
+            easy: "Papa prend un tournevis dans la boîte. Il resserre le pied de la chaise.",
+            medium: "Quand une chaise devient instable, papa vérifie les vis et les resserre avec soin jusqu'à ce qu'elle tienne bien.",
+            hard: "Testant la stabilité d'un geste sûr, papa sort ses outils, aligne l'assemblage et resserre chaque vis avec précision."
+        },
+        {
+            title: "Appel à la Maison",
+            easy: "Inès appelle ses parents le soir. Ils parlent vingt minutes et rient ensemble.",
+            medium: "Inès appelle ses parents chaque dimanche soir pour donner des nouvelles. Ils partagent leur semaine et se remémorent des souvenirs.",
+            hard: "Malgré la distance, Inès garde l'habitude d'appeler ses parents le dimanche pour échanger et rire ensemble comme autrefois."
+        },
+        {
+            title: "Chambre Rangée",
+            easy: "Toby range ses vêtements et nettoie son bureau. Maintenant la chambre paraît nette et spacieuse.",
+            medium: "Toby consacre quinze minutes à ranger sa chambre avant de dormir. Tout remettre à sa place facilite le lendemain.",
+            hard: "En quelques minutes avant de se coucher, Toby libère son bureau, range ses affaires et laisse sa chambre calme pour la nuit."
+        },
+        {
+            title: "Balcon Ensoleillé",
+            easy: "Le soleil du matin réchauffe le balcon. Paul boit du jus et lit les actualités.",
+            medium: "Paul profite d'un petit-déjeuner calme sur le balcon ensoleillé. Il boit un jus frais et lit quelques articles.",
+            hard: "Baigné par la lumière matinale sur le balcon, Paul savoure un jus frais et parcourt les nouvelles avant de commencer."
+        },
+        {
+            title: "Nouvelles Chaussures",
+            easy: "Nina essaie de nouvelles chaussures de course. Elles sont légères et douces aux pieds.",
+            medium: "Nina marche dans le magasin pour tester de nouvelles chaussures. Elles offrent un bon maintien pour ses promenades.",
+            hard: "Faisant quelques pas dans l'allée, Nina apprécie l'amorti souple et le confort des nouvelles chaussures pour marcher."
+        },
+        {
+            title: "Salade de Fruits",
+            easy: "Ils coupent une banane, une pomme et une mangue. Ils mélangent les fruits dans un grand bol.",
+            medium: "Pour un goûter frais, ils coupent banane, pomme et mangue en dés et les mélangent avec un filet de citron vert.",
+            hard: "Associant mangue sucrée, pomme croquante et banane mûre relevées d'un peu de citron vert, ils préparent une salade bien fraîche."
+        },
+        {
+            title: "Code Tardif",
+            easy: "Arthur écrit de courtes lignes de code. Il teste la page et sourit quand ça marche.",
+            medium: "Arthur avance sur un projet web le soir. Il corrige un petit bug, recharge la page et voit l'affichage fonctionner.",
+            hard: "Devant l'écran éclairé tard le soir, Arthur résout un détail de code et observe l'interface réagir sans accroc."
+        },
+        {
+            title: "Matin Nuageux",
+            easy: "Des nuages gris couvrent le ciel aujourd'hui. Le vent est doux et l'air semble frais.",
+            medium: "Des nuages gris flottent dans le ciel par un matin frais. Une brise légère agite les feuilles pendant que chacun part.",
+            hard: "Sous un ciel couvert de nuages légers, une brise fraîche traverse la rue et donne à la matinée une atmosphère calme."
+        },
+        {
+            title: "Cours d'Art",
+            easy: "Les élèves peignent à l'aquarelle sur du papier. Le bleu et le jaune forment du vert.",
+            medium: "En cours d'art, les élèves explorent l'aquarelle sur du papier épais. Mélanger bleu et jaune fait naître du vert.",
+            hard: "Posant le pinceau humide sur le papier, les élèves regardent le bleu et le jaune se mêler en nuances vertes subtiles."
+        },
+        {
+            title: "Nourrir les Poissons",
+            easy: "Les petits poissons nagent dans l'eau claire. Lucas leur donne une pincée de nourriture.",
+            medium: "Lucas vérifie le filtre de l'aquarium et donne une pincée de nourriture aux poissons. Ils montent vite et mangent calmement.",
+            hard: "Regardant l'eau limpide de l'aquarium, Lucas dépose une petite pincée de nourriture et voit les poissons s'approcher."
+        },
+        {
+            title: "Porte d'Embarquement",
+            easy: "Les passagers attendent près de la porte quatre. Un avion atterrit sur la piste.",
+            medium: "Les voyageurs patientent près de la porte quatre en attendant le départ. Dehors, un autre avion se pose sur la piste.",
+            hard: "Près des grandes baies vitrées, les voyageurs observent un avion qui descend doucement et touche la piste."
+        },
+        {
+            title: "Soupe Chaude",
+            easy: "La soupe est chaude dans le bol. La carotte, la pomme de terre et le poulet sentent bon.",
+            medium: "Par une soirée fraîche, un bol de soupe chaude aux légumes et au poulet réchauffe tout le monde après une longue journée.",
+            hard: "Versée fumante dans des bols creux, la soupe aux carottes, pommes de terre et poulet réchauffe agréablement."
+        },
+        {
+            title: "Pratique du Piano",
+            easy: "Sara joue un morceau lent au piano. Ses doigts se déplacent avec soin sur les touches.",
+            medium: "Sara répète un court morceau au piano chaque jour. Elle travaille les passages délicats lentement pour trouver le rythme.",
+            hard: "Avec patience et régularité, Sara reprend un passage exigeant au piano jusqu'à ce que la mélodie devienne fluide."
+        },
+        {
+            title: "Pont de la Ville",
+            easy: "Les voitures traversent le large pont au-dessus de la rivière. Des promeneurs prennent des photos.",
+            medium: "Beaucoup de voitures et de cyclistes empruntent le pont dans la journée. Des piétons s'arrêtent pour admirer la vue.",
+            hard: "Enjambant la large rivière, le pont accueille une circulation régulière tandis que les promeneurs contemplent l'horizon."
+        },
+        {
+            title: "Étirements du Matin",
+            easy: "Evan se lève et étire les bras. Il respire profondément et se sent prêt.",
+            medium: "Evan commence sa matinée par quelques étirements près de la fenêtre ouverte. Respirer profondément l'aide à se réveiller.",
+            hard: "Près de la fenêtre ouverte dès le matin, Evan étire les épaules, inspire profondément et démarre la journée calmement."
+        },
+        {
+            title: "Parapluie Oublié",
+            easy: "La pluie commence, mais Julia a laissé son parapluie à la maison. Elle court vers la boutique.",
+            medium: "Une averse soudaine surprend Julia sur le chemin du retour. Sans parapluie, elle s'abrite sous un auvent jusqu'à l'accalmie.",
+            hard: "Surprise par une pluie soudaine sans parapluie, Julia se met à l'abri sous un auvent et attend que l'averse diminue."
+        },
+        {
+            title: "Soirée Cinéma",
+            easy: "Ils éteignent les lumières et lancent un film. Le pop-corn est dans un grand bol.",
+            medium: "Le vendredi soir, ils tamisent les lumières, partagent du pop-corn et regardent un film d'aventure ensemble.",
+            hard: "À la lumière tamisée avec un bol de pop-corn à portée de main, ils suivent un film d'aventure jusqu'au générique."
+        },
+        {
+            title: "Écrire une Lettre",
+            easy: "Grand-père écrit un petit mot sur papier. Il le glisse dans une enveloppe avec un timbre.",
+            medium: "Grand-père écrit une lettre attentionnée à un vieil ami. Il plie la feuille, ferme l'enveloppe et la poste en marchant.",
+            hard: "Prenant le temps d'une écriture soignée, grand-père rédige quelques mots pour un ami de longue date et poste sa lettre."
+        },
+        {
+            title: "Jardin Botanique",
+            easy: "De grands arbres et des fleurs colorées emplissent le jardin. Des allées entourent un petit bassin.",
+            medium: "Les visiteurs flânent le long des allées du jardin botanique, entre massifs fleuris et un bassin paisible.",
+            hard: "Entre grands arbres, fleurs variées et bassin calme, le jardin botanique offre une promenade reposante en ville."
+        },
+        {
+            title: "Petit-Déjeuner Rapide",
+            easy: "Des tartines, du beurre et une banane font un petit-déjeuner rapide. Léo mange avant de partir.",
+            medium: "Léo prépare un petit-déjeuner simple avec des tartines, du beurre et une banane pour avoir de l'énergie le matin.",
+            hard: "Avec du pain grillé, une banane et une boisson chaude, Léo prend un petit-déjeuner rapide avant de sortir."
+        },
+        {
+            title: "Coucher de Soleil sur la Plage",
+            easy: "Les vagues roulent sur le sable. Le ciel devient orange près de l'océan.",
+            medium: "Des promeneurs marchent sur le sable humide au coucher du soleil tandis que les vagues douces rejoignent le rivage.",
+            hard: "Tandis que les vagues douces effleurent le sable, des teintes orangées et rosées s'étirent au-dessus de l'océan."
+        },
+        {
+            title: "Projet de Groupe",
+            easy: "Quatre amis travaillent ensemble sur un projet. Ils partagent des idées et notent le plan.",
+            medium: "Quatre camarades se réunissent pour organiser leur projet. Chacun prend une tâche claire pour respecter les délais.",
+            hard: "Réunis autour d'une table avec leurs notes, quatre camarades répartissent le travail et précisent les étapes du projet."
+        },
+        {
+            title: "Citronnade Fraîche",
+            easy: "La journée est chaude et ensoleillée. Mia prépare une citronnade froide avec des glaçons.",
+            medium: "Par un après-midi chaud, Mia presse des citrons frais, ajoute de l'eau froide et des glaçons et sert un grand verre.",
+            hard: "Avec des glaçons dans un grand verre, la citronnade fraîchement pressée de Mia rafraîchit agréablement sous la chaleur."
+        },
+        {
+            title: "Fenêtre du Train",
+            easy: "Des champs verts défilent derrière la fenêtre du train. Des vaches broutent près d'une clôture.",
+            medium: "Par la fenêtre du train, des champs verts et des maisons calmes passent. Des vaches pâturent sous un grand ciel.",
+            hard: "Au-delà de la vitre du train, prairies vertes, haies et troupeaux défilent dans un paysage rural paisible."
+        },
+        {
+            title: "Première Neige",
+            easy: "Des flocons blancs tombent doucement du ciel. Le toit et la rue deviennent blancs.",
+            medium: "Des flocons tombent sans bruit le soir venu, recouvrant toits, voitures et branches d'un fin voile blanc.",
+            hard: "Tombant doucement dans le calme du soir, les premiers flocons recouvrent toits et trottoirs d'une couche blanche."
+        },
+        {
+            title: "Échange de Livres",
+            easy: "Des amis échangent les livres qu'ils ont finis. Chacun reçoit une nouvelle histoire à lire.",
+            medium: "Un groupe d'amis échange des livres chaque mois afin de découvrir de nouvelles lectures facilement.",
+            hard: "Partageant leurs lectures terminées chaque mois, les amis entretiennent un échange simple qui renouvelle leurs découvertes."
+        },
+        {
+            title: "Réveil du Matin",
+            easy: "Le réveil sonne à six heures. Alex l'éteint, se lève et ouvre les rideaux.",
+            medium: "Quand le réveil sonne à six heures, Alex se lève aussitôt, ouvre les rideaux et accueille la lumière du jour.",
+            hard: "Dès que le réveil retentit, Alex se lève sans tarder, tire les rideaux et commence la matinée calmement."
+        },
+        {
+            title: "Vitrine de la Boulangerie",
+            easy: "Des gâteaux sucrés et des petits pains sont derrière la vitre. Les passants s'arrêtent pour regarder.",
+            medium: "Les passants s'arrêtent devant la boulangerie pour admirer les viennoiseries dorées, tartes et pains frais.",
+            hard: "Derrière la vitrine propre, les plateaux de brioches et de tartes attirent le regard des passants."
+        },
+        {
+            title: "Feu de Camp Étoilé",
+            easy: "Des amis s'assoient près d'un petit feu la nuit. Des étincelles montent vers les étoiles.",
+            medium: "Autour d'un petit feu de camp le soir, des amis discutent et regardent les étincelles monter sous les étoiles.",
+            hard: "Sous un ciel étoilé dans une clairière calme, un petit feu réchauffe la soirée tandis que les étincelles s'élèvent."
+        }
+    ],
+    ja: [
+        {
+            title: "朝のコーヒー",
+            easy: "レオは早く起きます。熱いコーヒーを作り、窓の近くに座ります。外で鳥が鳴いています。",
+            medium: "レオは毎朝仕事の前に早く起きます。熱いコーヒーをいれて窓辺に座り、今日の予定を確認します。",
+            hard: "街が本格的に動き出す前の静かな朝、レオは淹れたてのコーヒーを片手に明るい窓辺へ座り、一日の思考を整えます。"
+        },
+        {
+            title: "公園の散歩",
+            easy: "マヤは犬と公園を散歩します。緑の芝生の上を走り、赤いボールで遊びます。",
+            medium: "マヤは毎晩犬を連れて近くの公園を散歩します。小道を走り、芝生で赤いボールを投げて遊びます。",
+            hard: "高い木々の間から午後の柔らかな光が差し込む中、マヤは愛犬と公園の小道を駆け抜け、ボールが落ち葉のそばに転がると足を止めます。"
+        },
+        {
+            title: "駅にて",
+            easy: "サムは駅に着きます。切符を買い、青い電車を待ちます。みんな急いでいます。",
+            medium: "サムは十分前に駅へ着きます。時刻表を見て切符を買い、急ぐ人たちを眺めます。",
+            hard: "案内放送と足音が行き交う駅で、サムは発車案内を確認し、ドアが閉まる直前に急行電車へ乗り込みます。"
+        },
+        {
+            title: "一緒に料理",
+            easy: "アナとトムは家で夕食を作ります。新鮮な野菜を切り、トマトソースのパスタを作ります。",
+            medium: "アナとトムは仕事の後に一緒に夕食を作ります。野菜を切り、パスタをゆでてソースを作ります。",
+            hard: "小さなキッチンを心地よい空間にしながら、アナとトムは新鮮な食材を切り、その日の出来事を話しながらソースを煮込みます。"
+        },
+        {
+            title: "なくした鍵",
+            easy: "ベンは家の鍵が見つかりません。かばんやコートのポケット、テーブルを探します。",
+            medium: "ベンは出かける前に鍵を探します。リュックやポケット、玄関のテーブルを見て、ノートの陰で見つけます。",
+            hard: "約束の時間が近づく中、ベンは部屋やポケットを探し回り、ついにノートの下に隠れていた鍵を見つけます。"
+        },
+        {
+            title: "雨の午後",
+            easy: "ガラスに雨が降ります。クララはソファで本を読み、温かいお茶を飲みます。",
+            medium: "午後ずっと静かな雨が窓を打ちます。クララはソファで温かいお茶を飲みながら小説を読みます。",
+            hard: "窓ガラスを雨が流れ落ちる午後、クララは温かいお茶を手にソファへ腰を下ろし、物語の世界へ深く入り込みます。"
+        },
+        {
+            title: "新しい職場の初日",
+            easy: "デビッドは新しいチームに会います。みんな笑顔で机とパソコンを案内します。",
+            medium: "デビッドは初日に少し早く出社します。上司がチームを紹介し、席と仕事内容を案内します。",
+            hard: "期待と集中を胸に新しいオフィスへ入ったデビッドは、仲間と挨拶を交わし、席を整えて最初の目標に取り組みます。"
+        },
+        {
+            title: "夜空の星",
+            easy: "今夜は空がきれいです。エレナはバルコニーから星と明るい月を見ます。",
+            medium: "澄んだ秋の夜、エレナはバルコニーに出て涼しい風を感じながら星を見上げます。",
+            hard: "街の明かりから離れた澄み切った夜空の下、エレナはバルコニーに立ち、静かな夜に輝く星々を眺めます。"
+        },
+        {
+            title: "小さな本屋",
+            easy: "ルーカスは小さな本屋に入ります。棚には本がたくさんあり、二冊を選びます。",
+            medium: "ルーカスは帰り道に小さな本屋へ寄ります。木製の棚から今週読む本を二冊選びます。",
+            hard: "静かな通り沿いにある小さな本屋には紙の香りが漂い、ルーカスは棚を巡りながら心ひかれる二冊を選びます。"
+        },
+        {
+            title: "夕焼け空",
+            easy: "太陽が丘の後ろに沈みます。オレンジ色とピンク色が空に広がります。",
+            medium: "夕暮れ時、友人たちと丘へ行き、オレンジや紫に染まる夕焼け空を眺めます。",
+            hard: "太陽が稜線の向こうへ沈むと、橙色や桃色、深い藍色が地平線を染め、夕暮れのひとときを彩ります。"
+        },
+        {
+            title: "パンを焼く",
+            easy: "ミアは小麦粉とぬるま湯を混ぜます。生地をオーブンに入れ、香りを待ちます。",
+            medium: "ミアは台の上で生地をこね、少し休ませてから焼きます。やがて部屋中に焼きたての香りが広がります。",
+            hard: "木の台に粉を軽く広げ、ミアはふっくらとした生地を整えてオーブンへ入れ、香ばしい焼き上がりを待ちます。"
+        },
+        {
+            title: "朝のバス",
+            easy: "ノアは七時にバスに乗ります。音楽を聴き、窓の外を見ます。",
+            medium: "ノアは七時のバスで街を横切ります。イヤホンをつけ、店々の明かりがつく様子を眺めます。",
+            hard: "朝のバスの窓際に座り、ノアは音楽を聴きながら少しずつ動き出す街の景色を眺めます。"
+        },
+        {
+            title: "植物の水やり",
+            easy: "ソフィアはバルコニーに緑の植物を置いています。小さなじょうろで水をあげます。",
+            medium: "ソフィアは二日に一度植物に水をあげます。土の様子を見て、乾いた葉を整えます。",
+            hard: "小さなじょうろを持って鉢を回りながら、ソフィアは土の湿り気と日当たりを確かめて植物を世話します。"
+        },
+        {
+            title: "買い物リスト",
+            easy: "リアムは短いメモを書きます。市場でりんご、牛乳、米、卵を買います。",
+            medium: "リアムは買い忘れがないようにメモを作ります。新鮮な果物や野菜、基本の食材を選びます。",
+            hard: "メモを頼りに市場の通路を歩きながら、リアムは必要な食材を落ち着いて選びます。"
+        },
+        {
+            title: "勉強机",
+            easy: "エマは机に座ります。ノートを開き、青いペンを持って一時間勉強します。",
+            medium: "エマは集中できるように机を整えてから勉強を始めます。ノートを見返し、大事な点をまとめます。",
+            hard: "スタンドライトの下で、エマはノートを整理し、学んだ内容を結びつけながら一時間の勉強を進めます。"
+        },
+        {
+            title: "優しい隣人",
+            easy: "パークさんは庭から手を振ります。近所の人に新鮮なオレンジを持ってきます。",
+            medium: "パークさんは垣根越しによく近所の人と話します。昨日は庭でとれたオレンジを分けてくれました。",
+            hard: "気さくな挨拶で親しまれているパークさんは、庭でとれた甘いオレンジをかごに入れて届けてくれます。"
+        },
+        {
+            title: "夕暮れの自転車",
+            easy: "レオは小道を自転車で走ります。空気は涼しく、街灯がつきます。",
+            medium: "夕方にレオは川沿いの道を自転車で走ります。涼しい風を感じながら街灯の明かりを見ます。",
+            hard: "夕暮れの川沿いをゆっくり走りながら、レオは涼しい風と水面に映る街灯の光を感じます。"
+        },
+        {
+            title: "荷造り",
+            easy: "クロエは旅行用の小さなバッグに荷物を入れます。シャツと靴と充電器を入れます。",
+            medium: "クロエは週末の荷造り前にリストを作ります。軽い服をたたみ、必要なものをそろえます。",
+            hard: "ベッドの上に持ち物を並べてから、クロエは忘れ物がないように丁寧にバッグへ詰めます。"
+        },
+        {
+            title: "静かな図書館",
+            easy: "図書館は静かで涼しいです。ダニエルは木のテーブルで歴史の本を読みます。",
+            medium: "ダニエルは授業の後に図書館で二時間過ごします。奥の席で集中して本を読みます。",
+            hard: "静まり返った閲覧室で、ダニエルは木の机につき、落ち着いたペースでページをめくります。"
+        },
+        {
+            title: "お茶を入れる",
+            easy: "ハンナはやかんでお湯を沸かします。カップのミントの葉にお湯を注ぎます。",
+            medium: "ハンナはお湯を沸かし、夕方にミントティーを入れます。温かい飲み物で一日の疲れをほぐします。",
+            hard: "やかんから湯気が立つと、ハンナはミントの葉にお湯を注ぎ、静かなひとときを楽しみます。"
+        },
+        {
+            title: "週末の市場",
+            easy: "土曜日に人々が市場を訪れます。花やパンや果物があります。",
+            medium: "毎週土曜の朝、市場は色とりどりの店で賑わいます。花や焼きたてのパン、果物を買う人が集まります。",
+            hard: "土曜の朝になると市場には活気が生まれ、焼きたてのパンや旬の果物、花が並びます。"
+        },
+        {
+            title: "いすを直す",
+            easy: "お父さんは箱からドライバーを出します。いすのゆるんだ足を締めます。",
+            medium: "いすが少しぐらつくと、お父さんはねじを確かめてしっかり締め直します。",
+            hard: "ぐらつきを確かめたお父さんは、道具を出して部品を合わせ、ねじを丁寧に締め直します。"
+        },
+        {
+            title: "家への電話",
+            easy: "イネスは夕方に両親へ電話します。二十分話して笑います。",
+            medium: "イネスは毎週日曜の夕方に両親へ電話します。一週間の出来事を話し、思い出を語り合います。",
+            hard: "離れて暮らしていても、イネスは日曜の電話で近況を伝え合い、楽しい時間を共有します。"
+        },
+        {
+            title: "きれいな部屋",
+            easy: "トビーは服をしまい、机を片付けます。部屋がすっきりしました。",
+            medium: "トビーは寝る前に十五分ほど部屋を片付けます。物を戻しておくと次の日が楽になります。",
+            hard: "眠る前の短い片付けで、トビーは机の上を整え、心地よい状態で一日を終えます。"
+        },
+        {
+            title: "日当たりのよいバルコニー",
+            easy: "朝の光がバルコニーを温めます。ポールはジュースを飲み、ニュースを読みます。",
+            medium: "ポールは明るいバルコニーで朝ごはんを楽しみます。ジュースを飲みながら記事を読みます。",
+            hard: "朝の光が差し込むバルコニーで、ポールは冷たいジュースを味わいながら一日の流れを整えます。"
+        },
+        {
+            title: "新しい靴",
+            easy: "ニーナは新しいランニングシューズを履きます。軽くてやわらかい履き心地です。",
+            medium: "ニーナは店内で新しい靴を試します。クッションがよく、散歩にぴったりだと感じます。",
+            hard: "通路を少し歩いてみて、ニーナは足裏への当たりや歩きやすさを確かめます。"
+        },
+        {
+            title: "フルーツサラダ",
+            easy: "バナナやりんご、マンゴーを切ります。大きなボウルで混ぜます。",
+            medium: "おやつ用にバナナやりんご、マンゴーを切り、ライムを少し絞って混ぜます。",
+            hard: "甘いマンゴーやシャキッとしたりんご、バナナにライムを添えて、爽やかなサラダを作ります。"
+        },
+        {
+            title: "夜のコード",
+            easy: "アーサーは短いコードを書きます。ページを確かめて、動くと微笑みます。",
+            medium: "アーサーは夜にウェブ制作を進めます。小さな不具合を直し、表示が整うのを確かめます。",
+            hard: "夜の静かな時間に画面へ向かい、アーサーは細かい調整を加えてスムーズな動きを確認します。"
+        },
+        {
+            title: "曇りの朝",
+            easy: "今日は灰色の雲が空を覆っています。風がやわらかく、空気が涼しいです。",
+            medium: "涼しい朝、灰色の雲がゆっくり流れます。軽い風が吹く中、人々が学校へ向かいます。",
+            hard: "淡い雲に包まれた朝、爽やかな風が通りを抜け、静かで落ち着いた空気を作ります。"
+        },
+        {
+            title: "美術の授業",
+            easy: "生徒たちは紙に水彩で絵を描きます。青と黄色を混ぜると緑になります。",
+            medium: "美術の授業で厚い紙に水彩を広げます。青と黄色を混ぜて緑を作ります。",
+            hard: "筆に水と絵の具を含ませ、生徒たちは青と黄色が溶け合う緑の濃淡を楽しみます。"
+        },
+        {
+            title: "魚にごはんをあげる",
+            easy: "小さな魚がきれいな水を泳いでいます。ルーカスはえさを少しあげます。",
+            medium: "ルーカスは水槽のフィルターを見て、えさを少しあげます。魚たちが集まってきます。",
+            hard: "澄んだ水槽を見つめながら、ルーカスはえさを少し落とし、泳ぐ様子を見守ります。"
+        },
+        {
+            title: "搭乗口",
+            easy: "乗客が四番ゲート近くで待ちます。飛行機が滑走路に着陸します。",
+            medium: "出発を待つ人たちがゲート近くに集まります。外では別の飛行機が着陸します。",
+            hard: "大きな窓のそばから、乗客たちは飛行機が滑走路へ下りてくる様子を見つめます。"
+        },
+        {
+            title: "温かいスープ",
+            easy: "スープがボウルの中で温かいです。にんじんとじゃがいもと鶏肉がいい香りです。",
+            medium: "肌寒い夕方、野菜と鶏肉の温かいスープが体をやさしく温めます。",
+            hard: "湯気の立つスープを器に注ぐと、にんじんやじゃがいものやさしい味わいが広がります。"
+        },
+        {
+            title: "ピアノの練習",
+            easy: "サラはピアノでゆっくり曲を弾きます。指が鍵盤の上を丁寧に動きます。",
+            medium: "サラは毎日短い曲を練習します。むずかしい部分もゆっくり繰り返して慣らします。",
+            hard: "焦らず丁寧に向き合いながら、サラはフレーズを滑らかにつなげていきます。"
+        },
+        {
+            title: "街の橋",
+            easy: "車が川にかかる広い橋を渡ります。歩く人が景色を撮ります。",
+            medium: "昼間は多くの車や自転車が橋を渡ります。歩く人も景色を眺めて立ち止まります。",
+            hard: "川を渡る大きな橋の上を車が行き交い、歩く人々が街並みを眺めます。"
+        },
+        {
+            title: "朝のストレッチ",
+            easy: "エバンは立ち上がり、腕を伸ばします。深く息を吸い、準備が整います。",
+            medium: "エバンは開いた窓のそばで軽く体を伸ばします。深呼吸で気分がすっきりします。",
+            hard: "朝の空気が入る窓辺で、エバンは肩や腕を伸ばし、深呼吸して一日を始めます。"
+        },
+        {
+            title: "忘れた傘",
+            easy: "雨が降り始めますが、ジュリアは傘を家に忘れました。店へ走ります。",
+            medium: "帰り道に急に雨が降ります。傘がないジュリアは軒下で少し雨宿りをします。",
+            hard: "突然の雨に気づいたジュリアは、店の軒先に入って雨足が弱まるのを待ちます。"
+        },
+        {
+            title: "映画の夜",
+            easy: "明かりを消して映画を始めます。ポップコーンが大きなボウルに入っています。",
+            medium: "金曜の夜、明かりを少し落とし、ポップコーンを分け合いながら冒険映画を見ます。",
+            hard: "部屋を少し暗くしてポップコーンを用意し、最後まで楽しめる映画を味わいます。"
+        },
+        {
+            title: "手紙を書く",
+            easy: "おじいさんは紙に短いメモを書きます。切手を貼った封筒に入れます。",
+            medium: "おじいさんは古い友人へ手紙を書きます。丁寧にたたんで封筒に入れ、散歩の途中で出します。",
+            hard: "落ち着いた筆致で便せんに向かい、おじいさんは友人への思いを込めて手紙をまとめます。"
+        },
+        {
+            title: "植物園",
+            easy: "高い木々と色とりどりの花が庭を彩ります。小道が小さな池の周りを巡ります。",
+            medium: "植物園の小道を歩くと、季節の花や木陰、静かな池に出会います。",
+            hard: "緑豊かな木々や花壇、静かな池に囲まれた植物園で穏やかな時間を過ごします。"
+        },
+        {
+            title: "さっと朝ごはん",
+            easy: "トーストとバターとバナナで簡単な朝ごはんです。レオは出かける前に食べます。",
+            medium: "レオはトーストとバナナで手早く朝ごはんを済ませ、元気に家を出ます。",
+            hard: "こんがり焼けたトーストとバナナで短い朝ごはんを整え、一日の準備をします。"
+        },
+        {
+            title: "砂浜の夕日",
+            easy: "波が砂浜へ打ち寄せます。海の近くで空がオレンジ色になります。",
+            medium: "夕暮れの砂浜を歩く人々が、オレンジ色に染まる空と波音を楽しみます。",
+            hard: "穏やかな波が岸辺を濡らす頃、橙色と桃色の光が水平線に広がります。"
+        },
+        {
+            title: "グループ制作",
+            easy: "四人の友だちが一緒に作業します。アイデアを出し合い、計画を書きます。",
+            medium: "四人が集まって役割を決め、期限に間に合うように進めます。",
+            hard: "ノートを広げながら四人が意見を出し合い、進め方をわかりやすく整えます。"
+        },
+        {
+            title: "冷たいレモネード",
+            easy: "暑くて晴れた日です。ミアは氷と砂糖で冷たいレモネードを作ります。",
+            medium: "暑い午後にミアはレモンを絞り、冷たい水と氷を合わせて飲みます。",
+            hard: "氷の入ったグラスに搾りたてのレモンを合わせ、爽やかな一杯を作ります。"
+        },
+        {
+            title: "電車の窓",
+            easy: "緑の畑が電車の窓の外を流れます。牛が柵の近くで草を食べています。",
+            medium: "窓の外には緑の野原や小さな家々が広がり、牛がのんびり草をはんでいます。",
+            hard: "車窓の向こうに緑の草原と牧場の風景が続き、穏やかな時間が流れます。"
+        },
+        {
+            title: "初雪",
+            easy: "白い雪片が空から静かに降ります。屋根も通りも白くなります。",
+            medium: "夕暮れに雪が降り始め、屋根や木々をうっすらと白く染めます。",
+            hard: "音もなく舞い降りる初雪が、静かな町並みをやわらかな白で包みます。"
+        },
+        {
+            title: "本の交換",
+            easy: "友だち同士で読み終えた本を交換します。新しい物語が手に入ります。",
+            medium: "毎月友だちと本を交換し、新しい作家や物語に出会います。",
+            hard: "読み終わった本を回し合うことで、自然に新しい読書の世界が広がります。"
+        },
+        {
+            title: "朝の目覚まし",
+            easy: "六時に目覚ましが鳴ります。アレックスは止め、起きてカーテンを開けます。",
+            medium: "六時のアラームで起き上がり、カーテンを開けて朝の光を迎えます。",
+            hard: "アラームが鳴るとすぐに起き出し、カーテンを開けて一日をスタートします。"
+        },
+        {
+            title: "パン屋のショーケース",
+            easy: "甘いケーキやパンがガラスの向こうに並んでいます。人が足を止めて見ます。",
+            medium: "パン屋の前を通ると、焼きたてのパンやタルトに目が行きます。",
+            hard: "きれいに整えられたショーケースのパンや焼き菓子が通りを彩ります。"
+        },
+        {
+            title: "星空のたき火",
+            easy: "夜に友だちが小さな火のそばに座ります。火の粉が星へ向かって上がります。",
+            medium: "星空の下、小さな火を囲んで話し、揺れる炎と火の粉を眺めます。",
+            hard: "静かな夜空の下、小さな火を囲んで語らいながら穏やかな時間を過ごします。"
+        }
+    ],
+    pt: [
+        {
+            title: "O Café da Manhã",
+            easy: "Léo acorda cedo. Ele faz café quente e senta perto da janela. Os pássaros cantam lá fora.",
+            medium: "Léo acorda cedo todos os dias antes do trabalho. Ele prepara café quente, senta junto à janela iluminada e organiza suas metas.",
+            hard: "Todas as manhãs antes de a cidade ganhar ritmo, Léo passa um café fresco e senta perto da janela para alinhar suas ideias com tranquilidade."
+        },
+        {
+            title: "Passeio no Parque",
+            easy: "Maya passeia no parque com seu cachorro. Eles correm na grama verde e brincam com uma bola vermelha.",
+            medium: "Maya leva o cachorro ao parque toda tarde. Eles correm pela trilha e brincam com uma bola vermelha no gramado.",
+            hard: "Enquanto a luz dourada da tarde atravessa as árvores altas, Maya corre pela trilha com seu cachorro e para quando a bola rola entre as folhas."
+        },
+        {
+            title: "Na Estação de Trem",
+            easy: "Sam chega à estação. Ele compra uma passagem e espera o trem azul. As pessoas estão com pressa.",
+            medium: "Sam chega dez minutos antes à estação. Ele confere os horários, compra a passagem e observa os passageiros apressados.",
+            hard: "Em meio aos avisos sonoros e passos apressados, Sam confere o painel de partidas e embarca no trem expresso antes de as portas fecharem."
+        },
+        {
+            title: "Cozinhando Juntos",
+            easy: "Ana e Tom fazem o jantar em casa. Eles cortam legumes frescos e preparam massa com molho.",
+            medium: "Ana e Tom cozinham juntos após o expediente. Eles picam legumes frescos, cozinham o macarrão e preparam um molho de tomate.",
+            hard: "Transformando a cozinha em um espaço acolhedor, Ana e Tom picam ervas frescas e preparam um molho aromático enquanto conversam sobre o dia."
+        },
+        {
+            title: "As Chaves Perdidas",
+            easy: "Ben não encontra as chaves de casa. Ele olha na mochila, no casaco e na mesa da entrada.",
+            medium: "Ben procura as chaves antes de sair. Ele olha na mochila, nos bolsos e na mesa até achá-las sob um caderno.",
+            hard: "Com o horário de um compromisso se aproximando, Ben refaz o caminho pela sala, confere os bolsos e encontra as chaves sob um caderno."
+        },
+        {
+            title: "Tarde de Chuva",
+            easy: "A chuva cai no vidro. Clara lê um bom livro e toma chá quente no sofá.",
+            medium: "Uma chuva constante cai durante a tarde. Clara se acomoda no sofá com uma xícara de chá quente e lê um romance.",
+            hard: "Enquanto a chuva escorre pela janela, Clara acomoda-se no sofá com um chá quente e mergulha em uma leitura envolvente."
+        },
+        {
+            title: "Primeiro Dia no Trabalho",
+            easy: "David conhece sua nova equipe. Todos sorriem e mostram sua mesa e seu computador.",
+            medium: "David chega cedo no primeiro dia de trabalho. O gestor apresenta a equipe, organiza sua estação e explica o projeto.",
+            hard: "Chegando ao novo escritório com entusiasmo e foco, David cumprimenta os colegas, organiza sua mesa e define as primeiras metas."
+        },
+        {
+            title: "Olhando as Estrelas",
+            easy: "O céu está limpo à noite. Elena olha as estrelas e a lua brilhante da varanda.",
+            medium: "Em uma noite limpa de outono, Elena vai à varanda observar as estrelas enquanto a brisa fresca sopra.",
+            hard: "Sob um céu estrelado longe do barulho da cidade, Elena observa as constelações da varanda e aproveita a calma da noite."
+        },
+        {
+            title: "A Pequena Livraria",
+            easy: "Lucas entra em uma livraria pequena. As prateleiras têm vários livros e ele escolhe duas histórias.",
+            medium: "Lucas passa por uma livraria aconchegante na volta para casa. Entre as estantes, escolhe dois livros para ler na semana.",
+            hard: "Em uma rua tranquila, a pequena livraria tem cheiro de papel e convida Lucas a explorar as prateleiras até escolher dois títulos."
+        },
+        {
+            title: "O Pôr do Sol",
+            easy: "O sol desce atrás das colinas. Tons de laranja e rosa tomam conta do céu.",
+            medium: "No fim do dia, amigos sobem à colina para ver o pôr do sol em tons de laranja e lilás.",
+            hard: "Quando o sol se põe atrás das montanhas, faixas âmbar, rosa e violeta iluminam o horizonte e marcam o fim da tarde."
+        },
+        {
+            title: "Assando Pão",
+            easy: "Mia mistura farinha e água morna. Ela põe a massa no forno e espera o cheiro.",
+            medium: "Mia sova a massa na bancada e espera crescer antes de assar. Logo a cozinha fica com cheiro de pão quente.",
+            hard: "Polvilhando farinha na mesa, Mia modela a massa crescida com calma e leva ao forno até dourar e perfumar a casa."
+        },
+        {
+            title: "Viagem de Ônibus",
+            easy: "Noah pega o ônibus às sete. Ele ouve música e olha pela janela.",
+            medium: "Noah pega o ônibus das sete para atravessar a cidade. De fones, vê as luzes das lojas acenderem.",
+            hard: "Sentado junto à janela do ônibus matinal, Noah acompanha a música enquanto vê as ruas ganharem movimento."
+        },
+        {
+            title: "Regando as Plantas",
+            easy: "Sofia tem plantas verdes na varanda. Ela usa um regador pequeno para dar água.",
+            medium: "Sofia rega as plantas a cada dois dias. Olha a terra, tira folhas secas e ajusta a posição no sol.",
+            hard: "Passando de vaso em vaso com o regador, Sofia cuida das plantas observando a umidade e a luz da manhã."
+        },
+        {
+            title: "Lista do Mercado",
+            easy: "Liam escreve uma lista curta. Ele compra maçãs, leite, arroz e ovos no mercado.",
+            medium: "Liam faz uma lista antes de ir ao mercado para não esquecer nada. Compra frutas, legumes e itens básicos.",
+            hard: "Guiado por uma lista simples, Liam percorre o mercado escolhendo alimentos frescos sem pressa."
+        },
+        {
+            title: "Mesa de Estudo",
+            easy: "Emma senta na mesa. Abre o caderno, pega uma caneta azul e estuda por uma hora.",
+            medium: "Emma organiza a mesa antes de estudar para manter o foco. Revisa anotações e faz um resumo curto.",
+            hard: "Sob a luz suave do abajur, Emma organiza suas anotações, liga ideias e transforma uma hora de estudo em avanço real."
+        },
+        {
+            title: "Vizinho Gentil",
+            easy: "Seu Park acena do quintal. Ele traz laranjas frescas para os vizinhos.",
+            medium: "Seu Park conversa com os vizinhos perto da cerca. Ontem repartiu laranjas maduras colhidas no quintal.",
+            hard: "Conhecido pela gentileza na rua, seu Park passa com uma cesta de laranjas doces colhidas na hora."
+        },
+        {
+            title: "Passeio de Bicicleta",
+            easy: "Léo anda de bicicleta na trilha. O ar está fresco e os postes acendem.",
+            medium: "Léo pedala pela beira do rio no fim da tarde. Sente a brisa fresca enquanto as luzes refletem na água.",
+            hard: "Pedalando sem pressa ao entardecer, Léo sente o ar fresco enquanto os postes iluminam o caminho."
+        },
+        {
+            title: "Arrumando a Mala",
+            easy: "Chloe arruma uma bolsa pequena para a viagem. Coloca camisas, sapatos e carregador.",
+            medium: "Chloe faz uma lista antes de arrumar a bolsa do fim de semana. Dobra roupas leves e confere as passagens.",
+            hard: "Separando tudo sobre a cama primeiro, Chloe organiza a bolsa com calma para sair tranquila de manhã."
+        },
+        {
+            title: "Biblioteca Calma",
+            easy: "A biblioteca é silenciosa e fresca. Daniel lê um livro de história em uma mesa de madeira.",
+            medium: "Daniel passa duas horas na biblioteca após a aula. Escolhe um canto calmo e lê sem pressa.",
+            hard: "Na sala silenciosa da biblioteca, Daniel senta à mesa e avança na leitura em um ritmo constante."
+        },
+        {
+            title: "Fazendo Chá",
+            easy: "Hannah ferve água na chaleira. Despeja água quente sobre folhas de hortelã na xícara.",
+            medium: "Hannah esquenta água e faz um chá de hortelã à tarde. A bebida morna ajuda a relaxar após o dia.",
+            hard: "Com a água quente saindo da chaleira, Hannah prepara um chá de hortelã e aproveita uma pausa tranquila."
+        },
+        {
+            title: "Feira de Fim de Semana",
+            easy: "No sábado as pessoas vão à feira. Há flores, pão e frutas.",
+            medium: "Todo sábado de manhã a feira fica cheia de cor. As pessoas compram flores, pão fresco e frutas.",
+            hard: "Movimentada e colorida aos sábados, a feira reúne pães frescos, frutas maduras e flores."
+        },
+        {
+            title: "Arrumando uma Cadeira",
+            easy: "Pai pega uma chave de fenda na caixa. Aperta o pé frouxo da cadeira.",
+            medium: "Quando uma cadeira começa a balançar, o pai confere os parafusos e aperta até ficar firme.",
+            hard: "Testando a firmeza com cuidado, o pai pega as ferramentas e ajusta cada parafuso com precisão."
+        },
+        {
+            title: "Ligação para Casa",
+            easy: "Inês liga para os pais à noite. Conversam vinte minutos e dão risada.",
+            medium: "Inês liga para os pais todo domingo para contar novidades. Lembram histórias e conversam com calma.",
+            hard: "Mesmo de longe, Inês mantém a conversa de domingo para matar a saudade e rir em família."
+        },
+        {
+            title: "Quarto Organizado",
+            easy: "Toby guarda as roupas e limpa a mesa. Agora o quarto parece arrumado e amplo.",
+            medium: "Toby separa quinze minutos para arrumar o quarto antes de dormir. Deixar tudo no lugar ajuda amanhã.",
+            hard: "Em poucos minutos antes de deitar, Toby libera a mesa, guarda roupas e deixa o quarto pronto para o dia seguinte."
+        },
+        {
+            title: "Varanda Ensolarada",
+            easy: "O sol da manhã esquenta a varanda. Paul toma suco e lê as notícias.",
+            medium: "Paul aproveita a manhã na varanda ensolarada. Toma um suco fresco e lê algumas notícias.",
+            hard: "Com a luz da manhã na varanda, Paul toma um suco gelado e lê as notícias antes de começar."
+        },
+        {
+            title: "Tênis Novos",
+            easy: "Nina experimenta tênis novos de corrida. São leves e macios nos pés.",
+            medium: "Nina anda pela loja testando um par novo. Sente bom conforto para caminhar no dia a dia.",
+            hard: "Dando alguns passos pelo corredor, Nina percebe o conforto e a leveza dos tênis para caminhar."
+        },
+        {
+            title: "Salada de Frutas",
+            easy: "Eles cortam banana, maçã e manga. Misturam as frutas em uma tigela grande.",
+            medium: "Para um lanche fresco, cortam banana, maçã e manga e misturam com um pouco de limão.",
+            hard: "Juntando manga doce, maçã firme e banana com um toque de limão, fazem uma salada bem refrescante."
+        },
+        {
+            title: "Código à Noite",
+            easy: "Arthur escreve linhas curtas de código. Testa a página e sorri quando funciona.",
+            medium: "Arthur trabalha num projeto web à noite. Corrige um detalhe, recarrega a página e vê tudo funcionando.",
+            hard: "Diante da tela iluminada à noite, Arthur ajusta um trecho do código e vê a página responder bem."
+        },
+        {
+            title: "Manhã Nublada",
+            easy: "Nuvens cinzas cobrem o céu hoje. O vento é leve e o ar parece fresco.",
+            medium: "Nuvens cinzas passam devagar numa manhã fresca. Uma brisa leve move as folhas enquanto todos seguem.",
+            hard: "Sob nuvens suaves, uma brisa fresca passa pela rua e deixa a manhã calma e agradável."
+        },
+        {
+            title: "Aula de Arte",
+            easy: "Os alunos pintam com aquarela no papel. Azul e amarelo viram verde.",
+            medium: "Na aula de arte, testam aquarela em papel firme. Misturar azul e amarelo forma tons de verde.",
+            hard: "Com o pincel úmido no papel, os alunos veem o azul e o amarelo se misturarem em tons verdes."
+        },
+        {
+            title: "Alimentando os Peixes",
+            easy: "Os peixes pequenos nadam na água limpa. Lucas dá uma pitada de ração.",
+            medium: "Lucas confere o filtro do aquário e dá um pouco de ração. Os peixes sobem e comem com calma.",
+            hard: "Observando a água limpa do aquário, Lucas coloca uma pitada de ração e vê os peixes se aproximarem."
+        },
+        {
+            title: "Portão de Embarque",
+            easy: "Passageiros esperam perto do portão quatro. Um avião pousa na pista.",
+            medium: "Viajantes aguardam perto do portão quatro para embarcar. Fora, outro avião pousa na pista.",
+            hard: "Perto das janelas amplas, os passageiros acompanham um avião descendo e tocando a pista."
+        },
+        {
+            title: "Sopa Quente",
+            easy: "A sopa está quente na tigela. Cenoura, batata e frango têm ótimo cheiro.",
+            medium: "Numa noite fria, uma tigela de sopa quente de legumes e frango aquece depois de um dia corrido.",
+            hard: "Servida bem quente, a sopa de cenoura, batata e frango traz aconchego nos dias mais frescos."
+        },
+        {
+            title: "Prática no Piano",
+            easy: "Sara toca uma música lenta no piano. Os dedos se movem com cuidado nas teclas.",
+            medium: "Sara treina um trecho curto no piano todo dia. Repete as partes difíceis devagar até pegar o ritmo.",
+            hard: "Com paciência e atenção, Sara repete um trecho mais difícil até a música fluir com naturalidade."
+        },
+        {
+            title: "Ponte da Cidade",
+            easy: "Carros cruzam a ponte larga sobre o rio. Quem passa tira fotos da vista.",
+            medium: "Muitos carros e bicicletas cruzam a ponte durante o dia. Pedestres param para olhar a paisagem.",
+            hard: "Ligando as margens do rio, a ponte recebe movimento constante enquanto pedestres admiram a vista."
+        },
+        {
+            title: "Alongamento Matinal",
+            easy: "Evan fica de pé e estica os braços. Respira fundo e se sente pronto.",
+            medium: "Evan começa a manhã se alongando perto da janela aberta. Respirar fundo ajuda a despertar.",
+            hard: "Junto à janela aberta logo cedo, Evan estica os braços, respira fundo e começa o dia com calma."
+        },
+        {
+            title: "Guarda-Chuva Esquecido",
+            easy: "Começa a chover, mas Julia deixou o guarda-chuva em casa. Corre para a loja.",
+            medium: "Uma chuva rápida pega Julia na volta. Sem guarda-chuva, ela espera sob a marquise até diminuir.",
+            hard: "Surpreendida pela chuva sem guarda-chuva, Julia encosta sob a marquise e espera a chuva acalmar."
+        },
+        {
+            title: "Noite de Filme",
+            easy: "Apagam as luzes e começam um filme. A pipoca está numa tigela grande.",
+            medium: "Na sexta à noite, diminuem as luzes, dividem pipoca e assistem a um filme de aventura juntos.",
+            hard: "Com luz baixa e uma tigela de pipoca por perto, acompanham uma história envolvente até o fim."
+        },
+        {
+            title: "Escrevendo uma Carta",
+            easy: "O avô escreve um bilhete curto no papel. Coloca num envelope com selo.",
+            medium: "O avô escreve uma carta carinhosa para um velho amigo. Dobra a folha, fecha o envelope e posta.",
+            hard: "Com calma e letra caprichada, o avô escreve algumas linhas para um amigo antigo e envia a carta."
+        },
+        {
+            title: "Jardim Botânico",
+            easy: "Árvores altas e flores coloridas enchem o jardim. Trilhas contornam um lago pequeno.",
+            medium: "Visitantes caminham pelas trilhas do jardim botânico, entre flores variadas e um lago calmo.",
+            hard: "Entre árvores grandes, canteiros floridos e um lago tranquilo, o jardim oferece um passeio agradável."
+        },
+        {
+            title: "Café Rápido",
+            easy: "Torradas, manteiga e banana formam um café rápido. Léo come antes de sair.",
+            medium: "Léo prepara um café simples com torradas, manteiga e banana para ter energia pela manhã.",
+            hard: "Com torradas douradas, uma banana e uma bebida quente, Léo faz um lanche rápido antes de sair."
+        },
+        {
+            title: "Pôr do Sol na Praia",
+            easy: "Ondas chegam à areia. O céu fica alaranjado perto do mar.",
+            medium: "Pessoas caminham pela areia úmida no fim da tarde enquanto as ondas suaves chegam à praia.",
+            hard: "Enquanto as ondas leves tocam a areia, tons alaranjados e rosados se espalham pelo horizonte."
+        },
+        {
+            title: "Trabalho em Grupo",
+            easy: "Quatro amigos trabalham juntos num projeto. Trocam ideias e escrevem o plano.",
+            medium: "Quatro colegas se reúnem para organizar o trabalho. Cada um pega uma parte para cumprir o prazo.",
+            hard: "Reunidos com os cadernos abertos, quatro colegas dividem tarefas e alinham os passos do projeto."
+        },
+        {
+            title: "Limonada Gelada",
+            easy: "O dia está quente e ensolarado. Mia faz limonada gelada com gelo e açúcar.",
+            medium: "Numa tarde quente, Mia espreme limões frescos, mistura com água fria e gelo e serve num copo alto.",
+            hard: "Com gelo no copo, a limonada feita na hora refresca bem numa tarde de calor."
+        },
+        {
+            title: "Janela do Trem",
+            easy: "Campos verdes passam pela janela do trem. Vacas comem grama perto de uma cerca.",
+            medium: "Pela janela do trem passam campos verdes e sítios calmos. Vacas pastam sob um céu amplo.",
+            hard: "Além da janela do trem, campos verdes, cercas e pastagens seguem em sequência tranquila."
+        },
+        {
+            title: "Primeira Neve",
+            easy: "Flocos brancos caem devagar do céu. O telhado e a rua ficam brancos.",
+            medium: "Flocos leves caem no fim da tarde e cobrem telhados, carros e galhos com uma camada branca.",
+            hard: "Caindo em silêncio ao anoitecer, os primeiros flocos cobrem telhados e ruas com suavidade."
+        },
+        {
+            title: "Troca de Livros",
+            easy: "Amigos trocam livros que terminaram. Cada um ganha uma história nova para ler.",
+            medium: "Um grupo de amigos troca livros todo mês para conhecer histórias novas sem gastar mais.",
+            hard: "Passando adiante leituras concluídas todo mês, os amigos mantêm uma troca simples e divertida."
+        },
+        {
+            title: "Despertador da Manhã",
+            easy: "O despertador toca às seis. Alex desliga, levanta e abre as cortinas.",
+            medium: "Quando o despertador toca às seis, Alex levanta logo, abre as cortinas e deixa a luz entrar.",
+            hard: "Ao ouvir o despertador, Alex levanta sem enrolar, abre as cortinas e começa a manhã."
+        },
+        {
+            title: "Vitrine da Padaria",
+            easy: "Bolos doces e pães ficam atrás do vidro. Quem passa para para olhar.",
+            medium: "Quem passa pela padaria olha as bandejas de pães dourados, tortas e doces frescos.",
+            hard: "Atrás do vidro limpo, as bandejas de pães e tortas chamam atenção de quem passa na rua."
+        },
+        {
+            title: "Fogueira sob as Estrelas",
+            easy: "Amigos sentam perto de um fogo pequeno à noite. Faíscas sobem para as estrelas.",
+            medium: "Em volta de uma pequena fogueira à noite, os amigos conversam e olham as estrelas.",
+            hard: "Sob o céu estrelado, a pequena fogueira acompanha a conversa enquanto as faíscas sobem na noite."
+        }
+    ]
+};

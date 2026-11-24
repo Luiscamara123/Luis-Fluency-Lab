@@ -12,7 +12,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css?v=39">
+    <link rel="stylesheet" href="style.css?v=42">
     <!-- Manifest -->
     <link rel="manifest" href="./manifest.json">
 </head>
@@ -44,12 +44,12 @@
                     <div>
                         <label id="ob-lbl-origin" class="block text-xs font-bold mb-1 opacity-90">Idioma de Origem (Interface)</label>
                         <div class="grid grid-cols-2 gap-2">
-                            <button onclick="selectOnboardingOrigin('pt')" id="ob-origin-pt" class="p-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 ob-option-selected">🇧🇷 Português</button>
-                            <button onclick="selectOnboardingOrigin('en')" id="ob-origin-en" class="p-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2">🇺🇸 English</button>
+                            <button type="button" onclick="selectOnboardingOrigin('pt')" id="ob-origin-pt" class="p-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 ob-option-selected">🇧🇷 Português</button>
+                            <button type="button" onclick="selectOnboardingOrigin('en')" id="ob-origin-en" class="p-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2">🇺🇸 English</button>
                         </div>
                     </div>
                 </div>
-                <button onclick="nextOnboardingStep(2)" id="ob-btn-next1" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">Avançar</button>
+                <button type="button" onclick="nextOnboardingStep(2)" id="ob-btn-next1" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">Avançar</button>
             </div>
 
             <!-- Passo 2: Idioma Alvo -->
@@ -59,26 +59,26 @@
                     <p id="ob-desc-step2" class="text-xs opacity-80">Você poderá alternar entre idiomas no seu perfil depois.</p>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
-                    <button onclick="selectOnboardingTarget('en')" id="ob-target-en" class="p-4 rounded-2xl border flex flex-col items-center gap-2 font-bold text-xs ob-option-selected">
+                    <button type="button" onclick="selectOnboardingTarget('en')" id="ob-target-en" class="p-4 rounded-2xl border flex flex-col items-center gap-2 font-bold text-xs ob-option-selected">
                         <img src="img/bandeira-eua.webp" class="w-8 h-8 rounded-full object-cover border shadow">
                         English (EUA)
                     </button>
-                    <button onclick="selectOnboardingTarget('es')" id="ob-target-es" class="p-4 rounded-2xl border flex flex-col items-center gap-2 font-bold text-xs">
+                    <button type="button" onclick="selectOnboardingTarget('es')" id="ob-target-es" class="p-4 rounded-2xl border flex flex-col items-center gap-2 font-bold text-xs">
                         <img src="img/bandeira-espanha.webp" class="w-8 h-8 rounded-full object-cover border shadow">
                         Español
                     </button>
-                    <button onclick="selectOnboardingTarget('fr')" id="ob-target-fr" class="p-4 rounded-2xl border flex flex-col items-center gap-2 font-bold text-xs">
+                    <button type="button" onclick="selectOnboardingTarget('fr')" id="ob-target-fr" class="p-4 rounded-2xl border flex flex-col items-center gap-2 font-bold text-xs">
                         <img src="img/bandeira-franca.jpg" class="w-8 h-8 rounded-full object-cover border shadow">
                         Français
                     </button>
-                    <button onclick="selectOnboardingTarget('ja')" id="ob-target-ja" class="p-4 rounded-2xl border flex flex-col items-center gap-2 font-bold text-xs">
+                    <button type="button" onclick="selectOnboardingTarget('ja')" id="ob-target-ja" class="p-4 rounded-2xl border flex flex-col items-center gap-2 font-bold text-xs">
                         <img src="img/bandeira-japao.jpg" class="w-8 h-8 rounded-full object-cover border shadow">
                         日本語 (Japonês)
                     </button>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="nextOnboardingStep(1)" id="ob-btn-back2" class="w-1/3 py-3 rounded-xl border font-bold text-xs uppercase sub-card">Voltar</button>
-                    <button onclick="nextOnboardingStep(3)" id="ob-btn-next2" class="w-2/3 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">Avançar</button>
+                    <button type="button" onclick="nextOnboardingStep(1)" id="ob-btn-back2" class="w-1/3 py-3 rounded-xl border font-bold text-xs uppercase sub-card">Voltar</button>
+                    <button type="button" onclick="nextOnboardingStep(3)" id="ob-btn-next2" class="w-2/3 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">Avançar</button>
                 </div>
             </div>
 
@@ -91,78 +91,77 @@
                     <h2 id="ob-title-step3" class="text-xl font-black tracking-tight">Tudo pronto para a imersão!</h2>
                     <p id="ob-desc-step3" class="text-xs opacity-80">Seu painel personalizado foi configurado com sucesso.</p>
                 </div>
-                <button onclick="finishOnboarding()" id="ob-btn-finish" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-xl hover:brightness-110 transition-all">Começar Jornada</button>
+                <button type="button" onclick="finishOnboarding()" id="ob-btn-finish" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-xl hover:brightness-110 transition-all">Começar Jornada</button>
             </div>
         </div>
     </div>
 
     <div id="top-bar" class="sticky top-0 z-40 w-full">
-    <!-- HEADER PRINCIPAL -->
-    <header class="w-full border-b backdrop-blur-2xl sticky top-0 z-45 bg-opacity-60 bg-white/40 dark:bg-slate-950/40 border-white/20">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="openModule('hub')">
-                <div class="w-10 h-10 rounded-2xl overflow-hidden border shadow-md flex items-center justify-center p-0.5 sub-card">
-                    <img id="header-flag-img" src="img/bandeira-eua.webp" class="w-full h-full object-cover rounded-xl">
-                </div>
-                <div>
-                    <h1 class="text-sm font-black tracking-wider uppercase">Fluency Lab</h1>
-                    <p id="header-subtitle" class="text-[10px] opacity-80 font-semibold">American Immersion Platform</p>
-                </div>
-            </div>
-
-            <!-- Controles Desktop -->
-            <div class="hidden md:flex items-center gap-3">
-                <div onclick="openStreakModal()" class="flex items-center gap-2 px-3.5 py-2 rounded-2xl border sub-card cursor-pointer hover:border-blue-500 transition-all shadow-sm" title="Ofensiva Diária">
-                    <i id="header-streak-icon-desktop" class="fa-solid fa-fire text-blue-500"></i>
-                    <span id="header-streak-count-desktop" class="text-xs font-black">0</span>
-                </div>
-
-                <button onclick="openModule('achievements')" class="flex items-center gap-2 px-3.5 py-2 rounded-2xl border sub-card text-xs font-bold hover:border-blue-500 transition-all shadow-sm">
-                    <i class="fa-solid fa-trophy text-blue-500"></i>
-                    <span id="lbl-header-achievements">Conquistas</span>
-                </button>
-
-                <div class="flex items-center gap-2 border-l pl-3 border-slate-400/30">
-                    <button onclick="toggleDarkMode()" class="w-9 h-9 rounded-2xl border flex items-center justify-center sub-card hover:border-blue-500 transition-all shadow-sm" title="Alternar Tema">
-                        <i id="theme-icon-desktop" class="fa-solid fa-moon text-xs"></i>
-                    </button>
-                    <div onclick="openUserProfileModal()" class="w-10 h-10 rounded-2xl border overflow-hidden cursor-pointer flex items-center justify-center sub-card hover:border-blue-500 transition-all shadow-sm z-50" title="Perfil do Usuário">
-                        <img id="header-user-img-desktop" class="w-full h-full object-cover hidden">
-                        <i id="header-user-icon-desktop" class="fa-solid fa-user text-xs"></i>
+        <!-- HEADER PRINCIPAL -->
+        <header class="w-full border-b backdrop-blur-2xl sticky top-0 z-45 bg-opacity-60 bg-white/40 dark:bg-slate-950/40 border-white/20">
+            <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center gap-3 cursor-pointer" onclick="openModule('hub')">
+                    <div class="w-10 h-10 rounded-2xl overflow-hidden border shadow-md flex items-center justify-center p-0.5 sub-card">
+                        <img id="header-flag-img" src="img/bandeira-eua.webp" class="w-full h-full object-cover rounded-xl">
+                    </div>
+                    <div>
+                        <h1 class="text-sm font-black tracking-wider uppercase">Fluency Lab</h1>
+                        <p id="header-subtitle" class="text-[10px] opacity-80 font-semibold">American Immersion Platform</p>
                     </div>
                 </div>
-            </div>
 
-            <!-- Botões Mobile Header -->
-            <div class="flex md:hidden items-center gap-2">
-                <div onclick="openStreakModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border sub-card cursor-pointer shadow-sm">
-                    <i id="header-streak-icon" class="fa-solid fa-fire text-blue-500 text-xs"></i>
-                    <span id="header-streak-count" class="text-[11px] font-black">0</span>
+                <!-- Controles Desktop -->
+                <div class="hidden md:flex items-center gap-3">
+                    <div onclick="openStreakModal()" class="flex items-center gap-2 px-3.5 py-2 rounded-2xl border sub-card cursor-pointer hover:border-blue-500 transition-all shadow-sm" title="Ofensiva Diária">
+                        <i id="header-streak-icon-desktop" class="fa-solid fa-fire text-blue-500"></i>
+                        <span id="header-streak-count-desktop" class="text-xs font-black">0</span>
+                    </div>
+
+                    <button type="button" onclick="openModule('achievements')" class="flex items-center gap-2 px-3.5 py-2 rounded-2xl border sub-card text-xs font-bold hover:border-blue-500 transition-all shadow-sm">
+                        <i class="fa-solid fa-trophy text-blue-500"></i>
+                        <span id="lbl-header-achievements">Conquistas</span>
+                    </button>
+
+                    <div class="flex items-center gap-2 border-l pl-3 border-slate-400/30">
+                        <button type="button" onclick="toggleDarkMode()" class="w-9 h-9 rounded-2xl border flex items-center justify-center sub-card hover:border-blue-500 transition-all shadow-sm" title="Alternar Tema">
+                            <i id="theme-icon-desktop" class="fa-solid fa-moon text-xs"></i>
+                        </button>
+                        <div onclick="openUserProfileModal()" class="w-10 h-10 rounded-2xl border overflow-hidden cursor-pointer flex items-center justify-center sub-card hover:border-blue-500 transition-all shadow-sm z-50" title="Perfil do Usuário">
+                            <img id="header-user-img-desktop" class="w-full h-full object-cover hidden">
+                            <i id="header-user-icon-desktop" class="fa-solid fa-user text-xs"></i>
+                        </div>
+                    </div>
                 </div>
-                <div onclick="openUserProfileModal()" class="w-9 h-9 rounded-xl border overflow-hidden flex items-center justify-center sub-card shadow-sm z-50" title="Perfil do Usuário">
-                    <img id="header-user-img-mobile" class="w-full h-full object-cover hidden">
-                    <i id="header-user-icon-mobile" class="fa-solid fa-user text-[10px]"></i>
+
+                <!-- Botões Mobile Header -->
+                <div class="flex md:hidden items-center gap-2">
+                    <div onclick="openStreakModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border sub-card cursor-pointer shadow-sm">
+                        <i id="header-streak-icon" class="fa-solid fa-fire text-blue-500 text-xs"></i>
+                        <span id="header-streak-count" class="text-[11px] font-black">0</span>
+                    </div>
+                    <div onclick="openUserProfileModal()" class="w-9 h-9 rounded-xl border overflow-hidden flex items-center justify-center sub-card shadow-sm z-50" title="Perfil do Usuário">
+                        <img id="header-user-img-mobile" class="w-full h-full object-cover hidden">
+                        <i id="header-user-icon-mobile" class="fa-solid fa-user text-[10px]"></i>
+                    </div>
+                    <button type="button" onclick="toggleDarkMode()" class="w-9 h-9 rounded-xl border flex items-center justify-center sub-card shadow-sm">
+                        <i id="theme-icon-mobile" class="fa-solid fa-moon text-[10px]"></i>
+                    </button>
                 </div>
-                <button onclick="toggleDarkMode()" class="w-9 h-9 rounded-xl border flex items-center justify-center sub-card shadow-sm">
-                    <i id="theme-icon-mobile" class="fa-solid fa-moon text-[10px]"></i>
+            </div>
+        </header>
+
+        <!-- MENU DE NAVEGAÇÃO -->
+        <nav id="main-nav" class="hidden border-t border-white/10 px-4 py-2.5 flex items-center justify-between text-xs font-bold overflow-x-auto backdrop-blur-xl">
+            <div class="flex items-center gap-2">
+                <button type="button" onclick="openModule('hub')" id="btn-nav-hub" class="px-3.5 py-2 rounded-xl border flex items-center gap-2 opacity-90 hover:opacity-100 transition-all sub-card shadow-sm">
+                    <i class="fa-solid fa-house"></i> <span id="lbl-nav-hub">Início</span>
                 </button>
+                <div id="subnav-tabs-container" class="flex items-center gap-1 bg-black/10 dark:bg-white/10 p-1 rounded-2xl border border-white/20 shadow-inner">
+                    <button type="button" onclick="goToDashboard()" id="btn-dashboard" class="px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all shadow animated-nav-btn nav-btn-active"><i class="fa-solid fa-chart-pie"></i><span id="lbl-nav-dash">Dashboard</span></button>
+                    <button type="button" onclick="switchTab('cadastro')" id="btn-cadastro" class="px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all animated-nav-btn opacity-80 hover:opacity-100"><i class="fa-solid fa-circle-plus"></i><span id="lbl-nav-cad">Cadastrar</span></button>
+                </div>
             </div>
-        </div>
-
-    </header>
-
-    <!-- MENU DE NAVEGAÇÃO: barra no desktop / DOCK estilo iOS no mobile -->
-    <nav id="main-nav" class="hidden border-t border-white/10 px-4 py-2.5 flex items-center justify-between text-xs font-bold overflow-x-auto backdrop-blur-xl">
-        <div class="flex items-center gap-2">
-            <button onclick="openModule('hub')" id="btn-nav-hub" class="px-3.5 py-2 rounded-xl border flex items-center gap-2 opacity-90 hover:opacity-100 transition-all sub-card shadow-sm">
-                <i class="fa-solid fa-house"></i> <span id="lbl-nav-hub">Início</span>
-            </button>
-            <div id="subnav-tabs-container" class="flex items-center gap-1 bg-black/10 dark:bg-white/10 p-1 rounded-2xl border border-white/20 shadow-inner">
-                <button onclick="goToDashboard()" id="btn-dashboard" class="px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all shadow animated-nav-btn nav-btn-active"><i class="fa-solid fa-chart-pie"></i><span id="lbl-nav-dash">Dashboard</span></button>
-                <button onclick="switchTab('cadastro')" id="btn-cadastro" class="px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all animated-nav-btn opacity-80 hover:opacity-100"><i class="fa-solid fa-circle-plus"></i><span id="lbl-nav-cad">Cadastrar</span></button>
-            </div>
-        </div>
-    </nav>
+        </nav>
     </div>
 
     <!-- CONTEÚDO PRINCIPAL -->
@@ -175,16 +174,15 @@
                     <img id="hub-flag-img" src="img/bandeira-eua.webp" class="w-4 h-4 rounded-full object-cover">
                     <span id="hub-welcome">BEM-VINDO, LUIS • AMERICAN</span>
                 </div>
-                
-                <!-- TÍTULO DINÂMICO TOTALMENTE RESPONSIVO -->
+
                 <h2 id="hub-title" class="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight wave-title flex flex-wrap justify-center gap-x-2 gap-y-1 drop-shadow-md text-balance leading-tight">
                     <span id="hub-title-text">O que você deseja registrar ou praticar hoje?</span>
                 </h2>
-                
+
                 <p id="hub-desc" class="text-xs md:text-sm font-semibold opacity-90 pt-1 drop-shadow">Selecione um módulo abaixo para acompanhar seu progresso e evoluir no idioma.</p>
             </div>
 
-            <!-- CARROSSEL DO HUB (loop infinito) -->
+            <!-- CARROSSEL DO HUB (loop infinito com rolagem suave contínua) -->
             <div class="hub-carousel group select-none" role="region" aria-label="Módulos do Fluency Lab">
 
                 <button id="carousel-prev" type="button" aria-label="Anterior" class="carousel-arrow carousel-arrow-left hidden md:flex">
@@ -248,9 +246,21 @@
                             <div class="hub-icon"><i class="fa-solid fa-trophy"></i></div>
                             <span id="card-ach-tag" class="hub-eyebrow">DESAFIOS & TROFÉUS</span>
                             <h3 id="card-ach-title" class="text-base font-black">GALERIA DE CONQUISTAS</h3>
-                            <p id="card-ach-desc" class="text-xs opacity-90 leading-relaxed font-medium">Desbloqueie até 100 conquistas únicas com sua evolução diária nos estudos.</p>
+                            <p id="card-ach-desc" class="text-xs opacity-90 leading-relaxed font-medium">Desbloqueie conquistas únicas com sua evolução diária nos estudos.</p>
                         </div>
                         <button type="button" onclick="openModule('achievements')" id="hub-btn-ach" class="hub-cta">Ver Conquistas</button>
+                    </article>
+
+                    <!-- CARD 6: ROCKET LASER TYPING -->
+                    <article class="hub-card panel-card">
+                        <span class="hub-index">06</span>
+                        <div class="space-y-3">
+                            <div class="hub-icon"><i class="fa-solid fa-rocket"></i></div>
+                            <span id="card-typing-tag" class="hub-eyebrow">FOGUETE & LASER</span>
+                            <h3 id="card-typing-title" class="text-base font-black">Jogo de Digitação</h3>
+                            <p id="card-typing-desc" class="text-xs opacity-90 leading-relaxed font-medium">Comande seu foguete a laser no espaço destruindo palavras com flashcards, palavras próprias ou top 30.</p>
+                        </div>
+                        <button type="button" onclick="openModule('typing')" id="hub-btn-typing" class="hub-cta">Jogar Agora</button>
                     </article>
 
                 </div>
@@ -514,7 +524,7 @@
                         <div class="flex items-center justify-between pb-4 border-b border-white/20">
                             <span id="vocab-card-number" class="text-xs font-black px-3.5 py-1.5 rounded-xl border sub-card shadow-sm">#1</span>
                             <div class="flex items-center gap-2.5">
-                                <button onclick="speakCurrentWord()" class="w-10 h-10 rounded-2xl border flex items-center justify-center text-blue-500 sub-card hover:border-blue-500 transition-all shadow-sm"><i class="fa-solid fa-volume-high text-xs"></i></button>
+                                <button type="button" onclick="speakCurrentWord()" class="w-10 h-10 rounded-2xl border flex items-center justify-center text-blue-500 sub-card hover:border-blue-500 transition-all shadow-sm"><i class="fa-solid fa-volume-high text-xs"></i></button>
                                 <span id="vocab-card-counter" class="text-xs font-bold opacity-80">0 Registradas</span>
                             </div>
                         </div>
@@ -537,10 +547,10 @@
 
                         <div class="space-y-4 pt-4 border-t border-white/20">
                             <div class="grid grid-cols-2 gap-4">
-                                <button onclick="gradeFlashcard(false)" id="btn-wrong-action" class="py-3.5 rounded-xl border border-red-500/40 text-red-500 font-black text-xs uppercase tracking-wider hover:bg-red-500/10 transition-all sub-card shadow-sm">Não Lembrei</button>
-                                <button onclick="gradeFlashcard(true)" id="btn-correct-action" class="py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider hover:brightness-110 transition-all shadow-lg">Lembrei (Certo!)</button>
+                                <button type="button" onclick="gradeFlashcard(false)" id="btn-wrong-action" class="py-3.5 rounded-xl border border-red-500/40 text-red-500 font-black text-xs uppercase tracking-wider hover:bg-red-500/10 transition-all sub-card shadow-sm">Não Lembrei</button>
+                                <button type="button" onclick="gradeFlashcard(true)" id="btn-correct-action" class="py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider hover:brightness-110 transition-all shadow-lg">Lembrei (Certo!)</button>
                             </div>
-                            <button onclick="nextFlashcardRandom()" id="btn-next-random" class="w-full py-3 rounded-xl border font-bold text-xs uppercase tracking-wider opacity-90 hover:opacity-100 transition-all sub-card shadow-sm">Sortear Próxima Palavra Aleatória</button>
+                            <button type="button" onclick="nextFlashcardRandom()" id="btn-next-random" class="w-full py-3 rounded-xl border font-bold text-xs uppercase tracking-wider opacity-90 hover:opacity-100 transition-all sub-card shadow-sm">Sortear Próxima Palavra Aleatória</button>
                         </div>
                     </div>
 
@@ -592,7 +602,6 @@
         <!-- MÓDULO DE LEITURA & PRONÚNCIA -->
         <section id="module-speech" class="space-y-6 hidden">
             <div class="panel-card p-6 md:p-8 border shadow-2xl space-y-6">
-                <!-- Topo, Seletor de Nível e Seletor de História (1 a 50) -->
                 <div class="flex flex-col md:flex-row items-center justify-between gap-4 pb-4 border-b border-white/10">
                     <div>
                         <span id="speech-title-prefix" class="text-xs font-black tracking-wider uppercase opacity-80 block">Reading & Pronunciation Practice</span>
@@ -601,16 +610,14 @@
                     <div class="flex flex-wrap items-center gap-3">
                         <div class="flex items-center gap-2">
                             <span id="lbl-select-story" class="text-xs font-bold opacity-80">Texto:</span>
-                            <select id="speech-story-select" onchange="changeStoryIndex(this.value)" class="p-2 rounded-xl border text-xs font-bold outline-none cursor-pointer">
-                                <!-- Preenchido via JS de 1 a 50 -->
-                            </select>
+                            <select id="speech-story-select" onchange="changeStoryIndex(this.value)" class="p-2 rounded-xl border text-xs font-bold outline-none cursor-pointer"></select>
                         </div>
                         <div class="flex items-center gap-2">
                             <span id="lbl-difficulty-level" class="text-xs font-bold opacity-80">Nível:</span>
                             <div class="flex bg-black/20 p-1 rounded-xl border border-white/10">
-                                <button onclick="setSpeechLevel('easy')" id="speech-lvl-easy" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow">Fácil</button>
-                                <button onclick="setSpeechLevel('medium')" id="speech-lvl-medium" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all opacity-70 hover:opacity-100">Médio</button>
-                                <button onclick="setSpeechLevel('hard')" id="speech-lvl-hard" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all opacity-70 hover:opacity-100">Difícil</button>
+                                <button type="button" onclick="setSpeechLevel('easy')" id="speech-lvl-easy" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow">Fácil</button>
+                                <button type="button" onclick="setSpeechLevel('medium')" id="speech-lvl-medium" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all opacity-70 hover:opacity-100">Médio</button>
+                                <button type="button" onclick="setSpeechLevel('hard')" id="speech-lvl-hard" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all opacity-70 hover:opacity-100">Difícil</button>
                             </div>
                         </div>
                     </div>
@@ -620,23 +627,20 @@
                     💡 Clique em qualquer palavra para escutar a pronúncia individual. Aperte no botão para escutar a história completa ou no microfone para testar sua leitura em voz alta.
                 </p>
 
-                <!-- Área de Exibição da História -->
                 <div id="speech-story-container" class="p-6 rounded-2xl border sub-card space-y-4 text-base md:text-lg font-medium leading-relaxed tracking-wide min-h-[160px]"></div>
 
-                <!-- Painel de Ações -->
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10">
-                    <button onclick="listenFullStory()" id="btn-listen-story" class="w-full sm:w-auto px-6 py-3.5 rounded-xl border sub-card font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-sm hover:border-blue-500 transition-all">
+                    <button type="button" onclick="listenFullStory()" id="btn-listen-story" class="w-full sm:w-auto px-6 py-3.5 rounded-xl border sub-card font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-sm hover:border-blue-500 transition-all">
                         <i id="listen-icon" class="fa-solid fa-volume-high text-blue-500"></i>
                         <span id="lbl-btn-listen-story">Escutar História Completa</span>
                     </button>
 
-                    <button onclick="toggleVoiceRecognition()" id="btn-record-voice" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg hover:brightness-110 transition-all">
+                    <button type="button" onclick="toggleVoiceRecognition()" id="btn-record-voice" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg hover:brightness-110 transition-all">
                         <i id="mic-icon" class="fa-solid fa-microphone"></i>
                         <span id="lbl-btn-record-voice">Gravar e Ver Pronúncia</span>
                     </button>
                 </div>
 
-                <!-- Feedback de Reconhecimento -->
                 <div id="speech-feedback-bar" class="hidden p-3.5 rounded-xl border text-xs font-semibold flex items-center justify-between sub-card">
                     <span id="speech-status-text">Ouvindo... Fale a história em voz alta!</span>
                     <span id="speech-score-text" class="font-black text-blue-400">0% de precisão</span>
@@ -648,14 +652,14 @@
         <section id="module-achievements" class="space-y-6 hidden">
             <div class="panel-card p-6 md:p-8 border shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="space-y-2 text-center md:text-left">
-                    <span id="ach-banner-tag" class="text-[10px] font-black tracking-widest px-3.5 py-1.5 rounded-xl border sub-card">Galería de Trofeos</span>
-                    <h2 id="ach-banner-title" class="text-xl md:text-2xl font-black tracking-tight">Galeria de 100 Conquistas</h2>
+                    <span id="ach-banner-tag" class="text-[10px] font-black tracking-widest px-3.5 py-1.5 rounded-xl border sub-card">Galeria de Troféus</span>
+                    <h2 id="ach-banner-title" class="text-xl md:text-2xl font-black tracking-tight">Galeria de Conquistas</h2>
                     <p id="ach-banner-desc" class="text-xs opacity-80">Acompanhe seu progresso e conquiste badges estudando diariamente.</p>
                 </div>
                 <div class="flex items-center gap-6">
                     <div class="text-center">
                         <span id="lbl-ach-unlocked" class="text-[10px] font-bold opacity-70 block uppercase">Desbloqueadas</span>
-                        <span id="ach-unlocked-count" class="text-2xl font-black text-blue-500">0 / 100</span>
+                        <span id="ach-unlocked-count" class="text-2xl font-black text-blue-500">0 / 45</span>
                     </div>
                     <div class="text-center">
                         <span id="lbl-ach-progress" class="text-[10px] font-bold opacity-70 block uppercase">Progresso Geral</span>
@@ -664,17 +668,160 @@
                 </div>
             </div>
 
-            <!-- Filtros de Conquistas -->
             <div class="flex items-center gap-2 overflow-x-auto pb-2">
-                <button onclick="filterAchievements('all')" id="ach-filter-all" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border ach-filter-active shadow-sm">Todas (100)</button>
-                <button onclick="filterAchievements('streak')" id="ach-filter-streak" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border sub-card shadow-sm">🔥 Ofensiva</button>
-                <button onclick="filterAchievements('vocab')" id="ach-filter-vocab" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border sub-card shadow-sm">🧠 Vocabulário</button>
-                <button onclick="filterAchievements('listening')" id="ach-filter-listening" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border sub-card shadow-sm">🎧 Listening</button>
-                <button onclick="filterAchievements('reading')" id="ach-filter-reading" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border sub-card shadow-sm">📖 Leitura</button>
-                <button onclick="filterAchievements('polyglot')" id="ach-filter-polyglot" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border sub-card shadow-sm">🌍 Poliglota</button>
+                <button type="button" onclick="filterAchievements('all')" id="ach-filter-all" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border ach-filter-active shadow-sm">Todas</button>
+                <button type="button" onclick="filterAchievements('streak')" id="ach-filter-streak" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border sub-card shadow-sm">🔥 Ofensiva</button>
+                <button type="button" onclick="filterAchievements('vocab')" id="ach-filter-vocab" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border sub-card shadow-sm">🧠 Vocabulário</button>
+                <button type="button" onclick="filterAchievements('listening')" id="ach-filter-listening" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border sub-card shadow-sm">🎧 Listening</button>
+                <button type="button" onclick="filterAchievements('reading')" id="ach-filter-reading" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border sub-card shadow-sm">📖 Leitura</button>
+                <button type="button" onclick="filterAchievements('speech')" id="ach-filter-speech" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border sub-card shadow-sm">🎤 Fala</button>
+                <button type="button" onclick="filterAchievements('typing')" id="ach-filter-typing" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border sub-card shadow-sm">🚀 Foguete Laser</button>
+                <button type="button" onclick="filterAchievements('polyglot')" id="ach-filter-polyglot" class="px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all border sub-card shadow-sm">🌍 Poliglota</button>
             </div>
 
             <div id="achievements-full-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+        </section>
+
+        <!-- SEÇÃO 6: MÓDULO FOGUETE & LASER TYPING (IMERSIVO, ESPAÇOSO E TELA CHEIA) -->
+        <section id="module-typing" class="space-y-5 hidden">
+            <!-- Barra de Status & Recorde -->
+            <div class="panel-card p-5 md:p-6 border shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-400/40 flex items-center justify-center text-cyan-400 text-xl shadow-[0_0_24px_rgba(34,211,238,0.3)]">
+                        <i class="fa-solid fa-rocket"></i>
+                    </div>
+                    <div>
+                        <span id="typing-title-prefix" class="text-[11px] font-black tracking-widest uppercase text-cyan-400 block">Deep Space Laser Mission</span>
+                        <h2 id="typing-main-title" class="text-xl md:text-2xl font-black tracking-tight">Foguete a Laser</h2>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full lg:w-auto">
+                    <div class="p-3 rounded-2xl border sub-card text-center">
+                        <span id="lbl-typing-score" class="text-[10px] font-bold opacity-75 uppercase block">Pontuação</span>
+                        <span id="typing-score-display" class="text-lg font-black text-cyan-400">0</span>
+                    </div>
+                    <div class="p-3 rounded-2xl border sub-card text-center">
+                        <span id="lbl-typing-record" class="text-[10px] font-bold opacity-75 uppercase block">Recorde</span>
+                        <span id="typing-record-display" class="text-lg font-black text-amber-400">0</span>
+                    </div>
+                    <div class="p-3 rounded-2xl border sub-card text-center">
+                        <span id="lbl-typing-combo" class="text-[10px] font-bold opacity-75 uppercase block">Combo</span>
+                        <span id="typing-combo-display" class="text-lg font-black text-emerald-400">0x</span>
+                    </div>
+                    <div class="p-3 rounded-2xl border sub-card text-center">
+                        <span id="lbl-typing-lives" class="text-[10px] font-bold opacity-75 uppercase block">Escudos</span>
+                        <span id="typing-lives-display" class="text-lg font-black text-rose-400">❤️❤️❤️</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seletor de Modo de Palavras -->
+            <div class="panel-card p-5 border shadow-2xl space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <span id="lbl-typing-mode-title" class="text-xs font-black uppercase tracking-wider opacity-90">Escolha a Fonte das Palavras:</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 w-full md:w-auto">
+                        <button type="button" onclick="setTypingSource('flashcards')" id="typing-src-flashcards" class="px-4 py-2.5 rounded-xl border text-xs font-black uppercase transition-all typing-mode-active shadow-sm flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-clone"></i> <span id="lbl-mode-flashcards">Flashcards</span>
+                        </button>
+                        <button type="button" onclick="setTypingSource('custom')" id="typing-src-custom" class="px-4 py-2.5 rounded-xl border text-xs font-black uppercase transition-all sub-card shadow-sm flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-pen-to-square"></i> <span id="lbl-mode-custom">Minhas Palavras</span>
+                        </button>
+                        <button type="button" onclick="setTypingSource('top30')" id="typing-src-top30" class="px-4 py-2.5 rounded-xl border text-xs font-black uppercase transition-all sub-card shadow-sm flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-fire-flame-curved"></i> <span id="lbl-mode-top30">Top 30 Mais Usadas</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Cadastro Rápido de Palavras Próprias -->
+                <div id="typing-custom-manager" class="hidden pt-3 border-t border-white/10 space-y-3">
+                    <div class="flex flex-col sm:flex-row gap-2.5">
+                        <input type="text" id="typing-custom-input" onkeydown="if(event.key==='Enter'){event.preventDefault();addCustomTypingWord();}" placeholder="Digite uma palavra no idioma alvo..." class="flex-1 p-3 rounded-xl border text-xs font-bold outline-none">
+                        <button type="button" onclick="addCustomTypingWord()" id="btn-add-typing-word" class="px-5 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">
+                            <i class="fa-solid fa-plus mr-1"></i> <span id="lbl-btn-add-word">Cadastrar Palavra</span>
+                        </button>
+                    </div>
+                    <div id="typing-custom-tags" class="flex flex-wrap gap-2 max-h-28 overflow-y-auto pr-1"></div>
+                </div>
+            </div>
+
+            <!-- ARENA PROFISSIONAL DO FOGUETE A LASER (COM TELA CHEIA E ESPAÇO ANIMADO) -->
+            <div id="typing-arena-box" class="typing-arena-shell panel-card border shadow-2xl overflow-hidden relative select-none flex flex-col">
+                <!-- Barra Superior da Missão -->
+                <div class="px-4 py-3 border-b border-white/15 flex flex-wrap items-center justify-between gap-2 bg-slate-950/75 backdrop-blur-md z-30">
+                    <div class="flex items-center gap-2.5 text-xs font-bold">
+                        <span class="px-3 py-1 rounded-lg bg-cyan-500/15 text-cyan-300 border border-cyan-400/30">
+                            <i class="fa-solid fa-satellite-dish mr-1"></i> <span id="lbl-typing-wave">Setor</span> <span id="typing-wave-num">1</span>
+                        </span>
+                        <span class="px-3 py-1 rounded-lg bg-blue-500/15 text-blue-300 border border-blue-400/30">
+                            <i class="fa-solid fa-bullseye mr-1"></i> <span id="lbl-typing-hits">Alvos</span>: <span id="typing-hits-num">0</span>
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="startTypingGame()" id="btn-start-typing" class="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">
+                            <i class="fa-solid fa-play mr-1"></i> <span id="lbl-btn-start-typing">Iniciar Missão</span>
+                        </button>
+                        <button type="button" onclick="stopTypingGame(true)" id="btn-stop-typing" class="px-3.5 py-2 rounded-xl border border-rose-500/40 text-rose-400 font-bold text-xs uppercase sub-card hover:bg-rose-500/10 transition-all hidden">
+                            <i class="fa-solid fa-stop mr-1"></i> <span id="lbl-btn-stop-typing">Abortar</span>
+                        </button>
+                        <button type="button" onclick="toggleTypingFullscreen()" id="btn-typing-fullscreen" class="px-3.5 py-2 rounded-xl border border-cyan-400/35 text-cyan-300 font-bold text-xs uppercase sub-card hover:border-cyan-300 transition-all" title="Tela Cheia">
+                            <i id="typing-fs-icon" class="fa-solid fa-expand mr-1"></i> <span id="lbl-btn-fullscreen">Tela Cheia</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Campo Espacial com img/space.jpg -->
+                <div id="typing-playfield" class="relative w-full flex-1 min-h-[520px] sm:min-h-[580px] overflow-hidden bg-slate-950">
+                    <!-- Camada espacial animada com img/space.jpg -->
+                    <div class="typing-space-bg" style="background-image: url('img/space.jpg');"></div>
+                    <div class="typing-space-nebula"></div>
+
+                    <!-- Linha de defesa orbital inferior -->
+                    <div class="typing-danger-line"></div>
+
+                    <!-- SVG de lasers -->
+                    <svg id="typing-laser-svg" class="absolute inset-0 w-full h-full pointer-events-none z-10"></svg>
+
+                    <!-- Camada de palavras caindo -->
+                    <div id="typing-words-layer" class="absolute inset-0 z-20 pointer-events-none"></div>
+
+                    <!-- Foguete / Canhão Espacial na base -->
+                    <div id="typing-cannon" class="typing-rocket z-30">
+                        <div class="typing-rocket-flame"></div>
+                        <div class="typing-rocket-fin-left"></div>
+                        <div class="typing-rocket-fin-right"></div>
+                        <div class="typing-rocket-body">
+                            <div class="typing-rocket-cockpit"><i class="fa-solid fa-crosshairs"></i></div>
+                        </div>
+                    </div>
+
+                    <!-- Overlay Inicial / Game Over dentro da arena espacial -->
+                    <div id="typing-overlay-state" class="absolute inset-0 z-40 bg-slate-950/70 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4">
+                        <div class="w-20 h-20 rounded-3xl bg-cyan-500/20 border border-cyan-400/50 flex items-center justify-center text-cyan-300 text-3xl typing-pulse-icon shadow-[0_0_30px_rgba(34,211,238,0.35)]">
+                            <i class="fa-solid fa-rocket"></i>
+                        </div>
+                        <div class="space-y-1.5 max-w-md">
+                            <h3 id="typing-overlay-title" class="text-2xl font-black tracking-tight text-white">Pronto para Decolar?</h3>
+                            <p id="typing-overlay-desc" class="text-xs sm:text-sm text-slate-200 leading-relaxed">Digite as letras das palavras que avançam no espaço. Cada acerto dispara um feixe de laser do seu foguete!</p>
+                        </div>
+                        <div id="typing-overlay-summary" class="hidden text-xs sm:text-sm font-bold text-cyan-300 space-y-1"></div>
+                        <button type="button" onclick="startTypingGame()" id="btn-overlay-start-typing" class="px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-black text-xs uppercase tracking-wider shadow-xl hover:brightness-110 transition-all">
+                            <i class="fa-solid fa-bolt mr-1.5"></i> <span id="lbl-btn-overlay-start">Decolar Agora</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Console de Digitação Inferior -->
+                <div class="p-4 border-t border-white/15 bg-slate-950/80 backdrop-blur-md flex flex-col sm:flex-row items-center gap-3 z-30">
+                    <div class="relative flex-1 w-full">
+                        <i class="fa-solid fa-keyboard absolute left-3.5 top-1/2 -translate-y-1/2 text-cyan-400 text-xs"></i>
+                        <input type="text" id="typing-input" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Digite aqui para mirar e disparar o laser..." oninput="handleTypingInput(event)" class="w-full pl-9 pr-4 py-3 rounded-xl border text-sm font-black tracking-wide outline-none">
+                    </div>
+                    <span id="typing-active-target-badge" class="px-4 py-2.5 rounded-xl border sub-card text-xs font-black text-cyan-300 whitespace-nowrap">
+                        <i class="fa-solid fa-crosshairs mr-1"></i> <span id="lbl-typing-target-word">Alvo</span>: <span id="typing-target-preview">---</span>
+                    </span>
+                </div>
+            </div>
         </section>
 
     </main>
@@ -694,7 +841,7 @@
                 <h3 id="popup-streak-title" class="text-xl font-black">Foguinho Acendido! 🔥</h3>
                 <p id="popup-streak-desc" class="text-xs opacity-80">Excelente! Ofensiva garantida e salva no histórico diário.</p>
             </div>
-            <button onclick="closeStreakAnimation()" id="btn-streak-continue" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">Continuar</button>
+            <button type="button" onclick="closeStreakAnimation()" id="btn-streak-continue" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">Continuar</button>
         </div>
     </div>
 
@@ -704,9 +851,9 @@
             <div class="flex items-center justify-between">
                 <div class="space-y-0.5">
                     <h3 id="modal-streak-title" class="text-base font-black">Estatísticas de Ofensiva</h3>
-                    <p id="modal-streak-sub" class="text-[11px] opacity-80">Controlo diário e histórico persistente</p>
+                    <p id="modal-streak-sub" class="text-[11px] opacity-80">Controle diário e histórico persistente</p>
                 </div>
-                <button onclick="closeStreakModal()" class="w-9 h-9 rounded-xl border flex items-center justify-center sub-card shadow-sm"><i class="fa-solid fa-xmark text-xs"></i></button>
+                <button type="button" onclick="closeStreakModal()" class="w-9 h-9 rounded-xl border flex items-center justify-center sub-card shadow-sm"><i class="fa-solid fa-xmark text-xs"></i></button>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
@@ -734,7 +881,7 @@
                 </div>
             </div>
 
-            <button onclick="closeStreakModal()" id="btn-modal-understood" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">Entendido</button>
+            <button type="button" onclick="closeStreakModal()" id="btn-modal-understood" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">Entendido</button>
         </div>
     </div>
 
@@ -779,14 +926,13 @@
             </div>
 
             <div class="space-y-2 pt-2">
-                <button onclick="resetOnboardingData()" id="btn-refazer-perguntas" class="w-full py-3 rounded-xl border text-xs font-bold uppercase tracking-wider opacity-90 hover:opacity-100 transition-all sub-card shadow-sm">Refazer Perguntas Iniciais</button>
-                <button onclick="closeUserProfileModal()" id="btn-modal-close" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">Fechar</button>
+                <button type="button" onclick="resetOnboardingData()" id="btn-refazer-perguntas" class="w-full py-3 rounded-xl border text-xs font-bold uppercase tracking-wider opacity-90 hover:opacity-100 transition-all sub-card shadow-sm">Refazer Perguntas Iniciais</button>
+                <button type="button" onclick="closeUserProfileModal()" id="btn-modal-close" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all">Fechar</button>
             </div>
         </div>
     </div>
 
-    <!-- Script Principal -->
-    <script src="stories.js?v=1"></script>
-    <script src="script.js?v=40"></script>
+    <script src="stories.js?v=3"></script>
+    <script src="script.js?v=42"></script>
 </body>
 </html>
